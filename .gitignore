@@ -5,3 +5,4 @@ out
 *.log*
 .env
 electron.vite.config.**.mjs
+.idea
