@@ -15,8 +15,7 @@ import {
   installLibraries
 } from '@xmcl/installer'
 import { ChildProcess } from 'node:child_process'
-import { LauncherOptions } from './interfaces'
-// import { join } from 'path'
+import { LauncherOptions } from '@main/modules/launcher/launcher.interfaces'
 
 export class Client {
   private debugData: string[] = []

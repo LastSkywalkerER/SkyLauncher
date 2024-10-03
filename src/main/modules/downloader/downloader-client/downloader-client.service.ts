@@ -8,11 +8,11 @@ export class DownloaderClientService {
 
   constructor(@Inject(ConfigService) private readonly configService: ConfigService) {
     this._client = new Client({
-      endPoint: configService.get('s3client.endPoint'),
-      port: configService.get('s3client.port'),
-      useSSL: configService.get('s3client.useSSL'),
-      accessKey: configService.get('s3client.accessKey'),
-      secretKey: configService.get('s3client.secretKey')
+      endPoint: this.configService.get('s3client.endPoint')!,
+      port: this.configService.get('s3client.port')!,
+      useSSL: this.configService.get('s3client.useSSL')!,
+      accessKey: this.configService.get('s3client.accessKey')!,
+      secretKey: this.configService.get('s3client.secretKey')!
     })
   }
 

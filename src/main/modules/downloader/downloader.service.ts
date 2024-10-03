@@ -2,13 +2,13 @@ import { Inject, Injectable } from '@nestjs/common'
 import { ZipDownloaderService } from './zip-downloader/zip-downloader.service'
 import { join } from 'path'
 import { getAppDir } from '../../utils/window/getAppDir'
-import { DirDownloaderService } from './dir-downloader/dir-downloader.service'
+// import { DirDownloaderService } from './dir-downloader/dir-downloader.service'
 
 @Injectable()
 export class DownloaderService {
   constructor(
-    @Inject(ZipDownloaderService) private readonly zipDownloaderService: ZipDownloaderService,
-    @Inject(DirDownloaderService) private readonly dirDownloaderService: DirDownloaderService
+    @Inject(ZipDownloaderService) private readonly zipDownloaderService: ZipDownloaderService
+    // @Inject(DirDownloaderService) private readonly dirDownloaderService: DirDownloaderService
   ) {}
 
   public async downloadJava(version: string, debug: (data: string) => void): Promise<string> {

@@ -1,4 +1,4 @@
-import { contextBridge, IpcRenderer, ipcRenderer, IpcRendererEvent } from 'electron'
+import { contextBridge, IpcRenderer, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { Version } from './interfaces'
 import { CreateLauncher } from '@main/modules/launcher/launcher.interfaces'
@@ -10,7 +10,7 @@ const api = {
   launchMinecraft: (data: CreateLauncher): Promise<void> =>
     ipcRenderer.invoke('launchMinecraft', data),
   setLogger: (logTracer: (data: string) => void): IpcRenderer =>
-    ipcRenderer.on('debug', (event: IpcRendererEvent, message: string) => logTracer(message))
+    ipcRenderer.on('debug', (_, message: string) => logTracer(message))
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -10,6 +10,18 @@ import { ValidationPipe } from '@nestjs/common'
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
+const platformOperations = {
+  win: (): void => {
+    //
+  },
+  linux: (): void => {
+    //
+  },
+  mac: (): void => {
+    systemPreferences.askForMediaAccess('microphone')
+  }
+}
+
 async function electronAppInit(): Promise<void> {
   const isDev = !app.isPackaged
 
@@ -36,7 +48,17 @@ async function bootstrap(): Promise<void> {
   try {
     await electronAppInit()
 
-    systemPreferences.askForMediaAccess('microphone')
+    switch (process.platform) {
+      case 'linux':
+        platformOperations['linux']()
+        break
+      case 'win32':
+        platformOperations['win']()
+        break
+      default:
+        platformOperations['mac']()
+        break
+    }
 
     // Set app user model id for windows
     electronApp.setAppUserModelId('com.electron')
