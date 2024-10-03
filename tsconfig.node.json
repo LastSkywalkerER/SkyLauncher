@@ -8,7 +8,7 @@
     "composite": true,
     "types": ["reflect-metadata", "electron-vite/node"],
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "esnext",
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

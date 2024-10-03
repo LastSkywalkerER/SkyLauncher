@@ -3,7 +3,7 @@ import { IpcHandle, Window } from '@doubleshot/nest-electron'
 
 import { BrowserWindow } from 'electron'
 import { LauncherService } from './launcher.service'
-import { CreateLauncher } from './launcher.interfaces'
+import { type CreateLauncher } from './launcher.interfaces'
 import { Payload } from '@nestjs/microservices'
 import { Client } from '../../utils/launcher/Launcher'
 

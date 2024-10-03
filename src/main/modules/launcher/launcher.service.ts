@@ -21,19 +21,20 @@ export class LauncherService {
       process.platform === 'win32' ? '/bin/java.exe' : '/bin/java'
     )
 
-    exec(`chmod -R 755 "${javaDir}"`, (error, stdout, stderr) => {
-      if (error) {
-        logger(`Error to chmod java: ${error.message}`)
-        return
-      }
+    process.platform !== 'win32' &&
+      exec(`chmod -R 755 "${javaDir}"`, (error, stdout, stderr) => {
+        if (error) {
+          logger(`Error to chmod java: ${error.message}`)
+          return
+        }
 
-      if (stderr) {
-        logger(`Error: ${stderr}`)
-        return
-      }
+        if (stderr) {
+          logger(`Error: ${stderr}`)
+          return
+        }
 
-      logger(`Chmod sucess: ${stdout}`)
-    })
+        logger(`Chmod sucess: ${stdout}`)
+      })
 
     const destinationDir = await this.downloaderService.downloadModpack(version.folder, logger)
 

@@ -2,9 +2,9 @@ import { BrowserWindow, shell } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
 
-import iconLinux from '../../../../resources/icon.png?asset'
-import iconWin from '../../../../resources/icon.ico?asset'
-import iconMac from '../../../../resources/icon.icns?asset'
+// import iconLinux from '../../../../resources/icon.png?asset'
+// import iconWin from '../../../../resources/icon.ico?asset'
+// import iconMac from '../../../../resources/icon.icns?asset'
 
 export const createWindow = (): BrowserWindow => {
   // Create the browser window.
@@ -12,12 +12,12 @@ export const createWindow = (): BrowserWindow => {
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux'
-      ? { icon: iconLinux }
-      : process.platform === 'win32'
-        ? { icon: iconWin }
-        : { icon: iconMac }),
+    // autoHideMenuBar: true,
+    // ...(process.platform === 'linux'
+    //   ? { icon: iconLinux }
+    //   : process.platform === 'win32'
+    //     ? { icon: iconWin }
+    //     : { icon: iconMac }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       // sandbox: false,

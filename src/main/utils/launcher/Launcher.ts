@@ -105,7 +105,7 @@ export class Client {
     await installLibraries(resolvedVersion)
     this.debug('Libraries installed')
 
-    this.debug('Lunch minecraft with args: ', minecraftArgs)
+    this.debug('Lunch minecraft with args: ', JSON.stringify(minecraftArgs))
     const process = await launch(minecraftArgs)
 
     process.stdout?.setEncoding('utf-8')

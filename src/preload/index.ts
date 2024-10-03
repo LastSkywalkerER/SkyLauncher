@@ -1,7 +1,6 @@
 import { contextBridge, IpcRenderer, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { Version } from './interfaces'
-import { CreateLauncher } from '@main/modules/launcher/launcher.interfaces'
+import { CreateLauncher, Version } from './interfaces'
 
 // Custom APIs for renderer
 const api = {
