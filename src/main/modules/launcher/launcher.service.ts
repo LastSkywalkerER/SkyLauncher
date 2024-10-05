@@ -5,10 +5,14 @@ import { CustomLauncherOptions, LauncherOptions, Version } from './launcher.inte
 import { join } from 'path'
 import { exec } from 'child_process'
 import { DownloaderService } from '../downloader/downloader.service'
+import { HardwareService } from '../hardware/hardware.service'
 
 @Injectable()
 export class LauncherService {
-  constructor(@Inject(DownloaderService) private readonly downloaderService: DownloaderService) {}
+  constructor(
+    @Inject(DownloaderService) private readonly downloaderService: DownloaderService,
+    @Inject(HardwareService) private readonly hardwareService: HardwareService
+  ) {}
 
   public async getOptions(
     version: Version,
@@ -16,12 +20,9 @@ export class LauncherService {
     logger: (data: string) => void
   ): Promise<LauncherOptions> {
     const javaDir = await this.downloaderService.downloadJava(version.java, logger)
-    const javaExecutable = join(
-      javaDir,
-      process.platform === 'win32' ? '/bin/java.exe' : '/bin/java'
-    )
+    const javaExecutable = join(javaDir, this.hardwareService.getJavaExecutableName())
 
-    process.platform !== 'win32' &&
+    this.hardwareService.getPlatform() !== 'win32' &&
       exec(`chmod -R 755 "${javaDir}"`, (error, stdout, stderr) => {
         if (error) {
           logger(`Error to chmod java: ${error.message}`)

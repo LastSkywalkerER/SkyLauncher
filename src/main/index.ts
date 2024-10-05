@@ -7,6 +7,7 @@ import { ElectronIpcTransport } from '@doubleshot/nest-electron'
 import { AppModule } from './app.module'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { ValidationPipe } from '@nestjs/common'
+import { platform } from './constants'
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
@@ -26,11 +27,11 @@ async function electronAppInit(): Promise<void> {
   const isDev = !app.isPackaged
 
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
+    if (platform !== 'darwin') app.quit()
   })
 
   if (isDev) {
-    if (process.platform === 'win32') {
+    if (platform === 'win32') {
       process.on('message', (data) => {
         if (data === 'graceful-exit') app.quit()
       })
@@ -48,7 +49,7 @@ async function bootstrap(): Promise<void> {
   try {
     await electronAppInit()
 
-    switch (process.platform) {
+    switch (platform) {
       case 'linux':
         platformOperations['linux']()
         break

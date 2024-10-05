@@ -4,6 +4,7 @@ import { createWindow } from './utils/window/createWindow'
 import { LauncherModule } from './modules/launcher/launcher.module'
 import { VersionsModule } from './modules/versions/versions.module'
 import { AppConfigModule } from './modules/config/config.module'
+import { HardwareModule } from './modules/hardware/hardware.module'
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { AppConfigModule } from './modules/config/config.module'
     }),
     LauncherModule,
     VersionsModule,
-    AppConfigModule
+    AppConfigModule,
+    HardwareModule
   ]
 })
 export class AppModule {}

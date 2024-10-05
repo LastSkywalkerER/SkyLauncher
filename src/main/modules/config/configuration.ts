@@ -1,8 +1,13 @@
 import { config } from 'dotenv'
+import { arch, platform } from '../../constants'
 
 config()
 
 export default () => ({
+  hardware: {
+    platform: platform,
+    architecture: arch
+  },
   s3client: {
     endPoint: process.env.MAIN_VITE_MINIO_endPoint || import.meta.env.MAIN_VITE_MINIO_endPoint,
     port: Number(process.env.MAIN_VITE_MINIO_port || import.meta.env.MAIN_VITE_MINIO_port),

@@ -6,3 +6,4 @@ out
 .env
 electron.vite.config.**.mjs
 .idea
+test-scripts

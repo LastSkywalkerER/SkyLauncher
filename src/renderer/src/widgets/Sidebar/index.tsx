@@ -5,7 +5,7 @@ import { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export const Sidebar: FC = () => {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   return (
     <>

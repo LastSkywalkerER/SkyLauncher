@@ -63,20 +63,20 @@ export class Client {
 
     // Install main game version
     const availableVersions = await getVersionList()
-    this.debug('availableVersions: ', availableVersions)
+    this.debug('availableVersions: ', JSON.stringify(availableVersions))
     const foundVersion = availableVersions.versions.find(({ id }) => id === version.number)
-    this.debug('Installing version: ', foundVersion)
+    this.debug('Installing version: ', JSON.stringify(foundVersion))
     foundVersion && (await install(foundVersion, root))
     this.debug('Installation success')
 
     // Validate minecraft game folder
     const resolvedVersion: ResolvedVersion = await Version.parse(root, version.number)
-    this.debug('resolvedVersion: ', resolvedVersion)
+    this.debug('resolvedVersion: ', JSON.stringify(resolvedVersion))
     const issueReport: MinecraftIssueReport = await diagnose(
       resolvedVersion.id,
       resolvedVersion.minecraftDirectory
     )
-    this.debug('issueReport: ', issueReport)
+    this.debug('issueReport: ', JSON.stringify(issueReport))
 
     for (const issue of issueReport.issues) {
       switch (issue.role) {
@@ -93,9 +93,9 @@ export class Client {
       const availableForgeList: ForgeVersionList = await getForgeVersionList({
         minecraft: version.number
       })
-      this.debug('availableForgeList: ', availableForgeList)
+      this.debug('availableForgeList: ', JSON.stringify(availableForgeList))
       const forgeData = availableForgeList.versions.find(({ version }) => version === forge)
-      this.debug('Installing forge: ', forgeData)
+      this.debug('Installing forge: ', JSON.stringify(forgeData))
       forgeData && (await installForge(forgeData, root))
       this.debug('Forge installation success')
     }

@@ -4,12 +4,14 @@ import { DownloadAndUnzipOptions } from './zip-downloader.interface'
 import { join } from 'path'
 import { extract } from 'zip-lib'
 import { DownloaderClientService } from '../downloader-client/downloader-client.service'
+import { HardwareService } from '../../hardware/hardware.service'
 
 @Injectable()
 export class ZipDownloaderService {
   constructor(
     @Inject(DownloaderClientService)
-    private readonly downloaderClientService: DownloaderClientService
+    private readonly downloaderClientService: DownloaderClientService,
+    @Inject(HardwareService) private readonly hardwareService: HardwareService
   ) {}
 
   public async downloadAndUnzip({
@@ -20,7 +22,7 @@ export class ZipDownloaderService {
     zipPath
   }: DownloadAndUnzipOptions): Promise<string> {
     const downloadClient = this.downloaderClientService.get()
-    const objectName = join(zipPath, `${version}.zip`) // Путь к файлу в бакете
+    const objectName = this.hardwareService.multiplatformJoin(zipPath, `${version}.zip`) // Путь к файлу в бакете
     const outputDirectory = join(destinationPath, zipPath) || './downloads' // Локальная директория для разархивирования
     const extractedFileCheckPath = join(outputDirectory, version) // Проверка наличия разархивированной версии
 
@@ -47,17 +49,27 @@ export class ZipDownloaderService {
       const tempZipPath = join(outputDirectory, `${version}.zip`)
       const writeStream = createWriteStream(tempZipPath)
 
+      // Получение объекта с помощью потоков данных
+      const stat = await downloadClient.statObject(bucketName, objectName)
+      const totalSize = stat.size
+
+      let downloadedBytes = 0
+
       // Пишем поток данных в ZIP файл
       dataStream.pipe(writeStream)
 
       await new Promise((resolve, reject) => {
-        // Когда загрузка завершена, распаковываем ZIP файл с использованием zip-lib
         writeStream.on('finish', async () => {
           try {
             debug(`Extracting ZIP file to ${outputDirectory}`)
 
             // Распаковка архива с учетом символических ссылок
-            await extract(tempZipPath, outputDirectory)
+            await extract(tempZipPath, outputDirectory, {
+              onEntry: (entry) => {
+                // Обновляем статус распаковки
+                debug(`Extracting: ${entry.entryName}`)
+              }
+            })
 
             debug(`Extraction complete. Files are saved in ${outputDirectory}`)
 
@@ -76,9 +88,15 @@ export class ZipDownloaderService {
           reject()
         })
 
-        dataStream.on('error', (err) => {
-          debug(`Error downloading object: ${err}`)
-          reject()
+        dataStream.on('data', (chunk) => {
+          downloadedBytes += chunk.length // Увеличиваем количество загруженных байтов
+          const downloadPercentage = ((downloadedBytes / totalSize) * 100).toFixed(2)
+          debug(`Download progress: ${downloadPercentage}%`) // Обновляем статус загрузки
+        })
+
+        dataStream.on('end', () => {
+          const finalPercentage = 100
+          debug(`Download complete: ${finalPercentage}%`) // Статус загрузки 100%
         })
       })
     } catch (err) {
@@ -86,5 +104,44 @@ export class ZipDownloaderService {
     }
 
     return extractedFileCheckPath
+  }
+
+  private async getListFoldersInBucket(
+    bucketName: string,
+    debug: (data: string) => void,
+    prefix = ''
+  ): Promise<{ folders: string[]; files: string[] }> {
+    const downloadClient = this.downloaderClientService.get()
+    const folders: Set<string> = new Set() // Для уникальных префиксов папок
+    const files: Set<string> = new Set() // Для уникальных файлов
+
+    const stream = downloadClient.listObjects(bucketName, prefix, true)
+
+    return new Promise((resolve, reject): void => {
+      stream.on('data', (obj) => {
+        if (!obj.name) return
+
+        // Проверяем, если это папка или файл
+        const parts = obj.name.split('/')
+        if (parts.length > 1) {
+          // Добавляем папку
+          folders.add(parts[0])
+        }
+        // Добавляем файл
+        files.add(obj.name)
+      })
+
+      stream.on('error', (err) => {
+        debug(`Ошибка при получении списка объектов: ${JSON.stringify(err)}`)
+        reject(err)
+      })
+
+      stream.on('end', () => {
+        debug(`Список папок в бакете: ${JSON.stringify(Array.from(folders))}`)
+        debug(`Список файлов в бакете: ${JSON.stringify(Array.from(files))}`)
+        // Возвращаем список папок и файлов
+        resolve({ folders: Array.from(folders), files: Array.from(files) })
+      })
+    })
   }
 }
