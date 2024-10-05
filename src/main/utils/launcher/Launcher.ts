@@ -31,16 +31,21 @@ export class Client {
     )
   }
 
-  public async launch({
-    authorization,
-    forge,
-    javaPath,
-    memory,
-    root,
-    version,
-    window,
-    ...rest
-  }: LauncherOptions & Partial<Omit<LaunchOption, 'version'>>): Promise<ChildProcess> {
+  public async launch(
+    { authorization, forge, javaPath, memory, root, version, window }: LauncherOptions,
+    additionalOptions?: Partial<
+      Omit<
+        LaunchOption,
+        | 'gamePath'
+        | 'javaPath'
+        | 'version'
+        | 'gameProfile'
+        | 'minMemory'
+        | 'maxMemory'
+        | 'resolution'
+      >
+    >
+  ): Promise<ChildProcess> {
     const minecraftArgs: LaunchOption = {
       gamePath: root,
       javaPath: javaPath,
@@ -58,7 +63,7 @@ export class Client {
       //   `${version.number}-forge-${forge}-natives`
       // ),
       resolution: window,
-      ...rest
+      ...additionalOptions
     }
 
     // Install main game version

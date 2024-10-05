@@ -30,6 +30,17 @@ const Settings: FC = () => {
       {/* errors will return when field validation fails  */}
       {errors.minRam && <span>This field is required</span>}
 
+      <InputText
+        {...register('ip', {
+          required: false,
+          pattern:
+            /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+        })}
+      />
+      {errors.ip && <span>Wrong ip</span>}
+      <InputText {...register('port', { required: false, valueAsNumber: true })} />
+      {errors.port && <span>Must be number</span>}
+
       <Button type="submit">Safe</Button>
     </form>
   )

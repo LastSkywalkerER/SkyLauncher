@@ -12,8 +12,8 @@ export interface CreateLauncher {
 
 export interface CustomLauncherOptions {
   name: string
-
   maxRam: string | number
-
   minRam: string | number
+  port?: number
+  ip?: string
 }

@@ -39,26 +39,12 @@ export class LauncherService {
 
     const destinationDir = await this.downloaderService.downloadModpack(version.folder, logger)
 
-    // if (existsSync(destinationDir)) {
-    //   logger('Game folder exists')
-    // } else {
-    //   logger('Generating game folder...')
-
-    //   try {
-    //     cpSync(sourceDir, destinationDir, { recursive: true })
-    //     logger('Game folder genereated')
-    //   } catch (error) {
-    //     logger(String(error))
-    //   }
-    // }
-
     return {
       authorization: {
         uuid: 'offline-uuid',
         name: launcherOptions.name
       },
       root: destinationDir,
-      // root: join(minecraftDir.replace('/index.jar', ''), 'Grape Industrial DLC'),
       version: {
         number: version.version
       },
@@ -68,7 +54,6 @@ export class LauncherService {
       },
       forge: version.forge,
       javaPath: javaExecutable
-      // javaPath: java
     }
   }
 }

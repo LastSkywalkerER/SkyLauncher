@@ -2,8 +2,10 @@ import { interfaces } from 'inversify'
 
 export interface CustomLauncherOptions {
   name: string
-  maxRam: number | string
-  minRam: number | string
+  maxRam: string | number
+  minRam: string | number
+  port?: number
+  ip?: string
 }
 
 export interface ISettings {

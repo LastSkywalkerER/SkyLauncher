@@ -15,7 +15,7 @@ import { Version } from '@main/modules/launcher/launcher.interfaces'
 
 export const versions: Record<string, Version> = {
   'FreshCraft Industrial DLC': {
-    folder: 'FreshCraft Industrial DLC',
+    folder: 'FreshCraft Industrial DLC fixed',
     version: '1.19.2',
     forge: '43.3.13',
     java: '17'

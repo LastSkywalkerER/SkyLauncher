@@ -1,8 +1,15 @@
 import { injectable } from 'inversify'
 
 import { CustomLauncherOptions, ISettings } from './interfaces'
+import { environment } from '../../shared/config/environments'
 
-const defauleSettings: CustomLauncherOptions = { name: 'Player', maxRam: '8192', minRam: '1024' }
+const defauleSettings: CustomLauncherOptions = {
+  name: 'Player',
+  maxRam: '8192',
+  minRam: '1024',
+  port: environment.serverPort,
+  ip: environment.serverIp
+}
 
 @injectable()
 export class Settings implements ISettings {

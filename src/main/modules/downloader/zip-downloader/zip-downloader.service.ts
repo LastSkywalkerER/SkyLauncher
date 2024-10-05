@@ -106,42 +106,42 @@ export class ZipDownloaderService {
     return extractedFileCheckPath
   }
 
-  private async getListFoldersInBucket(
-    bucketName: string,
-    debug: (data: string) => void,
-    prefix = ''
-  ): Promise<{ folders: string[]; files: string[] }> {
-    const downloadClient = this.downloaderClientService.get()
-    const folders: Set<string> = new Set() // Для уникальных префиксов папок
-    const files: Set<string> = new Set() // Для уникальных файлов
-
-    const stream = downloadClient.listObjects(bucketName, prefix, true)
-
-    return new Promise((resolve, reject): void => {
-      stream.on('data', (obj) => {
-        if (!obj.name) return
-
-        // Проверяем, если это папка или файл
-        const parts = obj.name.split('/')
-        if (parts.length > 1) {
-          // Добавляем папку
-          folders.add(parts[0])
-        }
-        // Добавляем файл
-        files.add(obj.name)
-      })
-
-      stream.on('error', (err) => {
-        debug(`Ошибка при получении списка объектов: ${JSON.stringify(err)}`)
-        reject(err)
-      })
-
-      stream.on('end', () => {
-        debug(`Список папок в бакете: ${JSON.stringify(Array.from(folders))}`)
-        debug(`Список файлов в бакете: ${JSON.stringify(Array.from(files))}`)
-        // Возвращаем список папок и файлов
-        resolve({ folders: Array.from(folders), files: Array.from(files) })
-      })
-    })
-  }
+  // private async getListFoldersInBucket(
+  //   bucketName: string,
+  //   debug: (data: string) => void,
+  //   prefix = ''
+  // ): Promise<{ folders: string[]; files: string[] }> {
+  //   const downloadClient = this.downloaderClientService.get()
+  //   const folders: Set<string> = new Set() // Для уникальных префиксов папок
+  //   const files: Set<string> = new Set() // Для уникальных файлов
+  //
+  //   const stream = downloadClient.listObjects(bucketName, prefix, true)
+  //
+  //   return new Promise((resolve, reject): void => {
+  //     stream.on('data', (obj) => {
+  //       if (!obj.name) return
+  //
+  //       // Проверяем, если это папка или файл
+  //       const parts = obj.name.split('/')
+  //       if (parts.length > 1) {
+  //         // Добавляем папку
+  //         folders.add(parts[0])
+  //       }
+  //       // Добавляем файл
+  //       files.add(obj.name)
+  //     })
+  //
+  //     stream.on('error', (err) => {
+  //       debug(`Ошибка при получении списка объектов: ${JSON.stringify(err)}`)
+  //       reject(err)
+  //     })
+  //
+  //     stream.on('end', () => {
+  //       debug(`Список папок в бакете: ${JSON.stringify(Array.from(folders))}`)
+  //       debug(`Список файлов в бакете: ${JSON.stringify(Array.from(files))}`)
+  //       // Возвращаем список папок и файлов
+  //       resolve({ folders: Array.from(folders), files: Array.from(files) })
+  //     })
+  //   })
+  // }
 }

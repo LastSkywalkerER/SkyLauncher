@@ -23,7 +23,14 @@ export class LauncherController {
 
     try {
       const launcher = new Client()
-      await launcher.launch(options)
+      await launcher.launch(
+        options,
+        customLaucnherOptions.ip && customLaucnherOptions.port
+          ? {
+              server: { port: customLaucnherOptions.port, ip: customLaucnherOptions.ip }
+            }
+          : undefined
+      )
       launcher.onDebug((e: string) => debug(e))
     } catch (error) {
       debug(`Error during launch: ${error}`)
