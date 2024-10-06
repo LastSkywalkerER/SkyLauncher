@@ -2,8 +2,8 @@ import { CustomLauncherOptions, ISettings } from '@renderer/entities/Settings/in
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
-import { FC } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { FC, useEffect } from 'react'
+import { FieldPath, FieldPathValue, SubmitHandler, useForm } from 'react-hook-form'
 
 const Settings: FC = () => {
   const { setSettings, getSettings } = useInjection(ISettings.$)
@@ -11,10 +11,21 @@ const Settings: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm<CustomLauncherOptions>({
-    defaultValues: getSettings()
-  })
+    formState: { errors },
+    setValue
+  } = useForm<CustomLauncherOptions>()
+
+  useEffect(() => {
+    getSettings().subscribe((data) => {
+      data &&
+        Object.entries(data).map(([key, value]) =>
+          setValue(
+            key as FieldPath<CustomLauncherOptions>,
+            value as FieldPathValue<CustomLauncherOptions, never>
+          )
+        )
+    })
+  }, [])
 
   const onSubmit: SubmitHandler<CustomLauncherOptions> = (data) => setSettings(data)
 

@@ -1,39 +1,38 @@
 import { Controller, Inject } from '@nestjs/common'
-import { IpcHandle, Window } from '@doubleshot/nest-electron'
-
-import { BrowserWindow } from 'electron'
+import { IpcHandle } from '@doubleshot/nest-electron'
 import { LauncherService } from './launcher.service'
 import { type CreateLauncher } from './launcher.interfaces'
 import { Payload } from '@nestjs/microservices'
 import { Client } from '../../utils/launcher/Launcher'
+import { IPCHandleNames } from '../../constants'
+import { UserLoggerService } from '../user-logger/user-logger.service'
 
 @Controller()
 export class LauncherController {
   constructor(
-    @Window() private readonly mainWindow: BrowserWindow,
-    @Inject(LauncherService) private readonly launcherService: LauncherService
+    @Inject(LauncherService) private readonly launcherService: LauncherService,
+    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
   ) {}
 
-  @IpcHandle('launchMinecraft')
+  @IpcHandle(IPCHandleNames.LaunchMinecraft)
   public async handleLaunchMinecraft(
-    @Payload() { version, customLaucnherOptions }: CreateLauncher
+    @Payload() { version, customLauncherOptions }: CreateLauncher
   ): Promise<void> {
-    const debug = (data: string): void => this.mainWindow.webContents.send('debug', data)
-    const options = await this.launcherService.getOptions(version, customLaucnherOptions, debug)
+    const options = await this.launcherService.getOptions(version, customLauncherOptions)
 
     try {
       const launcher = new Client()
       await launcher.launch(
         options,
-        customLaucnherOptions.ip && customLaucnherOptions.port
+        customLauncherOptions.ip && customLauncherOptions.port
           ? {
-              server: { port: customLaucnherOptions.port, ip: customLaucnherOptions.ip }
+              server: { port: customLauncherOptions.port, ip: customLauncherOptions.ip }
             }
           : undefined
       )
-      launcher.onDebug((e: string) => debug(e))
+      launcher.onDebug((e: string) => this.userLoggerService.log(e))
     } catch (error) {
-      debug(`Error during launch: ${error}`)
+      this.userLoggerService.log(`Error during launch: ${error}`)
     }
   }
 }

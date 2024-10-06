@@ -5,6 +5,8 @@ import { LauncherModule } from './modules/launcher/launcher.module'
 import { VersionsModule } from './modules/versions/versions.module'
 import { AppConfigModule } from './modules/config/config.module'
 import { HardwareModule } from './modules/hardware/hardware.module'
+import { UserConfigModule } from './modules/user-config/user-config.module';
+import { UserLoggerModule } from './modules/user-logger/user-logger.module';
 
 @Module({
   imports: [
@@ -15,7 +17,9 @@ import { HardwareModule } from './modules/hardware/hardware.module'
     LauncherModule,
     VersionsModule,
     AppConfigModule,
-    HardwareModule
+    HardwareModule,
+    UserConfigModule,
+    UserLoggerModule
   ]
 })
 export class AppModule {}

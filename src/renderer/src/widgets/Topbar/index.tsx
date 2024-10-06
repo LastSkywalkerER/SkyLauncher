@@ -1,16 +1,21 @@
 import { MegaMenu } from 'primereact/megamenu'
-import { MenuItem, MenuItemCommandEvent } from 'primereact/menuitem'
+import { MenuItem } from 'primereact/menuitem'
 import { Ripple } from 'primereact/ripple'
 
 import icon from '../../../../../resources/icon.png'
 import { routeLinks } from '../../shared/routes/routeNames'
 import { useNavigate } from 'react-router-dom'
 import { Avatar } from 'primereact/avatar'
+import { useInjection } from 'inversify-react'
+import { ISettings } from '../../entities/Settings/interfaces'
+import { useObservable } from '../../shared/hooks/useObservable'
 
 export const Topbar = () => {
   const navigate = useNavigate()
+  const { getSettings } = useInjection(ISettings.$)
+  const settings = useObservable(getSettings(), null)
 
-  const itemRenderer = (item, options) => {
+  const itemRenderer = (item) => {
     return (
       <a
         className="flex align-items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold text-lg uppercase p-ripple hover:surface-ground"
@@ -26,7 +31,7 @@ export const Topbar = () => {
   const items: MenuItem[] = routeLinks.map(({ name, path }) => ({
     label: name,
     template: itemRenderer,
-    command(event: MenuItemCommandEvent) {
+    command() {
       navigate(path)
     }
   }))
@@ -35,7 +40,7 @@ export const Topbar = () => {
     return (
       <div className={'flex items-center gap-5 mr-5'}>
         <Avatar template={<img src={icon} alt="icon" />} shape="circle" />
-        <h5>Player</h5>
+        <h3>{settings?.name}</h3>
       </div>
     )
   }

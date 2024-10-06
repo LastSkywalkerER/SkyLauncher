@@ -1,6 +1,6 @@
 import { injectable } from 'inversify'
 
-import { INodeApi, Version, WindowApi } from './interfaces'
+import { ConfigKeys, INodeApi, Version, WindowApi } from './interfaces'
 import { CustomLauncherOptions } from '../Settings/interfaces'
 import { from, Observable, ReplaySubject, Subscription } from 'rxjs'
 
@@ -13,7 +13,7 @@ export class NodeApi implements INodeApi {
   constructor() {
     this._nodeApi = window.api as WindowApi
 
-    this._versions = from(this._nodeApi.getMinceraftVersions())
+    this._versions = from(this._nodeApi.getMinecraftVersions())
 
     this._nodeApi.setLogger((data) => this._logs$.next(String(data)))
 
@@ -28,10 +28,22 @@ export class NodeApi implements INodeApi {
   }
 
   public launchMinecraft(version: Version, launcherOptions: CustomLauncherOptions): Promise<void> {
-    console.log(version)
     return this._nodeApi.launchMinecraft({
       version,
-      customLaucnherOptions: launcherOptions
+      customLauncherOptions: launcherOptions
+    })
+  }
+
+  public setConfig(key: ConfigKeys, value: unknown): Promise<void> {
+    return this._nodeApi.setUserConfig({
+      key,
+      value
+    })
+  }
+
+  public getConfig(key: ConfigKeys): Promise<string> {
+    return this._nodeApi.getUserConfig({
+      key
     })
   }
 

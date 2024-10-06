@@ -7,18 +7,17 @@ import { Button } from 'primereact/button'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 
-import React from 'react'
-
 const Versions: FC = () => {
   const { getMCVersions, launchMinecraft } = useInjection(INodeApi.$)
   const versions = useObservable(getMCVersions(), {})
 
   const { getSettings } = useInjection(ISettings.$)
+  const settings = useObservable(getSettings(), null)
 
   const handleButton =
     (version: Version): (() => void) =>
     (): void => {
-      launchMinecraft(version, getSettings())
+      settings && launchMinecraft(version, settings)
     }
 
   return (

@@ -2,11 +2,12 @@ import { Controller } from '@nestjs/common'
 import { Version } from '../launcher/launcher.interfaces'
 import { IpcHandle } from '@doubleshot/nest-electron'
 import { versions } from '../../utils/launcher/versions'
+import { IPCHandleNames } from '../../constants'
 
 @Controller()
 export class VersionsController {
-  @IpcHandle('getMinceraftVersions')
-  public handleGetMinceraftVersions(): Record<string, Version> {
+  @IpcHandle(IPCHandleNames.GetMinecraftVersions)
+  public handleGetMinecraftVersions(): Record<string, Version> {
     return versions
   }
 }

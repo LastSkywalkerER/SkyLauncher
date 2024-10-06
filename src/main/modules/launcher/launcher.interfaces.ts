@@ -1,11 +1,9 @@
 export interface Version {
   folder: string
-
   version: string
-
   forge: string
-
   java: string
+  icon: string
 }
 
 export interface CustomLauncherOptions {
@@ -18,7 +16,7 @@ export interface CustomLauncherOptions {
 
 export interface CreateLauncher {
   version: Version
-  customLaucnherOptions: CustomLauncherOptions
+  customLauncherOptions: CustomLauncherOptions
 }
 
 export interface LauncherOptions {

@@ -10,8 +10,6 @@ const Logs: FC = () => {
 
   useEffect(() => {
     const subscription = subscribeOnLogs((newLog) => {
-      console.log('Client', newLog)
-
       setLogs((oldLogs) => {
         const newLogs = `${oldLogs}
         ${newLog}`

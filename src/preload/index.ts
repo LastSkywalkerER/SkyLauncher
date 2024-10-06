@@ -4,12 +4,14 @@ import { CreateLauncher, Version } from './interfaces'
 
 // Custom APIs for renderer
 const api = {
-  getMinceraftVersions: (): Promise<Record<string, Version>> =>
-    ipcRenderer.invoke('getMinceraftVersions'),
+  getMinecraftVersions: (): Promise<Record<string, Version>> =>
+    ipcRenderer.invoke('getMinecraftVersions'),
   launchMinecraft: (data: CreateLauncher): Promise<void> =>
     ipcRenderer.invoke('launchMinecraft', data),
   setLogger: (logTracer: (data: string) => void): IpcRenderer =>
-    ipcRenderer.on('debug', (_, message: string) => logTracer(message))
+    ipcRenderer.on('user-log', (_, message: string) => logTracer(message)),
+  setUserConfig: (data): Promise<void> => ipcRenderer.invoke('set-config', data),
+  getUserConfig: (data): Promise<string> => ipcRenderer.invoke('get-config', data)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

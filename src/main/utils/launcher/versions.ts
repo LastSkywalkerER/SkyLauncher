@@ -18,7 +18,8 @@ export const versions: Record<string, Version> = {
     folder: 'FreshCraft Industrial DLC fixed',
     version: '1.19.2',
     forge: '43.3.13',
-    java: '17'
+    java: '17',
+    icon: 'https://ipfs.io/ipfs/QmTjtPMc2gXGxdyFrsnzAvVa7gLBNBguasNVqJNa1X5ZzT'
     // java: javas['17']
   }
   // 'grape-industrial-dlc-mac': {

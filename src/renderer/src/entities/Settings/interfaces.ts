@@ -1,4 +1,5 @@
 import { interfaces } from 'inversify'
+import { Observable } from 'rxjs'
 
 export interface CustomLauncherOptions {
   name: string
@@ -9,7 +10,7 @@ export interface CustomLauncherOptions {
 }
 
 export interface ISettings {
-  getSettings: () => CustomLauncherOptions
+  getSettings: () => Observable<CustomLauncherOptions | null>
   setSettings: (settings: CustomLauncherOptions) => void
 }
 
