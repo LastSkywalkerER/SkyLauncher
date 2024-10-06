@@ -26,7 +26,7 @@ const Logs: FC = () => {
   }, [])
 
   return (
-    <div className="h-[80%] w-full">
+    <div className="h-full w-full">
       <ScrollFollow
         startFollowing={true}
         render={({ follow, onScroll }) => (

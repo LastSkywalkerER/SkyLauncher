@@ -1,4 +1,5 @@
 import './index.css'
+import 'primeicons/primeicons.css'
 
 import { PrimeReactProvider } from 'primereact/api'
 import { routes } from '@renderer/shared/routes/routes'

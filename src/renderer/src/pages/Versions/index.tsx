@@ -7,6 +7,8 @@ import { Button } from 'primereact/button'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 
+import React from 'react'
+
 const Versions: FC = () => {
   const { getMCVersions, launchMinecraft } = useInjection(INodeApi.$)
   const versions = useObservable(getMCVersions(), {})

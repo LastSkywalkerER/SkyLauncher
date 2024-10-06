@@ -6,7 +6,6 @@ const Layout = lazy(() => import('../../app/Layout'))
 const Home = lazy(() => import('../../pages/Home'))
 const Logs = lazy(() => import('../../pages/Logs'))
 const Settings = lazy(() => import('../../pages/Settings'))
-const Versions = lazy(() => import('../../pages/Versions'))
 
 export const routes = createBrowserRouter([
   {
@@ -28,10 +27,6 @@ export const routes = createBrowserRouter([
       {
         path: RouteNames.Settings,
         element: <Settings />
-      },
-      {
-        path: RouteNames.Versions,
-        element: <Versions />
       }
     ]
   }
