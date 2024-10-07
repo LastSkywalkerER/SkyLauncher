@@ -108,21 +108,25 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Get macOS build artifact name
+      - name: Find macOS build artifact
         id: macos_artifact
         run: |
-          macos_file=$(ls dist/*.dmg | xargs -n 1 basename)
+          macos_file=$(find . -name "*.dmg" | xargs -n 1 basename)
+          if [ -z "$macos_file" ]; then
+            echo "No macOS build artifact found."
+            exit 1  # Завершение работы с ошибкой, если артефакт не найден
+          fi
           echo "macos_file=${macos_file}" >> $GITHUB_ENV  # Установка переменной окружения
 
-      - name: Check for Windows build artifact
+      - name: Find Windows build artifact
+        id: windows_artifact
         run: |
-          if ls dist/*.exe 1> /dev/null 2>&1; then
-            windows_file=$(ls dist/*.exe | xargs -n 1 basename)
-            echo "windows_file=${windows_file}" >> $GITHUB_ENV  # Установка переменной окружения
-          else
+          windows_file=$(find . -name "*.exe" | xargs -n 1 basename)
+          if [ -z "$windows_file" ]; then
             echo "No Windows build artifact found."
             exit 1  # Завершение работы с ошибкой, если артефакт не найден
           fi
+          echo "windows_file=${windows_file}" >> $GITHUB_ENV  # Установка переменной окружения
 
       - name: Upload macOS build artifact
         uses: actions/upload-release-asset@v1
