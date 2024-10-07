@@ -93,8 +93,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем персональный токен
         with:
-          tag_name: ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
+          tag_name: release-${{ github.run_number }}  # Имя тега для релиза
+          release_name: Release ${{ github.run_number }}  # Имя релиза
           draft: false
           prerelease: false
 
