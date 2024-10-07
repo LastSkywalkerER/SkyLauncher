@@ -1,0 +1,57 @@
+stages:
+  - build
+  - release
+
+variables:
+  NODE_VERSION: $(cat .nvmrc | sed 's/^v//')  # Удаление 'v' из начала строки
+
+build:
+  stage: build
+  image: macos-latest  # Использование macOS образа
+  script:
+    - echo "Using Node.js version $NODE_VERSION"
+    - brew install node@${NODE_VERSION}  # Установка нужной версии Node.js
+    - brew install --cask wine  # Установка Wine для сборки Windows
+    - yarn install
+
+    # Генерация .env файла из секретов GitLab
+    - |
+      echo "Generating .env file..."
+      echo "# Generated environment variables" > .env
+      for var in $(printenv | grep -E 'MAIN_VITE_|RENDERER_VITE_' | cut -d= -f1); do
+        echo "$var=${!var}" >> .env
+      done
+
+    - yarn build:mac
+    - yarn build:win
+  artifacts:
+    paths:
+      - dist/*
+
+release:
+  stage: release
+  image: macos-latest  # Использование macOS образа
+  dependencies:
+    - build
+  script:
+    - mkdir -p release
+    - mv dist/*.dmg release/macos_build.dmg
+    - mv dist/*.exe release/windows_build.exe
+    - echo "Release files prepared for uploading"
+
+    # Используем API GitLab для создания релиза и загрузки артефактов
+    - >
+      curl --request POST --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" \
+      --form "name=Release ${CI_PIPELINE_ID}" \
+      --form "tag_name=release-${CI_PIPELINE_ID}" \
+      --form "description=Release of version ${CI_PIPELINE_ID}" \
+      "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/releases"
+
+    - >
+      curl --request POST --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" \
+      --form "file=@release/macos_build.dmg" \
+      "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/uploads"
+    - >
+      curl --request POST --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" \
+      --form "file=@release/windows_build.exe" \
+      "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/uploads"
