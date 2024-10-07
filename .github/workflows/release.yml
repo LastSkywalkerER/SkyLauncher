@@ -73,6 +73,7 @@ jobs:
           path: dist/windows
 
       - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,6 +82,29 @@ jobs:
           release_name: Release ${{ github.sha }}
           draft: false
           prerelease: false
-          files: |
-            dist/macos/*.dmg
-            dist/windows/*.exe
+
+      - name: Get macOS build artifact name
+        id: macos_artifact
+        run: |
+          echo "macos_file=$(ls dist/*.dmg | xargs -n 1 basename)" >> $GITHUB_ENV
+
+      - name: Get Windows build artifact name
+        id: windows_artifact
+        run: |
+          echo "windows_file=$(ls dist/*.exe | xargs -n 1 basename)" >> $GITHUB_ENV
+
+      - name: Upload macOS build artifact
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/macos/${{ env.macos_file }}  # Используем имя файла из переменной
+          asset_name: ${{ env.macos_file }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload Windows build artifact
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/windows/${{ env.windows_file }}  # Используем имя файла из переменной
+          asset_name: ${{ env.windows_file }}
+          asset_content_type: application/octet-stream
