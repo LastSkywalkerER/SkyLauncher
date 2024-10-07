@@ -1,0 +1,78 @@
+name: Build and Release Electron App
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Триггер на тегированный релиз по шаблону версий vX.X.X
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+
+      # Установка Wine на macOS для сборки Windows .exe
+      - name: Install Wine on macOS
+        run: brew install --cask wine-stable
+
+      - name: Build the app for macOS
+        run: yarn build:mac
+
+      - name: Build the app for Windows
+        run: yarn build:win
+
+      - name: Upload macOS build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-dist
+          path: dist/*.dmg
+
+      - name: Upload Windows build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-dist
+          path: dist/*.exe
+
+  release:
+    needs: build
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download macOS build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-dist
+          path: dist/macos
+
+      - name: Download Windows build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-dist
+          path: dist/windows
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+          files: |
+            dist/macos/*.dmg
+            dist/windows/*.exe
