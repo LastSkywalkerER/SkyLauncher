@@ -9,11 +9,11 @@ export default () => ({
     architecture: arch
   },
   s3client: {
-    endPoint: process.env.MAIN_VITE_MINIO_endPoint || import.meta.env.MAIN_VITE_MINIO_endPoint,
-    port: Number(process.env.MAIN_VITE_MINIO_port || import.meta.env.MAIN_VITE_MINIO_port),
+    endPoint: process.env.MAIN_VITE_MINIO_ENDPOINT || import.meta.env.MAIN_VITE_MINIO_ENDPOINT,
+    port: Number(process.env.MAIN_VITE_MINIO_PORT || import.meta.env.MAIN_VITE_MINIO_PORT),
     useSSL:
-      (process.env.MAIN_VITE_MINIO_useSSL || import.meta.env.MAIN_VITE_MINIO_useSSL) === 'true',
-    accessKey: process.env.MAIN_VITE_MINIO_accessKey || import.meta.env.MAIN_VITE_MINIO_accessKey,
-    secretKey: process.env.MAIN_VITE_MINIO_secretKey || import.meta.env.MAIN_VITE_MINIO_secretKey
+      (process.env.MAIN_VITE_MINIO_USESSL || import.meta.env.MAIN_VITE_MINIO_USESSL) === 'true',
+    accessKey: process.env.MAIN_VITE_MINIO_ACCESSKEY || import.meta.env.MAIN_VITE_MINIO_ACCESSKEY,
+    secretKey: process.env.MAIN_VITE_MINIO_SECRETKEY || import.meta.env.MAIN_VITE_MINIO_SECRETKEY
   }
 })

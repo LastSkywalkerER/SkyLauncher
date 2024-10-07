@@ -13,6 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
+      - name: Generate .env file from all relevant secrets
+        run: |
+          touch .env
+          for var in $(printenv); do
+            # Фильтрация переменных с префиксами MAIN_VITE_ и RENDERER_VITE_
+            if [[ $var == MAIN_VITE_* || $var == RENDERER_VITE_* ]]; then
+              key=$(echo $var | cut -d'=' -f1)
+              value=$(echo $var | cut -d'=' -f2-)
+              echo "$key=$value" >> .env
+            fi
+          done
+          echo ".env file generated:"
+          cat .env
+
       # Чтение версии Node.js из файла .nvmrc и удаление 'v' в начале
       - name: Use Node.js version from .nvmrc
         id: nvmrc_version
@@ -76,7 +91,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем персональный токен
         with:
           tag_name: ${{ github.sha }}
           release_name: Release ${{ github.sha }}
