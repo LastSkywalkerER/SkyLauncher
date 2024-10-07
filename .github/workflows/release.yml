@@ -13,10 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Чтение версии Node.js из файла .nvmrc и удаление 'v' в начале
+      - name: Use Node.js version from .nvmrc
+        id: nvmrc_version
+        run: |
+          NODE_VERSION=$(cat .nvmrc | sed 's/^v//')  # Удаление 'v' из начала строки
+          echo "Using Node.js version $NODE_VERSION"
+          echo "NODE_VERSION=$NODE_VERSION" >> $GITHUB_ENV  # Сохранение переменной в окружении
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}  # Использование версии из .nvmrc без 'v'
           cache: 'yarn'
 
       - name: Install dependencies
