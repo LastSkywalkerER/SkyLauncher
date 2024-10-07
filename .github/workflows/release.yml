@@ -52,8 +52,18 @@ jobs:
       - name: Build the app for macOS
         run: yarn build:mac
 
+      - name: List files in dist after macOS build
+        run: |
+          echo "Files in dist after macOS build:"
+          ls -la dist
+
       - name: Build the app for Windows
         run: yarn build:win
+
+      - name: List files in dist after Windows build
+        run: |
+          echo "Files in dist after Windows build:"
+          ls -la dist
 
       - name: Upload macOS build artifacts
         uses: actions/upload-artifact@v3
@@ -101,12 +111,18 @@ jobs:
       - name: Get macOS build artifact name
         id: macos_artifact
         run: |
-          echo "macos_file=$(ls dist/*.dmg | xargs -n 1 basename)" >> $GITHUB_ENV
+          macos_file=$(ls dist/*.dmg | xargs -n 1 basename)
+          echo "macos_file=${macos_file}" >> $GITHUB_ENV  # Установка переменной окружения
 
-      - name: Get Windows build artifact name
-        id: windows_artifact
+      - name: Check for Windows build artifact
         run: |
-          echo "windows_file=$(ls dist/*.exe | xargs -n 1 basename)" >> $GITHUB_ENV
+          if ls dist/*.exe 1> /dev/null 2>&1; then
+            windows_file=$(ls dist/*.exe | xargs -n 1 basename)
+            echo "windows_file=${windows_file}" >> $GITHUB_ENV  # Установка переменной окружения
+          else
+            echo "No Windows build artifact found."
+            exit 1  # Завершение работы с ошибкой, если артефакт не найден
+          fi
 
       - name: Upload macOS build artifact
         uses: actions/upload-release-asset@v1
