@@ -2,7 +2,7 @@ import { MegaMenu } from 'primereact/megamenu'
 import { MenuItem } from 'primereact/menuitem'
 import { Ripple } from 'primereact/ripple'
 
-import icon from '../../../../../resources/icon.png'
+import icon from '../../../../../resources/icons/icon.png'
 import { routeLinks } from '../../shared/routes/routeNames'
 import { useNavigate } from 'react-router-dom'
 import { Avatar } from 'primereact/avatar'
