@@ -101,7 +101,7 @@ export class Client {
       this.debug('availableForgeList: ', JSON.stringify(availableForgeList))
       const forgeData = availableForgeList.versions.find(({ version }) => version === forge)
       this.debug('Installing forge: ', JSON.stringify(forgeData))
-      forgeData && (await installForge(forgeData, root))
+      forgeData && (await installForge(forgeData, root, { java: javaPath }))
       this.debug('Forge installation success')
     }
 
