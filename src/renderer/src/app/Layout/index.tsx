@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { Outlet } from 'react-router-dom'
+import { ProgressBar } from '../../widgets/ProgressBar'
 import { Topbar } from '../../widgets/Topbar'
 import { Dock } from '../../widgets/Versions'
 import background from '../../../../../resources/images/background2.png'
@@ -18,6 +19,7 @@ const Layout: FC = () => {
       <div className={'absolute top-[90px] right-0 left-[100px] h-[80%]'}>
         <Outlet />
       </div>
+      <ProgressBar className={'absolute bottom-0 w-full'} />
     </div>
   )
 }

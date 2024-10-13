@@ -7,6 +7,7 @@ import { AppConfigModule } from './modules/config/config.module'
 import { HardwareModule } from './modules/hardware/hardware.module'
 import { UserConfigModule } from './modules/user-config/user-config.module';
 import { UserLoggerModule } from './modules/user-logger/user-logger.module';
+import { ProcessProgressModule } from './modules/process-progress/process-progress.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UserLoggerModule } from './modules/user-logger/user-logger.module';
     AppConfigModule,
     HardwareModule,
     UserConfigModule,
-    UserLoggerModule
+    UserLoggerModule,
+    ProcessProgressModule
   ]
 })
 export class AppModule {}

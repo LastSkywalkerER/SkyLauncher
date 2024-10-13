@@ -1,7 +1,19 @@
-export interface DownloadAndUnzipOptions {
+import * as stream from 'stream'
+
+export interface Unzip {
+  outputDirectory: string
   zipPath: string
-  destinationPath: string
+}
+
+export interface DownloadFromS3 {
   bucketName: string
-  version: string
-  debug: (data: string) => void
+  objectPath: string
+  fileName: string
+  outputDirectory: string
+}
+
+export interface DownloadFromUrl {
+  fileUrl: string
+  fileName: string
+  outputDirectory: string
 }

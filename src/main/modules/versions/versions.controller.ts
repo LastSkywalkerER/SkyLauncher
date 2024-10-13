@@ -1,13 +1,20 @@
-import { Controller } from '@nestjs/common'
-import { Version } from '../launcher/launcher.interfaces'
+import { Controller, Inject } from '@nestjs/common'
+import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
 import { IpcHandle } from '@doubleshot/nest-electron'
-import { versions } from '../../utils/launcher/versions'
-import { IPCHandleNames } from '../../constants'
+import { IPCHandleNames } from '../../../constants'
+import { VersionsService } from './versions.service'
 
 @Controller()
 export class VersionsController {
-  @IpcHandle(IPCHandleNames.GetMinecraftVersions)
-  public handleGetMinecraftVersions(): Record<string, Version> {
-    return versions
+  constructor(@Inject(VersionsService) private readonly versionsService: VersionsService) {}
+
+  @IpcHandle(IPCHandleNames.GetCustomMCVersions)
+  public async handleGetCustomMCVersions(): Promise<IMCGameVersion[]> {
+    return await this.versionsService.getCustomModpacksVersions()
+  }
+
+  @IpcHandle(IPCHandleNames.GetLocalMCVersions)
+  public async handleGetLocalMCVersions(): Promise<IMCGameVersion[]> {
+    return await this.versionsService.getLocalVersions()
   }
 }

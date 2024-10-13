@@ -1,63 +1,230 @@
 import { Inject, Injectable } from '@nestjs/common'
+import { launch, LaunchOption, Version } from '@xmcl/core'
 
-import { CustomLauncherOptions, LauncherOptions, Version } from './launcher.interfaces'
-
-import { join } from 'path'
+import { install, installForge, installLibraries } from '@xmcl/installer'
 import { exec } from 'child_process'
+import { ChildProcess } from 'node:child_process'
+import { existsSync } from 'node:fs'
+import { join } from 'path'
+import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { DownloaderService } from '../downloader/downloader.service'
 import { HardwareService } from '../hardware/hardware.service'
+import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
+import { VersionsService } from '../versions/versions.service'
 
 @Injectable()
 export class LauncherService {
   constructor(
     @Inject(DownloaderService) private readonly downloaderService: DownloaderService,
     @Inject(HardwareService) private readonly hardwareService: HardwareService,
-    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
+    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService,
+    @Inject(UserConfigService) private readonly userConfigService: UserConfigService,
+    @Inject(VersionsService) private readonly versionsService: VersionsService
   ) {}
 
-  public async getOptions(
-    version: Version,
-    launcherOptions: CustomLauncherOptions
-  ): Promise<LauncherOptions> {
-    const logger = this.userLoggerService.log.bind(this.userLoggerService)
-    const javaDir = await this.downloaderService.downloadJava(version.java, logger)
-    const javaExecutable = join(javaDir, this.hardwareService.getJavaExecutableName())
+  public async isJavaExecutableExists(version?: string): Promise<boolean> {
+    const javaDir = this.hardwareService.getJavaDir(version)
+    const javaExecutablePath = this.hardwareService.getJavaExecutablePath(version)
 
-    console.log({ version, launcherOptions })
+    if (!existsSync(javaDir)) {
+      this.userLoggerService.log(`${javaDir} not exists`)
+      return false
+    }
+    this.userLoggerService.log(`${javaDir} exists`)
+
+    if (!existsSync(javaExecutablePath)) {
+      this.userLoggerService.log(`${javaExecutablePath} not exists`)
+      return false
+    }
+    this.userLoggerService.log(`${javaExecutablePath} exists`)
+
+    return true
+  }
+
+  public async installJava(version?: string): Promise<void> {
+    const javaDir = await this.downloaderService.downloadJava(version)
 
     this.hardwareService.getPlatform() !== 'win32' &&
       exec(`chmod -R 755 "${javaDir}"`, (error, stdout, stderr) => {
         if (error) {
-          logger(`Error to chmod java: ${error.message}`)
+          this.userLoggerService.error(`Error to chmod java: ${error.message}`)
           return
         }
 
         if (stderr) {
-          logger(`Error: ${stderr}`)
+          this.userLoggerService.error(`Error: ${stderr}`)
           return
         }
 
-        logger(`Chmod sucess: ${stdout}`)
+        this.userLoggerService.log(`Chmod sucess: ${stdout}`)
       })
+  }
 
-    const destinationDir = await this.downloaderService.downloadModpack(version.folder, logger)
+  public async installNativeGame(version: MCGameVersion): Promise<MCGameVersion> {
+    const updatedVersion = version.update({
+      folder:
+        version.folder ||
+        join(
+          this.userConfigService.get<'directoriesPaths.modpacks'>('directoriesPaths.modpacks'),
+          version.name
+        )
+    })
 
-    return {
-      authorization: {
-        uuid: 'offline-uuid',
-        name: launcherOptions.name
-      },
-      root: destinationDir,
-      version: {
-        number: version.version
-      },
-      memory: {
-        max: launcherOptions.maxRam,
-        min: launcherOptions.minRam
-      },
-      forge: version.forge,
-      javaPath: javaExecutable
+    let jsonUrl = updatedVersion.jsonUrl
+
+    if (!jsonUrl) {
+      const nativeVersion = await this.versionsService.getNativeVersions([version.version])
+
+      jsonUrl = nativeVersion[0].jsonUrl
     }
+
+    try {
+      console.log(
+        {
+          url: jsonUrl,
+          id: version.version
+        },
+        updatedVersion.folder
+      )
+      await install(
+        {
+          url: jsonUrl,
+          id: version.version
+        },
+        updatedVersion.folder
+      )
+
+      console.log('installed')
+
+      const resolvedVersion = await Version.parse(updatedVersion.folder, version.version)
+      console.log({ resolvedVersion })
+
+      await installLibraries(resolvedVersion)
+
+      console.log('installLibraries')
+
+      return updatedVersion.update({ jsonUrl }).updateStatus({ native: true, libs: true })
+    } catch (error) {
+      this.userLoggerService.error(`Error while installing native game: `, error)
+      return version
+    }
+  }
+
+  public async installForgeGame(version: MCGameVersion): Promise<MCGameVersion> {
+    const updatedVersion = version.update({
+      folder:
+        version.folder ||
+        join(
+          this.userConfigService.get<'directoriesPaths.modpacks'>('directoriesPaths.modpacks'),
+          version.name
+        )
+    })
+
+    if (!(await this.isJavaExecutableExists(version.java))) {
+      await this.installJava(version.java)
+    }
+
+    const javaPath = this.hardwareService.getJavaExecutablePath(version.java)
+
+    try {
+      const nativeVersion = await this.installNativeGame(updatedVersion)
+
+      await installForge(
+        { mcversion: nativeVersion.version, version: nativeVersion.forge },
+        nativeVersion.folder,
+        { java: javaPath }
+      )
+
+      return nativeVersion.updateStatus({ forge: true })
+    } catch (error) {
+      this.userLoggerService.error(`Error while installing forged game: `, error)
+      return version
+    }
+  }
+
+  public async installCustomModpack(version: MCGameVersion): Promise<MCGameVersion> {
+    try {
+      const modpackDir = await this.downloaderService.downloadModpack(version)
+
+      const updatedVersion = version.update({ folder: modpackDir })
+
+      return await this.installForgeGame(updatedVersion)
+    } catch (error) {
+      this.userLoggerService.error(`Error while downloading custom modpack: `, error)
+      return version
+    }
+  }
+
+  public async checkLocalModpack(version: MCGameVersion): Promise<MCGameVersion> {
+    try {
+      if (version.forge) {
+        return await this.installForgeGame(version)
+      }
+
+      return await this.installNativeGame(version)
+    } catch (error) {
+      this.userLoggerService.error(`Error while downloading custom modpack: `, error)
+      return version
+    }
+  }
+
+  public async launchGame(version: MCGameVersion): Promise<ChildProcess> {
+    const {
+      status: { native, libs }
+    } = version
+    if (!native || !libs) {
+      throw Error(`Game ${version.name} not ready`)
+    }
+
+    if (!(await this.isJavaExecutableExists(version.java))) {
+      await this.installJava(version.java)
+    }
+
+    const javaPath = this.hardwareService.getJavaExecutablePath(version.java)
+    const userName = this.userConfigService.get<'user.name'>('user.name')
+    const userId = this.userConfigService.get<'user.id'>('user.id')
+    const minMemory = this.userConfigService.get<'javaArgs.minMemory'>('javaArgs.minMemory')
+    const maxMemory = this.userConfigService.get<'javaArgs.maxMemory'>('javaArgs.maxMemory')
+    const width = this.userConfigService.get<'resolution.width'>('resolution.width')
+    const height = this.userConfigService.get<'resolution.height'>('resolution.height')
+    const fullscreen = this.userConfigService.get<'resolution.fullscreen'>(
+      'resolution.fullscreen'
+    ) as undefined | true
+
+    const launchOptions: LaunchOption = {
+      gamePath: version.folder,
+      javaPath: javaPath,
+      version: version.fullVersion,
+      gameProfile: { name: userName, id: userId },
+      //   userType: 'legacy',
+      // resourcePath: root,
+      minMemory,
+      maxMemory,
+      server: version.server,
+      // nativeRoot: join(
+      //   root,
+      //   'versions',
+      //   `${version.number}-forge-${forge}`,
+      //   `${version.number}-forge-${forge}-natives`
+      // ),
+      resolution: {
+        width,
+        height,
+        fullscreen
+      }
+    }
+
+    this.userLoggerService.info(`Start ${version.name} with args: `, launchOptions)
+
+    const process = await launch(launchOptions)
+
+    process.stdout?.setEncoding('utf-8')
+    process.stdout?.on('data', (data) => this.userLoggerService.log(`${version.name}: `, data))
+
+    process.stderr?.setEncoding('utf-8')
+    process.stderr?.on('data', (data) => this.userLoggerService.error(`${version.name}: `, data))
+
+    return process
   }
 }

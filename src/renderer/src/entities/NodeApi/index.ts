@@ -1,57 +1,38 @@
 import { injectable } from 'inversify'
+import { RendererApi } from '../../../../api/types'
+import { ConfigKeys, UserConfigData } from '../../../../dtos/config.dto'
 
-import { ConfigKeys, INodeApi, Version, WindowApi } from './interfaces'
-import { CustomLauncherOptions } from '../Settings/interfaces'
-import { from, Observable, ReplaySubject, Subscription } from 'rxjs'
+import { INodeApi } from './interfaces'
+import { ReplaySubject, Subscription } from 'rxjs'
 
 @injectable()
 export class NodeApi implements INodeApi {
-  private _nodeApi: WindowApi
+  private _nodeApi: RendererApi
   private _logs$ = new ReplaySubject<undefined | string>()
-  private _versions: Observable<Record<string, Version>>
 
   constructor() {
-    this._nodeApi = window.api as WindowApi
-
-    this._versions = from(this._nodeApi.getMinecraftVersions())
+    this._nodeApi = window.api as RendererApi
 
     this._nodeApi.setLogger((data) => this._logs$.next(String(data)))
 
-    this.getMCVersions = this.getMCVersions.bind(this)
-    this.launchMinecraft = this.launchMinecraft.bind(this)
+    this.setConfig = this.setConfig.bind(this)
+    this.getConfig = this.getConfig.bind(this)
     this.subscribeOnLogs = this.subscribeOnLogs.bind(this)
-    this.unsubscribeOnLogs = this.unsubscribeOnLogs.bind(this)
   }
 
-  public getMCVersions(): Observable<Record<string, Version>> {
-    return this._versions
+  public getMainProcessApi(): RendererApi {
+    return this._nodeApi
   }
 
-  public launchMinecraft(version: Version, launcherOptions: CustomLauncherOptions): Promise<void> {
-    return this._nodeApi.launchMinecraft({
-      version,
-      customLauncherOptions: launcherOptions
-    })
-  }
-
-  public setConfig(key: ConfigKeys, value: unknown): Promise<void> {
-    return this._nodeApi.setUserConfig({
-      key,
-      value
-    })
+  public setConfig(config: UserConfigData): Promise<void> {
+    return this._nodeApi.setConfig(config)
   }
 
   public getConfig(key: ConfigKeys): Promise<string> {
-    return this._nodeApi.getUserConfig({
-      key
-    })
+    return this._nodeApi.getConfig(key)
   }
 
   public subscribeOnLogs(subscriber: (data: string | undefined) => void): Subscription {
     return this._logs$.subscribe(subscriber)
-  }
-
-  public unsubscribeOnLogs(subscription: Subscription): void {
-    subscription.unsubscribe()
   }
 }

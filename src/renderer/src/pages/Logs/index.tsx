@@ -4,7 +4,7 @@ import { useInjection } from 'inversify-react'
 import { FC, useEffect, useState } from 'react'
 
 const Logs: FC = () => {
-  const { subscribeOnLogs, unsubscribeOnLogs } = useInjection(INodeApi.$)
+  const { subscribeOnLogs } = useInjection(INodeApi.$)
 
   const [logs, setLogs] = useState('')
 
@@ -19,7 +19,7 @@ const Logs: FC = () => {
     })
 
     return (): void => {
-      unsubscribeOnLogs(subscription)
+      subscription.unsubscribe()
     }
   }, [])
 

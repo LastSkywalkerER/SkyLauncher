@@ -37,9 +37,15 @@ export class Settings implements ISettings {
   }
 
   public async setSettings(settings: CustomLauncherOptions): Promise<void> {
-    await this._nodeApi.setConfig('user.name', settings.name)
-    await this._nodeApi.setConfig('javaArgs.minMemory', settings.minRam)
-    await this._nodeApi.setConfig('javaArgs.maxMemory', settings.maxRam)
+    await this._nodeApi.setConfig({
+      user: {
+        name: settings.name
+      },
+      javaArgs: {
+        maxMemory: Number(settings.maxRam),
+        minMemory: Number(settings.minRam)
+      }
+    })
 
     this._settings.next(settings)
   }

@@ -7,7 +7,7 @@ import { ElectronIpcTransport } from '@doubleshot/nest-electron'
 import { AppModule } from './app.module'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { ValidationPipe } from '@nestjs/common'
-import { platform } from './constants'
+import { platform } from '../constants'
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 

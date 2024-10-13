@@ -2,27 +2,28 @@ import { Dock as PrimeDock } from 'primereact/dock'
 import { Tooltip } from 'primereact/tooltip'
 import { MenuItem } from 'primereact/menuitem'
 import { useInjection } from 'inversify-react'
-import { INodeApi } from '../../entities/NodeApi/interfaces'
+import { FC } from 'react'
+import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
+import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { useNavigate } from 'react-router-dom'
-import { ISettings } from '../../entities/Settings/interfaces'
-import { RouteNames } from '../../shared/routes/routeNames'
+import cx from 'classnames'
 
-export const Dock = () => {
-  const { getMCVersions, launchMinecraft } = useInjection(INodeApi.$)
-  const versions = useObservable(getMCVersions(), {})
-  const navigate = useNavigate()
-  const { getSettings } = useInjection(ISettings.$)
-  const settings = useObservable(getSettings(), null)
+export const Dock: FC = () => {
+  const { getLocalMCVersions, setCurrentMCVersion, getCurrentMCVersion } = useInjection(IVersions.$)
+  const versions = useObservable(getLocalMCVersions(), [] as IMCGameVersion[])
+  const currentVersion = useObservable(getCurrentMCVersion(), null)
 
-  console.log(versions)
-
-  const dockItems: MenuItem[] = Object.entries(versions).map(([key, version]) => ({
-    icon: <img src={version.icon} alt={'icon'} />,
-    label: key,
-    command() {
-      navigate(RouteNames.Logs)
-      settings && launchMinecraft(version, settings)
+  const dockItems: MenuItem[] = versions.map((version) => ({
+    icon: (
+      <img
+        className={cx({ ['scale-110']: currentVersion?.name === version.name })}
+        src={version.icon}
+        alt={'icon'}
+      />
+    ),
+    label: version.name,
+    command(): void {
+      setCurrentMCVersion(version)
     }
   }))
 

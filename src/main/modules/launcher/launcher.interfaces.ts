@@ -1,24 +1,3 @@
-export interface Version {
-  folder: string
-  version: string
-  forge: string
-  java: string
-  icon: string
-}
-
-export interface CustomLauncherOptions {
-  name: string
-  maxRam: string | number
-  minRam: string | number
-  port?: number
-  ip?: string
-}
-
-export interface CreateLauncher {
-  version: Version
-  customLauncherOptions: CustomLauncherOptions
-}
-
 export interface LauncherOptions {
   authorization: {
     uuid: string
