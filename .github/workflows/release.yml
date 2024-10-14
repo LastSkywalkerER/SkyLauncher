@@ -21,33 +21,21 @@ jobs:
           echo "Files in the working directory:"
           ls -la
 
-      # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
-      - name: Generate .env file from all relevant secrets
+      - name: Check .env.example content
         run: |
-          # Путь к файлу .env.example
-          ENV_EXAMPLE_PATH="./.env.example"
+          echo ".env.example content:"
+          cat .env.example
 
-          # Проверка существования .env.example
-          if [ ! -f $ENV_EXAMPLE_PATH ]; then
-            echo "$ENV_EXAMPLE_PATH not found!"
+      # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
+      - name: Generate .env file from .env.example
+        run: |
+          if [ ! -f .env.example ]; then
+            echo ".env.example not found!"
             exit 1
           fi
 
-          # Создание .env файла на основе .env.example
-          cp $ENV_EXAMPLE_PATH .env
-
-          # Замена всех переменных в формате ${VARIABLE} на их значения из GitHub Secrets
-          while IFS= read -r line; do
-            while [[ "$line" =~ \$\{([A-Za-z_][A-Za-z0-9_]*)\} ]]; do
-              var_name="${BASH_REMATCH[1]}"
-              value=$(printenv "$var_name")
-              line=${line//\$\{$var_name\}/$value}
-            done
-            echo "$line" >> .env.tmp
-          done < $ENV_EXAMPLE_PATH
-
-          # Перемещаем временный файл в .env
-          mv .env.tmp .env
+          # Просто копируем файл .env.example в .env
+          cp .env.example .env
 
           echo ".env file generated:"
           cat .env
