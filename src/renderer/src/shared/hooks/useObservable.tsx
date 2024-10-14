@@ -16,7 +16,7 @@ export const useObservable = <T,>(observable: Observable<T>, initialValue: T): T
     return (): void => {
       subscription.unsubscribe()
     }
-  }, [observable])
+  }, [])
 
   return value
 }

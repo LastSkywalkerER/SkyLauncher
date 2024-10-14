@@ -1,7 +1,8 @@
 export enum RouteNames {
   Home = '/',
   Settings = '/settings',
-  Logs = '/logs'
+  Logs = '/logs',
+  AvailableVersions = '/available-versions'
 }
 
 export const routeLinks = [
@@ -16,5 +17,9 @@ export const routeLinks = [
   {
     name: 'Logs',
     path: RouteNames.Logs
+  },
+  {
+    name: 'AvailableVersions',
+    path: RouteNames.AvailableVersions
   }
 ]
