@@ -35,8 +35,22 @@ jobs:
             exit 1
           fi
 
-          # Замена всех переменных в формате ${VARIABLE} на их значения из переменных окружения
-          envsubst < .env.example > .env
+          # Копируем .env.example в .env
+          cp .env.example .env
+
+          # Чтение всех переменных из .env.example и замена их на значения из окружения
+          while IFS= read -r line; do
+            while [[ "$line" =~ \${([A-Za-z_][A-Za-z0-9_]*)} ]]; do
+              var_name="${BASH_REMATCH[1]}"
+              value=$(printenv "$var_name")
+              if [ -z "$value" ]; then
+                echo "Warning: No value found for $var_name"
+              else
+                # Замена переменных в формате ${VARIABLE} на их значения
+                sed -i "s|\${$var_name}|$value|g" .env
+              fi
+            done
+          done < .env.example
 
           echo ".env file generated:"
           cat .env
