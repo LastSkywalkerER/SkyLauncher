@@ -16,15 +16,18 @@ jobs:
       # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
       - name: Generate .env file from all relevant secrets
         run: |
-          touch .env
-          for var in $(printenv); do
-            # Фильтрация переменных с префиксами MAIN_VITE_ и RENDERER_VITE_
-            if [[ $var == MAIN_VITE_* || $var == RENDERER_VITE_* ]]; then
-              key=$(echo $var | cut -d'=' -f1)
-              value=$(echo $var | cut -d'=' -f2-)
-              echo "$key=$value" >> .env
-            fi
-          done
+          # Проверка существования .env.example
+          if [ ! -f .env.example ]; then
+            echo ".env.example not found!"
+            exit 1
+          fi
+
+          # Создание .env файла на основе .env.example
+          cp .env.example .env
+
+          # Замена всех переменных в формате ${VARIABLE} на их значения из GitHub Secrets
+          sed -i -E 's/\${([A-Za-z_][A-Za-z0-9_]*)}/$(printenv \1)/g' .env
+
           echo ".env file generated:"
           cat .env
 
