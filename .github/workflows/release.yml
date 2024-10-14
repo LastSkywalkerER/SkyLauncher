@@ -36,7 +36,6 @@ jobs:
           fi
 
           # Замена всех переменных в формате ${VARIABLE} на их значения из переменных окружения
-          export $(grep -v '^#' .env.example | xargs) # Экспортируем все переменные из .env.example, чтобы envsubst мог их заменить
           envsubst < .env.example > .env
 
           echo ".env file generated:"
