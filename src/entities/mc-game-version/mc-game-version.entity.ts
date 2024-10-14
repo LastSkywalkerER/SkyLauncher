@@ -24,7 +24,7 @@ export class MCGameVersion implements IMCGameVersion {
   title?: string
   description?: string
 
-  constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'ready' | 'fullVersion'>) {
+  constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'fullVersion'>) {
     if (!data.folder && !data.jsonUrl && !data.downloadUrl) {
       throw Error('MC Version have no source')
     }

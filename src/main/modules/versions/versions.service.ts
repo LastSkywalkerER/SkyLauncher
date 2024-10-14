@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { diagnose, ResolvedVersion, Version } from '@xmcl/core'
+import { Version } from '@xmcl/core'
 import { getForgeVersionList, getVersionList } from '@xmcl/installer'
 import { join } from 'path'
 import { forgeVersionSeparator, versionsFolder } from '../../../constants'
@@ -23,13 +23,21 @@ export class VersionsService {
   public async getNativeVersions(versions?: string[]): Promise<IMCGameVersion[]> {
     const availableVersions = await getVersionList()
 
-    const nativeVersions: IMCGameVersion[] = availableVersions.versions.map(
+    const nativeVersions: (IMCGameVersion & {
+      jsonUrl: string
+      version: string
+      name: string
+    })[] = availableVersions.versions.map(
       ({ url, id }) =>
         new MCGameVersion({
           jsonUrl: url,
           version: id,
           name: id
-        })
+        }) as IMCGameVersion & {
+          jsonUrl: string
+          version: string
+          name: string
+        }
     )
 
     if (versions) {
@@ -62,7 +70,7 @@ export class VersionsService {
     const responseVersion = versions.map((version) => {
       const jsonUrl = nativeVersions.find(
         ({ version: nativeVersion }) => version.version === nativeVersion
-      ).jsonUrl
+      )?.jsonUrl
 
       return new MCGameVersion({ ...version, jsonUrl }).getData()
     })
@@ -71,9 +79,7 @@ export class VersionsService {
   }
 
   public async getLocalVersions(): Promise<IMCGameVersion[]> {
-    const modpacksDir = this.userConfigService.get<'directoriesPaths.modpacks'>(
-      'directoriesPaths.modpacks'
-    )
+    const modpacksDir = this.userConfigService.get('modpacksPath')
 
     const foundModpacks = await findFoldersWithTargetFolder({
       dir: modpacksDir,
@@ -104,12 +110,16 @@ export class VersionsService {
       })
     )
 
-    const resolvedVersions: MCGameVersion[] = await Promise.all(
-      foundModpacksVersions.map(async (version) => {
+    const resolvedVersions: (MCGameVersion | undefined)[] = await Promise.all(
+      foundModpacksVersions.map(async (version): Promise<MCGameVersion | undefined> => {
+        if (!version.folder) {
+          return
+        }
+
         try {
           const resolvedVersion = await Version.parse(version.folder, version.fullVersion)
 
-          const issueReport = await diagnose(resolvedVersion.id, resolvedVersion.minecraftDirectory)
+          // const issueReport = await diagnose(resolvedVersion.id, resolvedVersion.minecraftDirectory)
 
           // if (issueReport.issues.length === 0) {
           return version.update({ java: String(resolvedVersion.javaVersion.majorVersion) })
@@ -125,6 +135,8 @@ export class VersionsService {
             error
           )
         }
+
+        return
       })
     )
 

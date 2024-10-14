@@ -1,5 +1,3 @@
-import * as stream from 'stream'
-
 export interface Unzip {
   outputDirectory: string
   zipPath: string

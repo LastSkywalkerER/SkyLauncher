@@ -28,7 +28,7 @@ export class NodeApi implements INodeApi {
     return this._nodeApi.setConfig(config)
   }
 
-  public getConfig(key: ConfigKeys): Promise<string> {
+  public getConfig<T extends ConfigKeys>(key: T): Promise<Required<UserConfigData>[T]> {
     return this._nodeApi.getConfig(key)
   }
 

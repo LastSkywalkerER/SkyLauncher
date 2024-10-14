@@ -1,7 +1,6 @@
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
-import React, { useState } from 'react'
-import { ListBox, ListBoxChangeEvent } from 'primereact/listbox'
+import { ListBox } from 'primereact/listbox'
 import { useForm } from 'react-hook-form'
 import { MCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.entity'
 import { IVersions } from '../../entities/Versions/interfaces'

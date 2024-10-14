@@ -1,5 +1,5 @@
 import { useInjection } from 'inversify-react'
-import { useState, useEffect, useRef, FC, Fragment } from 'react'
+import { useEffect, useRef, FC } from 'react'
 import { ProgressBar as PrimeProgressBar, ProgressBarProps } from 'primereact/progressbar'
 import { Toast } from 'primereact/toast'
 import { IProcessProgress } from '../../entities/ProcessProgress/interfaces'
@@ -15,7 +15,7 @@ export const ProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ className, ..
       const notFinishedProcessed = Object.values(data)[0]
 
       if (notFinishedProcessed.status === 'finished') {
-        toast.current.show({
+        toast.current?.show({
           severity: 'info',
           summary: notFinishedProcessed.status,
           detail: `${notFinishedProcessed.processName} ${notFinishedProcessed.status}`

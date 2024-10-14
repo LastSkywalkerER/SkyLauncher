@@ -30,10 +30,10 @@ export class HardwareService {
 
   public getJavaDir(version?: string): string {
     return join(
-      this.userConfigService.get<'directoriesPaths.java'>('directoriesPaths.java'),
+      this.userConfigService.get('javaPath'),
       this.getPlatform(),
       this.getArchitecture(),
-      version || String(this.userConfigService.get<'javaArgs.version'>('javaArgs.version'))
+      version || String(this.userConfigService.get('javaArgsVersion'))
     )
   }
 

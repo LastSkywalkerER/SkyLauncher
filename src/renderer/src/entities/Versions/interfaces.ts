@@ -6,7 +6,7 @@ export interface IVersions {
   getCustomMCVersions(): Observable<IMCGameVersion[]>
   checkLocalMCVersions(): void
   getLocalMCVersions(): Observable<IMCGameVersion[]>
-  getCurrentMCVersion(): Observable<IMCGameVersion>
+  getCurrentMCVersion(): Observable<IMCGameVersion | null>
   setCurrentMCVersion(version: IMCGameVersion): void
   launchGame(version: IMCGameVersion): void
   checkGame(version: IMCGameVersion): void

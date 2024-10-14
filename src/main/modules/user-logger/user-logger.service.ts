@@ -5,7 +5,7 @@ import { IPCSendNames } from '../../../constants'
 
 @Injectable()
 export class UserLoggerService {
-  private readonly _logger: (...data: unknown[]) => void
+  private readonly _logger: (data: unknown[]) => void
 
   constructor(@Window() private readonly mainWindow: BrowserWindow) {
     this._logger = (data: unknown[]): void => {

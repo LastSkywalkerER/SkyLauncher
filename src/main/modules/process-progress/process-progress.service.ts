@@ -23,8 +23,8 @@ export class ProcessProgressService {
     )
     if (
       this._activeProcessesMap[data.processName] &&
-      (this._activeProcessesMap[data.processName].status !== 'finished') &
-        (data.status === 'started')
+      this._activeProcessesMap[data.processName].status !== 'finished' &&
+      data.status === 'started'
     ) {
       throw Error(`Process ${data.processName} already running`)
     }

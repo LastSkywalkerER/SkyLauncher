@@ -1,6 +1,6 @@
 import { Controller, Inject } from '@nestjs/common'
 import { IpcHandle } from '@doubleshot/nest-electron'
-import { GameData } from '../../../dtos/launcher.dto'
+import { type GameData } from '../../../dtos/launcher.dto'
 import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
 import { LauncherService } from './launcher.service'
@@ -16,7 +16,9 @@ export class LauncherController {
   ) {}
 
   @IpcHandle(IPCHandleNames.InstallGame)
-  public async handleInstallGame(@Payload() { version }: GameData): Promise<IMCGameVersion> {
+  public async handleInstallGame(
+    @Payload() { version }: GameData
+  ): Promise<IMCGameVersion | undefined> {
     try {
       const fullVersion = new MCGameVersion(version)
 
@@ -24,21 +26,25 @@ export class LauncherController {
     } catch (error) {
       this.userLoggerService.error(error)
     }
+
+    return
   }
 
   @IpcHandle(IPCHandleNames.CheckGame)
-  public async handleCheckGame(@Payload() { version }: GameData): Promise<IMCGameVersion> {
+  public async handleCheckGame(
+    @Payload() { version }: GameData
+  ): Promise<IMCGameVersion | undefined> {
     try {
       const fullVersion = new MCGameVersion(version)
 
       const data = (await this.launcherService.checkLocalModpack(fullVersion)).getData()
 
-      console.log({ data })
-
       return data
     } catch (error) {
       this.userLoggerService.error(error)
     }
+
+    return
   }
 
   @IpcHandle(IPCHandleNames.LaunchGame)

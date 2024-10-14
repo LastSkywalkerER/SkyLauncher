@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { existsSync } from 'node:fs'
 import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
-import { ProcessProgressService } from '../process-progress/process-progress.service'
 import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
 import { ZipDownloaderService } from './zip-downloader/zip-downloader.service'
@@ -15,7 +14,7 @@ export class DownloaderService {
   constructor(
     @Inject(ZipDownloaderService) private readonly zipDownloaderService: ZipDownloaderService,
     @Inject(HardwareService) private readonly hardwareService: HardwareService,
-    @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService,
+    // @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService,
     @Inject(UserConfigService) private readonly userConfigService: UserConfigService,
     @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
     // @Inject(DirDownloaderService) private readonly dirDownloaderService: DirDownloaderService
@@ -24,10 +23,8 @@ export class DownloaderService {
   public async downloadJava(version?: string): Promise<string> {
     const platform = this.hardwareService.getPlatform()
     const architecture = this.hardwareService.getArchitecture()
-    const fileName =
-      version || String(this.userConfigService.get<'javaArgs.version'>('javaArgs.version'))
-    const outputDirectory =
-      this.userConfigService.get<'directoriesPaths.java'>('directoriesPaths.java')
+    const fileName = version || String(this.userConfigService.get('javaArgsVersion'))
+    const outputDirectory = this.userConfigService.get('javaPath')
     const extractedFileCheckPath = join(outputDirectory, platform, architecture, fileName)
 
     if (existsSync(extractedFileCheckPath)) {
@@ -53,9 +50,7 @@ export class DownloaderService {
   }
 
   public async downloadModpack(version: MCGameVersion): Promise<string> {
-    const outputDirectory = this.userConfigService.get<'directoriesPaths.modpacks'>(
-      'directoriesPaths.modpacks'
-    )
+    const outputDirectory = this.userConfigService.get('modpacksPath')
     const extractedFileCheckPath = join(outputDirectory, version.name)
 
     if (existsSync(extractedFileCheckPath)) {
@@ -68,7 +63,7 @@ export class DownloaderService {
     const zipPath = await this.zipDownloaderService.downloadFromUrl({
       fileName: version.name,
       outputDirectory,
-      fileUrl: version.downloadUrl
+      fileUrl: version.downloadUrl!
     })
 
     await this.zipDownloaderService.unzip({ zipPath, outputDirectory })

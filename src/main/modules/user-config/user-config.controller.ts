@@ -1,7 +1,7 @@
 import { Controller, Inject } from '@nestjs/common'
 import { IpcHandle } from '@doubleshot/nest-electron'
 import { Payload } from '@nestjs/microservices'
-import { ConfigKeys, UserConfigData } from '../../../dtos/config.dto'
+import { type ConfigKeys, type UserConfigData } from '../../../dtos/config.dto'
 
 import { UserConfigService } from './user-config.service'
 import { IPCHandleNames } from '../../../constants'
@@ -16,7 +16,7 @@ export class UserConfigController {
   }
 
   @IpcHandle(IPCHandleNames.GetConfig)
-  public getConfig(@Payload() key: ConfigKeys): unknown {
+  public getConfig<T extends ConfigKeys>(@Payload() key: T): UserConfigData[T] {
     return this.userConfigService.get(key)
   }
 }

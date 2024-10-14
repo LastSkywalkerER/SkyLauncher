@@ -1,5 +1,4 @@
 import { useInjection } from 'inversify-react'
-import { Button } from 'primereact/button'
 import { FC, HTMLAttributes } from 'react'
 import play from '../../../../../resources/images/play_button_big.png'
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
@@ -24,10 +23,10 @@ type ButtonStatus = 'installed' | 'checked'
 const getButtonStatus = (version: IMCGameVersion): ButtonStatus => {
   const statuses: Record<ButtonStatus, boolean> = {
     installed: !!version.folder && !version.status?.libs && !version.status?.native,
-    checked: !!version.folder && version.status?.libs && version.status?.native
+    checked: !!version.folder && !!version.status?.libs && !!version.status?.native
   }
 
-  return Object.entries(statuses).find(([, value]) => value)[0] as ButtonStatus
+  return Object.entries(statuses).find(([, value]) => value)?.[0] as ButtonStatus
 }
 
 const Home: FC = () => {

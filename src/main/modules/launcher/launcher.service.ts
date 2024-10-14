@@ -63,13 +63,8 @@ export class LauncherService {
 
   public async installNativeGame(version: MCGameVersion): Promise<MCGameVersion> {
     const updatedVersion = version.update({
-      folder:
-        version.folder ||
-        join(
-          this.userConfigService.get<'directoriesPaths.modpacks'>('directoriesPaths.modpacks'),
-          version.name
-        )
-    })
+      folder: version.folder || join(this.userConfigService.get('modpacksPath'), version.name)
+    }) as MCGameVersion
 
     let jsonUrl = updatedVersion.jsonUrl
 
@@ -80,29 +75,17 @@ export class LauncherService {
     }
 
     try {
-      console.log(
-        {
-          url: jsonUrl,
-          id: version.version
-        },
-        updatedVersion.folder
-      )
       await install(
         {
-          url: jsonUrl,
+          url: jsonUrl!,
           id: version.version
         },
-        updatedVersion.folder
+        updatedVersion.folder!
       )
 
-      console.log('installed')
-
-      const resolvedVersion = await Version.parse(updatedVersion.folder, version.version)
-      console.log({ resolvedVersion })
+      const resolvedVersion = await Version.parse(updatedVersion.folder!, version.version)
 
       await installLibraries(resolvedVersion)
-
-      console.log('installLibraries')
 
       return updatedVersion.update({ jsonUrl }).updateStatus({ native: true, libs: true })
     } catch (error) {
@@ -113,12 +96,7 @@ export class LauncherService {
 
   public async installForgeGame(version: MCGameVersion): Promise<MCGameVersion> {
     const updatedVersion = version.update({
-      folder:
-        version.folder ||
-        join(
-          this.userConfigService.get<'directoriesPaths.modpacks'>('directoriesPaths.modpacks'),
-          version.name
-        )
+      folder: version.folder || join(this.userConfigService.get('modpacksPath'), version.name)
     })
 
     if (!(await this.isJavaExecutableExists(version.java))) {
@@ -130,9 +108,13 @@ export class LauncherService {
     try {
       const nativeVersion = await this.installNativeGame(updatedVersion)
 
+      if (!nativeVersion.forge) {
+        throw Error('There is no forge version')
+      }
+
       await installForge(
         { mcversion: nativeVersion.version, version: nativeVersion.forge },
-        nativeVersion.folder,
+        nativeVersion.folder!,
         { java: javaPath }
       )
 
@@ -170,10 +152,8 @@ export class LauncherService {
   }
 
   public async launchGame(version: MCGameVersion): Promise<ChildProcess> {
-    const {
-      status: { native, libs }
-    } = version
-    if (!native || !libs) {
+    const { status } = version
+    if (!status?.native || !status?.libs || !version.folder) {
       throw Error(`Game ${version.name} not ready`)
     }
 
@@ -182,15 +162,13 @@ export class LauncherService {
     }
 
     const javaPath = this.hardwareService.getJavaExecutablePath(version.java)
-    const userName = this.userConfigService.get<'user.name'>('user.name')
-    const userId = this.userConfigService.get<'user.id'>('user.id')
-    const minMemory = this.userConfigService.get<'javaArgs.minMemory'>('javaArgs.minMemory')
-    const maxMemory = this.userConfigService.get<'javaArgs.maxMemory'>('javaArgs.maxMemory')
-    const width = this.userConfigService.get<'resolution.width'>('resolution.width')
-    const height = this.userConfigService.get<'resolution.height'>('resolution.height')
-    const fullscreen = this.userConfigService.get<'resolution.fullscreen'>(
-      'resolution.fullscreen'
-    ) as undefined | true
+    const userName = this.userConfigService.get('userName')
+    const userId = this.userConfigService.get('userId')
+    const minMemory = this.userConfigService.get('javaArgsMinMemory')
+    const maxMemory = this.userConfigService.get('javaArgsMaxMemory')
+    const width = this.userConfigService.get('resolutionWidth')
+    const height = this.userConfigService.get('resolutionHeight')
+    const fullscreen = this.userConfigService.get('resolutionFullscreen') as undefined | true
 
     const launchOptions: LaunchOption = {
       gamePath: version.folder,

@@ -18,9 +18,9 @@ export class Settings implements ISettings {
       return {
         port: environment.serverPort!,
         ip: environment.serverIp!,
-        maxRam: await this._nodeApi.getConfig('javaArgs.maxMemory'),
-        minRam: await this._nodeApi.getConfig('javaArgs.minMemory'),
-        name: await this._nodeApi.getConfig('user.name')
+        maxRam: await this._nodeApi.getConfig('javaArgsMaxMemory'),
+        minRam: await this._nodeApi.getConfig('javaArgsMinMemory'),
+        name: await this._nodeApi.getConfig('userName')
       }
     }
 
@@ -38,13 +38,9 @@ export class Settings implements ISettings {
 
   public async setSettings(settings: CustomLauncherOptions): Promise<void> {
     await this._nodeApi.setConfig({
-      user: {
-        name: settings.name
-      },
-      javaArgs: {
-        maxMemory: Number(settings.maxRam),
-        minMemory: Number(settings.minRam)
-      }
+      userName: settings.name,
+      javaArgsMaxMemory: Number(settings.maxRam),
+      javaArgsMinMemory: Number(settings.minRam)
     })
 
     this._settings.next(settings)

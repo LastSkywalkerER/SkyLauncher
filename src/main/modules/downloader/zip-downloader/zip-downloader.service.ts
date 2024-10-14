@@ -9,7 +9,6 @@ import { DownloadFromS3, DownloadFromUrl, Unzip } from './zip-downloader.interfa
 import { join } from 'path'
 import { extract } from 'zip-lib'
 import { DownloaderClientService } from '../downloader-client/downloader-client.service'
-import { HardwareService } from '../../hardware/hardware.service'
 
 const tempName = '.temp'
 
@@ -18,7 +17,7 @@ export class ZipDownloaderService {
   constructor(
     @Inject(DownloaderClientService)
     private readonly downloaderClientService: DownloaderClientService,
-    @Inject(HardwareService) private readonly hardwareService: HardwareService,
+    // @Inject(HardwareService) private readonly hardwareService: HardwareService,
     @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService,
     @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
   ) {}

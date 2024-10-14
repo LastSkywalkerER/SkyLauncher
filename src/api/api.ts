@@ -18,7 +18,7 @@ export const rendererApi = {
     ipcRenderer.invoke(IPCHandleNames.InstallGame, data),
   setConfig: (data: UserConfigData): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.SetConfig, data),
-  getConfig: (data: ConfigKeys): Promise<unknown> =>
+  getConfig: <T extends ConfigKeys>(data: T): Promise<Required<UserConfigData>[T]> =>
     ipcRenderer.invoke(IPCHandleNames.GetConfig, data),
   setLogger: (logTracer: (data: string) => void): IpcRenderer =>
     ipcRenderer.on(IPCSendNames.UserLog, (_, message: string) => logTracer(message)),

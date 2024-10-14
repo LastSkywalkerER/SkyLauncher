@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 
 export interface INodeApi {
   setConfig(config: UserConfigData): Promise<void>
-  getConfig(key: ConfigKeys): Promise<string>
+  getConfig<T extends ConfigKeys>(key: T): Promise<Required<UserConfigData>[T]>
 
   subscribeOnLogs: (subscriber: (data: string | undefined) => void) => Subscription
 }

@@ -9,7 +9,8 @@ import { IVersions } from './interfaces'
 
 @injectable()
 export class Versions implements IVersions {
-  private readonly _version: BehaviorSubject<IMCGameVersion> = new BehaviorSubject(null)
+  private readonly _version: BehaviorSubject<IMCGameVersion | null> =
+    new BehaviorSubject<IMCGameVersion | null>(null)
   private _nodeApi: RendererApi
   private _localMCVersions = new BehaviorSubject<IMCGameVersion[]>([])
 
@@ -42,7 +43,7 @@ export class Versions implements IVersions {
     return this._localMCVersions
   }
 
-  public getCurrentMCVersion(): Observable<IMCGameVersion> {
+  public getCurrentMCVersion(): Observable<IMCGameVersion | null> {
     return this._version
   }
 
