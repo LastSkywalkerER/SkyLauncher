@@ -28,6 +28,15 @@ jobs:
 
       # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
       - name: Generate .env file from .env.example
+        env:
+          MAIN_VITE_MINIO_ENDPOINT: ${{ secrets.MAIN_VITE_MINIO_ENDPOINT }}
+          MAIN_VITE_MINIO_PORT: ${{ secrets.MAIN_VITE_MINIO_PORT }}
+          MAIN_VITE_MINIO_USESSL: ${{ secrets.MAIN_VITE_MINIO_USESSL }}
+          MAIN_VITE_MINIO_ACCESSKEY: ${{ secrets.MAIN_VITE_MINIO_ACCESSKEY }}
+          MAIN_VITE_MINIO_SECRETKEY: ${{ secrets.MAIN_VITE_MINIO_SECRETKEY }}
+          MAIN_VITE_CURSEFORGE_APIKEY: ${{ secrets.MAIN_VITE_CURSEFORGE_APIKEY }}
+          RENDERER_VITE_IP: ${{ secrets.RENDERER_VITE_IP }}
+          RENDERER_VITE_PORT: ${{ secrets.RENDERER_VITE_PORT }}
         run: |
           # Проверка существования .env.example
           if [ ! -f .env.example ]; then
@@ -35,25 +44,8 @@ jobs:
             exit 1
           fi
 
-          # Отладка: вывод переменных окружения для проверки их доступности
-          echo "Available environment variables:"
-          printenv | grep -E 'MAIN_VITE_|RENDERER_VITE_'
-
-          # Копируем .env.example в .env
-          cp .env.example .env
-
-          # Чтение всех переменных из .env.example и замена их на значения из окружения
-          for var in $(awk -F'[${}]' '/\${[A-Za-z_][A-Za-z0-9_]*}/ {for(i=2;i<=NF;i+=2) print $i}' .env.example); do
-            # Получение значения из окружения
-            value=$(printenv "$var")
-
-            if [ -z "$value" ]; then
-              echo "Warning: No value found for $var"
-            else
-              # Замена переменной в файле .env на её значение
-              sed -i '' "s|\${$var}|$value|g" .env
-            fi
-          done
+          # Замена всех переменных в формате ${VARIABLE} на их значения из переменных окружения
+          envsubst < .env.example > .env
 
           echo ".env file generated:"
           cat .env
