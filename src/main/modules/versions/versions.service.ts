@@ -111,14 +111,14 @@ export class VersionsService {
 
           const issueReport = await diagnose(resolvedVersion.id, resolvedVersion.minecraftDirectory)
 
-          if (issueReport.issues.length === 0) {
-            return version.update({ java: String(resolvedVersion.javaVersion.majorVersion) })
-          }
-
-          this.userLoggerService.error(
-            `Issues in ${version.folder} with version ${version.name}: `,
-            issueReport
-          )
+          // if (issueReport.issues.length === 0) {
+          return version.update({ java: String(resolvedVersion.javaVersion.majorVersion) })
+          // }
+          //
+          // this.userLoggerService.error(
+          //   `Issues in ${version.folder} with version ${version.name}: `,
+          //   issueReport
+          // )
         } catch (error) {
           this.userLoggerService.error(
             `Error in ${version.folder} with version ${version.name}: `,

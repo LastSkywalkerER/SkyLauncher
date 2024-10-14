@@ -4,6 +4,7 @@ import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-ver
 
 export interface IVersions {
   getCustomMCVersions(): Observable<IMCGameVersion[]>
+  checkLocalMCVersions(): void
   getLocalMCVersions(): Observable<IMCGameVersion[]>
   getCurrentMCVersion(): Observable<IMCGameVersion>
   setCurrentMCVersion(version: IMCGameVersion): void

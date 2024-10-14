@@ -1,7 +1,6 @@
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { FC, HTMLAttributes } from 'react'
-import cover from '../../../../../resources/images/minecraft_fresh.png'
 import play from '../../../../../resources/images/play_button_big.png'
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { IVersions } from '../../entities/Versions/interfaces'
@@ -48,8 +47,10 @@ const Home: FC = () => {
   return (
     <div className="flex flex-col justify-between items-center h-full mt-[20px]">
       <div className={'w-[500px] h-fit'}>
-        <img src={currentVersion.coverImage || cover} alt="cover" />
+        {currentVersion?.titleImage && <img src={currentVersion?.titleImage} alt="cover" />}
+        {currentVersion?.title && <h3>{currentVersion?.title}</h3>}
       </div>
+      <div>{currentVersion?.title && <p>{currentVersion?.title}</p>}</div>
       {buttonStatus === 'installed' && 'Loading'}
       {buttonStatus === 'checked' && (
         <BigButton onClick={() => launchGame(currentVersion)}>

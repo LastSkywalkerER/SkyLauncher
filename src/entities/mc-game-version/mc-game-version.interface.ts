@@ -11,6 +11,9 @@ export interface IMCGameVersion {
   name: string
   status?: GameInstallationStatus
   server?: ServerData
+  titleImage?: string
+  title?: string
+  description?: string
 }
 
 export interface GameInstallationStatus {

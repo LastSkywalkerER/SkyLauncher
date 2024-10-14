@@ -11,11 +11,15 @@ import { IVersions } from './interfaces'
 export class Versions implements IVersions {
   private readonly _version: BehaviorSubject<IMCGameVersion> = new BehaviorSubject(null)
   private _nodeApi: RendererApi
+  private _localMCVersions = new BehaviorSubject<IMCGameVersion[]>([])
 
   constructor(@inject(INodeApi.$) nodeApi: NodeApi) {
     this._nodeApi = nodeApi.getMainProcessApi()
 
+    this._nodeApi.getLocalMCVersions().then((data) => this._localMCVersions.next(data))
+
     this.getCustomMCVersions = this.getCustomMCVersions.bind(this)
+    this.checkLocalMCVersions = this.checkLocalMCVersions.bind(this)
     this.getLocalMCVersions = this.getLocalMCVersions.bind(this)
     this.getCurrentMCVersion = this.getCurrentMCVersion.bind(this)
     this.setCurrentMCVersion = this.setCurrentMCVersion.bind(this)
@@ -28,8 +32,14 @@ export class Versions implements IVersions {
     return from(this._nodeApi.getCustomMCVersions())
   }
 
+  public checkLocalMCVersions(): void {
+    from(this._nodeApi.getLocalMCVersions())
+      .pipe(tap((data) => this._localMCVersions.next(data)))
+      .subscribe()
+  }
+
   public getLocalMCVersions(): Observable<IMCGameVersion[]> {
-    return from(this._nodeApi.getLocalMCVersions())
+    return this._localMCVersions
   }
 
   public getCurrentMCVersion(): Observable<IMCGameVersion> {
@@ -65,6 +75,13 @@ export class Versions implements IVersions {
       this._nodeApi.installGame({
         version
       })
-    ).subscribe((data) => this._version.next(data))
+    )
+      .pipe(
+        tap((data) => {
+          this._version.next(data)
+          this.checkLocalMCVersions()
+        })
+      )
+      .subscribe()
   }
 }

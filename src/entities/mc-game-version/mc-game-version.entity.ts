@@ -1,4 +1,4 @@
-import { defaultModpackIcon, forgeVersionSeparator } from '../../constants'
+import { defaultModpackCover, defaultModpackIcon, forgeVersionSeparator } from '../../constants'
 import {
   GameInstallationStatus,
   IMCGameVersion,
@@ -20,6 +20,9 @@ export class MCGameVersion implements IMCGameVersion {
   server?: ServerData
   status?: GameInstallationStatus
   coverImage?: string
+  titleImage?: string
+  title?: string
+  description?: string
 
   constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'ready' | 'fullVersion'>) {
     if (!data.folder && !data.jsonUrl && !data.downloadUrl) {
@@ -40,7 +43,10 @@ export class MCGameVersion implements IMCGameVersion {
     this.java = data.java
     this.status = data.status
     this.server = data.server
-    this.coverImage = data.coverImage
+    this.coverImage = data.coverImage || defaultModpackCover
+    this.titleImage = data.titleImage
+    this.title = data.title
+    this.description = data.description
   }
 
   public getData(): IMCGameVersion {
@@ -56,7 +62,10 @@ export class MCGameVersion implements IMCGameVersion {
       downloadUrl: this.downloadUrl,
       jsonUrl: this.jsonUrl,
       server: this.server,
-      coverImage: this.coverImage
+      coverImage: this.coverImage,
+      description: this.description,
+      title: this.title,
+      titleImage: this.titleImage
     }
   }
 
