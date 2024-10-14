@@ -35,6 +35,10 @@ jobs:
             exit 1
           fi
 
+          # Отладка: вывод переменных окружения для проверки их доступности
+          echo "Available environment variables:"
+          printenv | grep -E 'MAIN_VITE_|RENDERER_VITE_'
+
           # Копируем .env.example в .env
           cp .env.example .env
 
