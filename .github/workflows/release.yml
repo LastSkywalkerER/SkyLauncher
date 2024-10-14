@@ -13,17 +13,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Check current working directory and list files
+        run: |
+          echo "Current working directory:"
+          pwd
+
+          echo "Files in the working directory:"
+          ls -la
+
       # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
       - name: Generate .env file from all relevant secrets
         run: |
+          # Путь к файлу .env.example
+          ENV_EXAMPLE_PATH="./.env.example"
+
           # Проверка существования .env.example
-          if [ ! -f .env.example ]; then
-            echo ".env.example not found!"
+          if [ ! -f $ENV_EXAMPLE_PATH ]; then
+            echo "$ENV_EXAMPLE_PATH not found!"
             exit 1
           fi
 
           # Создание .env файла на основе .env.example
-          cp .env.example .env
+          cp $ENV_EXAMPLE_PATH .env
 
           # Замена всех переменных в формате ${VARIABLE} на их значения из GitHub Secrets
           while IFS= read -r line; do
@@ -33,7 +44,7 @@ jobs:
               line=${line//\$\{$var_name\}/$value}
             done
             echo "$line" >> .env.tmp
-          done < .env.example
+          done < $ENV_EXAMPLE_PATH
 
           # Перемещаем временный файл в .env
           mv .env.tmp .env
