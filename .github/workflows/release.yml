@@ -26,7 +26,17 @@ jobs:
           cp .env.example .env
 
           # Замена всех переменных в формате ${VARIABLE} на их значения из GitHub Secrets
-          sed -i -E 's/\${([A-Za-z_][A-Za-z0-9_]*)}/$(printenv \1)/g' .env
+          while IFS= read -r line; do
+            while [[ "$line" =~ \$\{([A-Za-z_][A-Za-z0-9_]*)\} ]]; do
+              var_name="${BASH_REMATCH[1]}"
+              value=$(printenv "$var_name")
+              line=${line//\$\{$var_name\}/$value}
+            done
+            echo "$line" >> .env.tmp
+          done < .env.example
+
+          # Перемещаем временный файл в .env
+          mv .env.tmp .env
 
           echo ".env file generated:"
           cat .env
