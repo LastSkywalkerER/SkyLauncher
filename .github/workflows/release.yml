@@ -29,13 +29,15 @@ jobs:
       # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
       - name: Generate .env file from .env.example
         run: |
+          # Проверка существования .env.example
           if [ ! -f .env.example ]; then
             echo ".env.example not found!"
             exit 1
           fi
 
-          # Просто копируем файл .env.example в .env
-          cp .env.example .env
+          # Замена всех переменных в формате ${VARIABLE} на их значения из переменных окружения
+          export $(grep -v '^#' .env.example | xargs) # Экспортируем все переменные из .env.example, чтобы envsubst мог их заменить
+          envsubst < .env.example > .env
 
           echo ".env file generated:"
           cat .env
