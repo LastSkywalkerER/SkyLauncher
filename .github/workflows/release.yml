@@ -38,19 +38,18 @@ jobs:
           # Копируем .env.example в .env
           cp .env.example .env
 
-          # Чтение всех переменных из .env.example и замена их на значения из окружения
-          while IFS= read -r line; do
-            while [[ "$line" =~ \${([A-Za-z_][A-Za-z0-9_]*)} ]]; do
-              var_name="${BASH_REMATCH[1]}"
-              value=$(printenv "$var_name")
-              if [ -z "$value" ]; then
-                echo "Warning: No value found for $var_name"
-              else
-                # Замена переменных в формате ${VARIABLE} на их значения
-                sed -i "s|\${$var_name}|$value|g" .env
-              fi
-            done
-          done < .env.example
+          # Чтение всех переменных из .env.example
+          for var in $(grep -oP '\$\{\K[A-Za-z_][A-Za-z0-9_]*(?=\})' .env.example); do
+            # Получение значения из окружения
+            value=$(printenv "$var")
+
+            if [ -z "$value" ]; then
+              echo "Warning: No value found for $var"
+            else
+              # Замена переменной в файле .env на её значение
+              sed -i '' "s|\${$var}|$value|g" .env
+            fi
+          done
 
           echo ".env file generated:"
           cat .env
