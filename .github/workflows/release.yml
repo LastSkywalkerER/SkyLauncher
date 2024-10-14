@@ -38,8 +38,8 @@ jobs:
           # Копируем .env.example в .env
           cp .env.example .env
 
-          # Чтение всех переменных из .env.example
-          for var in $(grep -oP '\$\{\K[A-Za-z_][A-Za-z0-9_]*(?=\})' .env.example); do
+          # Чтение всех переменных из .env.example и замена их на значения из окружения
+          for var in $(awk -F'[${}]' '/\${[A-Za-z_][A-Za-z0-9_]*}/ {for(i=2;i<=NF;i+=2) print $i}' .env.example); do
             # Получение значения из окружения
             value=$(printenv "$var")
 
