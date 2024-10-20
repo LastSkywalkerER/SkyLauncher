@@ -66,7 +66,6 @@ export class Versions implements IVersions {
         version
       })
     ).subscribe((data) => {
-      console.log(data)
       this._version.next(data)
     })
   }

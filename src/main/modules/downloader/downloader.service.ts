@@ -37,13 +37,13 @@ export class DownloaderService {
     const zipPath = await this.zipDownloaderService.downloadFromS3({
       bucketName: BucketNames.Java,
       fileName,
-      objectPath: join(platform, architecture),
+      objectPath: this.hardwareService.multiplatformJoin(platform, architecture),
       outputDirectory
     })
 
     await this.zipDownloaderService.unzip({
       zipPath,
-      outputDirectory: zipPath.replace(`/${fileName}.zip`, '')
+      outputDirectory: join(outputDirectory, platform, architecture)
     })
 
     return zipPath.replace('.zip', '')

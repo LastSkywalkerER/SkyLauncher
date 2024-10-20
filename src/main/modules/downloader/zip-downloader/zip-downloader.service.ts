@@ -9,6 +9,7 @@ import { DownloadFromS3, DownloadFromUrl, Unzip } from './zip-downloader.interfa
 import { join } from 'path'
 import { extract } from 'zip-lib'
 import { DownloaderClientService } from '../downloader-client/downloader-client.service'
+import { HardwareService } from '@main/modules/hardware/hardware.service'
 
 const tempName = '.temp'
 
@@ -17,7 +18,7 @@ export class ZipDownloaderService {
   constructor(
     @Inject(DownloaderClientService)
     private readonly downloaderClientService: DownloaderClientService,
-    // @Inject(HardwareService) private readonly hardwareService: HardwareService,
+    @Inject(HardwareService) private readonly hardwareService: HardwareService,
     @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService,
     @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
   ) {}
@@ -84,11 +85,9 @@ export class ZipDownloaderService {
     fileName
   }: DownloadFromS3): Promise<string> {
     const downloadClient = this.downloaderClientService.get()
-    const stat = await downloadClient.statObject(bucketName, join(objectPath, `${fileName}.zip`))
-    const dataStream = await downloadClient.getObject(
-      bucketName,
-      join(objectPath, `${fileName}.zip`)
-    )
+    const bucketFilePath = this.hardwareService.multiplatformJoin(objectPath, `${fileName}.zip`)
+    const stat = await downloadClient.statObject(bucketName, bucketFilePath)
+    const dataStream = await downloadClient.getObject(bucketName, bucketFilePath)
     const finishedDirectory = join(outputDirectory, objectPath)
     const finishedFilePath = join(finishedDirectory, `${fileName}.zip`)
     const tempZipPath = finishedFilePath + tempName

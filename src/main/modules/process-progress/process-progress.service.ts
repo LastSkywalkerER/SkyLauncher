@@ -18,9 +18,6 @@ export class ProcessProgressService {
   }
 
   public set(data: ProcessProgressData): void {
-    console.log(
-      `${data.processName}: ${(data.currentValue / (data.maxValue - data.minValue)) * 100}% ${data.status}`
-    )
     if (
       this._activeProcessesMap[data.processName] &&
       this._activeProcessesMap[data.processName].status !== 'finished' &&
