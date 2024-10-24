@@ -24,11 +24,18 @@ const Logs: FC = () => {
   }, [])
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full p-10">
       <ScrollFollow
         startFollowing={true}
         render={({ follow, onScroll }) => (
-          <LazyLog text={logs} stream follow={follow} onScroll={onScroll} />
+          <LazyLog
+            text={logs}
+            stream
+            follow={follow}
+            onScroll={onScroll}
+            enableLinks
+            selectableLines
+          />
         )}
       />
     </div>

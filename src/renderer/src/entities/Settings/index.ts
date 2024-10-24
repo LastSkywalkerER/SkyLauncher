@@ -1,27 +1,27 @@
 import { inject, injectable } from 'inversify'
+import { settingsList } from '../../shared/config/settings.config'
 
-import { CustomLauncherOptions, ISettings } from './interfaces'
-import { environment } from '../../shared/config/environments'
+import { LauncherSettings, ISettings } from './interfaces'
 import { NodeApi } from '../NodeApi'
 import { INodeApi } from '../NodeApi/interfaces'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 @injectable()
 export class Settings implements ISettings {
-  private _settings = new BehaviorSubject<CustomLauncherOptions | null>(null)
+  private _settings = new BehaviorSubject<LauncherSettings | null>(null)
   private _nodeApi: NodeApi
 
   constructor(@inject(INodeApi.$) nodeApi: NodeApi) {
     this._nodeApi = nodeApi
 
-    const getSettings = async (): Promise<CustomLauncherOptions> => {
-      return {
-        port: environment.serverPort!,
-        ip: environment.serverIp!,
-        maxRam: await this._nodeApi.getConfig('javaArgsMaxMemory'),
-        minRam: await this._nodeApi.getConfig('javaArgsMinMemory'),
-        name: await this._nodeApi.getConfig('userName')
+    const getSettings = async (): Promise<LauncherSettings> => {
+      const acc: LauncherSettings = {} as LauncherSettings
+
+      for (const { fieldName } of settingsList) {
+        acc[fieldName] = (await this._nodeApi.getConfig(fieldName)) as never
       }
+
+      return acc
     }
 
     getSettings().then((data) => {
@@ -32,16 +32,12 @@ export class Settings implements ISettings {
     this.setSettings = this.setSettings.bind(this)
   }
 
-  public getSettings(): Observable<CustomLauncherOptions | null> {
+  public getSettings(): Observable<LauncherSettings | null> {
     return this._settings
   }
 
-  public async setSettings(settings: CustomLauncherOptions): Promise<void> {
-    await this._nodeApi.setConfig({
-      userName: settings.name,
-      javaArgsMaxMemory: Number(settings.maxRam),
-      javaArgsMinMemory: Number(settings.minRam)
-    })
+  public async setSettings(settings: LauncherSettings): Promise<void> {
+    await this._nodeApi.setConfig(settings)
 
     this._settings.next(settings)
   }

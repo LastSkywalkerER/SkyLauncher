@@ -40,7 +40,7 @@ export const Topbar = () => {
     return (
       <div className={'flex items-center gap-5 mr-5'}>
         <Avatar template={<img src={icon} alt="icon" />} shape="circle" />
-        <h3>{settings?.name}</h3>
+        <h3>{settings?.userName}</h3>
       </div>
     )
   }

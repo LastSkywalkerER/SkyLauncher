@@ -1,58 +1,54 @@
-import { CustomLauncherOptions, ISettings } from '@renderer/entities/Settings/interfaces'
+import { ISettings } from '@renderer/entities/Settings/interfaces'
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
-import { InputText } from 'primereact/inputtext'
 import { FC, useEffect } from 'react'
 import { FieldPath, FieldPathValue, SubmitHandler, useForm } from 'react-hook-form'
+import { LauncherSettings } from '../../entities/Settings/interfaces'
+
+import { settingsList } from '../../shared/config/settings.config'
+import { InputFieldControlled } from '../../widgets/InputField'
 
 const Settings: FC = () => {
   const { setSettings, getSettings } = useInjection(ISettings.$)
 
   const {
-    register,
+    control,
+
     handleSubmit,
     formState: { errors },
     setValue
-  } = useForm<CustomLauncherOptions>()
+  } = useForm<LauncherSettings>()
 
   useEffect(() => {
     getSettings().subscribe((data) => {
       data &&
         Object.entries(data).map(([key, value]) =>
           setValue(
-            key as FieldPath<CustomLauncherOptions>,
-            value as FieldPathValue<CustomLauncherOptions, never>
+            key as FieldPath<LauncherSettings>,
+            value as FieldPathValue<LauncherSettings, never>
           )
         )
     })
   }, [])
 
-  const onSubmit: SubmitHandler<CustomLauncherOptions> = (data) => setSettings(data)
+  const onSubmit: SubmitHandler<LauncherSettings> = (data) => setSettings(data)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-      {/* register your input into the hook by invoking the "register" function */}
-      <InputText {...register('name', { required: true, minLength: 3 })} />
-      {errors.name && <span>This field is required</span>}
-      {/* include validation with required or other standard HTML validation rules */}
-      <InputText {...register('maxRam', { required: true, valueAsNumber: true })} />
-      {errors.maxRam && <span>This field is required</span>}
-      <InputText {...register('minRam', { required: true, valueAsNumber: true })} />
-      {/* errors will return when field validation fails  */}
-      {errors.minRam && <span>This field is required</span>}
+    <form onSubmit={handleSubmit(onSubmit)} className={'p-1 h-full flex flex-col justify-between'}>
+      <div className="flex gap-x-5 gap-y-10 flex-wrap p-10 bg-amber-950 bg-opacity-90 rounded-2xl">
+        {settingsList.map(({ fieldName }) => (
+          <InputFieldControlled
+            key={fieldName}
+            control={control}
+            name={fieldName}
+            error={errors[fieldName] ? 'Field is required' : undefined}
+          />
+        ))}
+      </div>
 
-      <InputText
-        {...register('ip', {
-          required: false,
-          pattern:
-            /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-        })}
-      />
-      {errors.ip && <span>Wrong ip</span>}
-      <InputText {...register('port', { required: false, valueAsNumber: true })} />
-      {errors.port && <span>Must be number</span>}
-
-      <Button type="submit">Safe</Button>
+      <Button type="submit" className={'self-center'}>
+        Safe
+      </Button>
     </form>
   )
 }

@@ -1,17 +1,12 @@
 import { interfaces } from 'inversify'
 import { Observable } from 'rxjs'
+import { UserConfigData } from '../../../../dtos/config.dto'
 
-export interface CustomLauncherOptions {
-  name: string
-  maxRam: string | number
-  minRam: string | number
-  port?: number
-  ip?: string
-}
+export interface LauncherSettings extends UserConfigData {}
 
 export interface ISettings {
-  getSettings: () => Observable<CustomLauncherOptions | null>
-  setSettings: (settings: CustomLauncherOptions) => void
+  getSettings: () => Observable<LauncherSettings | null>
+  setSettings: (settings: LauncherSettings) => void
 }
 
 export namespace ISettings {
