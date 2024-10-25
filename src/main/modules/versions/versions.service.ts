@@ -3,7 +3,10 @@ import { Version } from '@xmcl/core'
 import { getForgeVersionList, getVersionList } from '@xmcl/installer'
 import { join } from 'path'
 import { forgeVersionSeparator, versionsFolder } from '../../../constants'
-import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
+import {
+  imageFields,
+  MCGameVersion
+} from '../../../entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
 
 import { findFoldersWithTargetFolder } from '../../utils/filesystem/findFoldersWithTargetFolder'
@@ -12,6 +15,7 @@ import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
 
 import { versions } from './versions.mock'
+import { promises as fsPromises } from 'fs'
 
 @Injectable()
 export class VersionsService {
@@ -114,6 +118,20 @@ export class VersionsService {
       foundModpacksVersions.map(async (version): Promise<MCGameVersion | undefined> => {
         if (!version.folder) {
           return
+        }
+
+        const metadata = await version.getMetadata()
+
+        if (metadata) {
+          await Promise.all(
+            imageFields.map(async (field) => {
+              if (metadata[field]) {
+                const file = await fsPromises.readFile(metadata[field] as string, 'base64')
+
+                version.update({ [field]: `data:image/png;base64,${file}` })
+              }
+            })
+          )
         }
 
         try {

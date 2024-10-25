@@ -5,6 +5,7 @@ import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-ver
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import cx from 'classnames'
+import { Loading } from '../../widgets/Loading'
 
 const BigButton: FC<HTMLAttributes<HTMLButtonElement>> = ({ children, className, ...props }) => (
   <button
@@ -50,7 +51,7 @@ const Home: FC = () => {
         {currentVersion?.title && <h3>{currentVersion?.title}</h3>}
       </div>
       <div>{currentVersion?.title && <p>{currentVersion?.title}</p>}</div>
-      {buttonStatus === 'installed' && 'Loading'}
+      {buttonStatus === 'installed' && <Loading />}
       {buttonStatus === 'checked' && (
         <BigButton onClick={() => launchGame(currentVersion)}>
           <img src={play} alt="play" />

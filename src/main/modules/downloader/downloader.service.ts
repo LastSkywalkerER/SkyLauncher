@@ -3,11 +3,12 @@ import { existsSync } from 'node:fs'
 import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
+import { DownloadFromUrl } from './url-downloader/url-downloader.interface'
+import { UrlDownloaderService } from './url-downloader/url-downloader.service'
 import { ZipDownloaderService } from './zip-downloader/zip-downloader.service'
 import { join } from 'path'
 import { HardwareService } from '../hardware/hardware.service'
 import { BucketNames } from '../../../constants'
-// import { DirDownloaderService } from './dir-downloader/dir-downloader.service'
 
 @Injectable()
 export class DownloaderService {
@@ -16,8 +17,8 @@ export class DownloaderService {
     @Inject(HardwareService) private readonly hardwareService: HardwareService,
     // @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService,
     @Inject(UserConfigService) private readonly userConfigService: UserConfigService,
-    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
-    // @Inject(DirDownloaderService) private readonly dirDownloaderService: DirDownloaderService
+    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService,
+    @Inject(UrlDownloaderService) private readonly urlDownloaderService: UrlDownloaderService
   ) {}
 
   public async downloadJava(version?: string): Promise<string> {
@@ -69,5 +70,11 @@ export class DownloaderService {
     await this.zipDownloaderService.unzip({ zipPath, outputDirectory })
 
     return zipPath.replace('.zip', '')
+  }
+
+  public async downloadImage(data: DownloadFromUrl): Promise<string> {
+    const iconPath = await this.urlDownloaderService.download(data)
+
+    return iconPath
   }
 }

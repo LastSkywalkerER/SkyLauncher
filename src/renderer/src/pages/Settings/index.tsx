@@ -35,7 +35,7 @@ const Settings: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'p-1 h-full flex flex-col justify-between'}>
-      <div className="flex gap-x-5 gap-y-10 flex-wrap p-10 bg-amber-950 bg-opacity-90 rounded-2xl">
+      <div className="flex gap-x-5 gap-y-10 flex-wrap p-10 bg-[var(--surface-100)] bg-opacity-90 rounded-2xl">
         {settingsList.map(({ fieldName }) => (
           <InputFieldControlled
             key={fieldName}

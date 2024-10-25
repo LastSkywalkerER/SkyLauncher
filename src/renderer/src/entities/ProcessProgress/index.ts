@@ -21,15 +21,31 @@ export class ProcessProgress implements IProcessProgress {
   }
 
   private _subscribe(): void {
-    this._nodeApi.subscripbeOnProgress((data) => {
+    this._nodeApi.subscripbeOnProgress(async (data) => {
       const prevValue = this._processes.getValue()
 
-      const filteredPrevValue = Object.values(prevValue)
+      const filteredPrevValues = Object.values(prevValue)
         .filter(({ status }) => status !== 'finished')
         .reduce((acc, data) => ({ ...acc, [data.processName]: data }), {})
 
-      this._processes.next({ ...filteredPrevValue, [data.processName]: data })
+      this._processes.next({ ...filteredPrevValues, [data.processName]: data })
+
+      if (data.status === 'finished') {
+        await new Promise((resolve) =>
+          setTimeout(() => resolve(this.filterFinishedProcesses()), 100)
+        )
+      }
     })
+  }
+
+  private filterFinishedProcesses(): void {
+    const values = this._processes.getValue()
+
+    const filteredValues = Object.values(values)
+      .filter(({ status }) => status !== 'finished')
+      .reduce((acc, data) => ({ ...acc, [data.processName]: data }), {})
+
+    this._processes.next(filteredValues)
   }
 
   public getProgress(): Observable<Record<string, ProcessProgressData>> {

@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+import { join } from 'path'
 import { defaultModpackCover, defaultModpackIcon, forgeVersionSeparator } from '../../constants'
 import {
   GameInstallationStatus,
@@ -6,7 +8,12 @@ import {
   ServerData
 } from './mc-game-version.interface'
 
+const metadataJsonName = 'info.json'
+export const imageFields: (keyof IMCGameVersion)[] = ['icon', 'coverImage', 'titleImage']
+
 export class MCGameVersion implements IMCGameVersion {
+  public metadataDirName = 'metadata'
+
   icon: string
   name: string
   version: string
@@ -70,10 +77,57 @@ export class MCGameVersion implements IMCGameVersion {
   }
 
   public update(data: Partial<IMCGameVersion>): MCGameVersion {
-    return new MCGameVersion({ ...this.getData(), ...data })
+    Object.assign(this as object, data)
+    return this
+  }
+
+  public async updateMetadata(newMetadata: Partial<IMCGameVersion>): Promise<void> {
+    if (!this.folder) {
+      throw Error('Modpack not installed')
+    }
+
+    const filePath = join(this.folder, this.metadataDirName, metadataJsonName)
+
+    try {
+      if (fs.existsSync(filePath)) {
+        const fileData = await fs.promises.readFile(filePath, 'utf8')
+        const jsonContent = JSON.parse(fileData) as IMCGameVersion
+
+        const updatedData = { ...jsonContent, ...newMetadata }
+
+        await fs.promises.writeFile(filePath, JSON.stringify(updatedData, null, 2), 'utf8')
+      } else {
+        await fs.promises.writeFile(filePath, JSON.stringify(newMetadata, null, 2), 'utf8')
+      }
+    } catch (error) {
+      console.error('Metadata file error:', error)
+    }
+  }
+
+  public async getMetadata(): Promise<IMCGameVersion | null> {
+    if (!this.folder) {
+      throw Error('Modpack not installed')
+    }
+
+    const filePath = join(this.folder, this.metadataDirName, metadataJsonName)
+
+    try {
+      if (fs.existsSync(filePath)) {
+        const fileData = await fs.promises.readFile(filePath, 'utf8')
+        const jsonContent = JSON.parse(fileData) as IMCGameVersion
+
+        return jsonContent
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error('Error with reading metadata:', error)
+      return null
+    }
   }
 
   public updateStatus(status?: GameInstallationStatus): MCGameVersion {
-    return new MCGameVersion({ ...this.getData(), status: { ...this.getData().status, ...status } })
+    Object.assign(this as object, { status: { ...this.getData().status, ...status } })
+    return this
   }
 }

@@ -1,11 +1,12 @@
 import { existsSync, mkdirSync, createWriteStream, promises as fsPromises } from 'fs'
 import { Inject, Injectable } from '@nestjs/common'
-import * as https from 'https'
 import { ProcessStatus } from '../../../../dtos/process-progress.dto'
 
 import { ProcessProgressService } from '../../process-progress/process-progress.service'
 import { UserLoggerService } from '../../user-logger/user-logger.service'
-import { DownloadFromS3, DownloadFromUrl, Unzip } from './zip-downloader.interface'
+import { DownloadFromUrl } from '../url-downloader/url-downloader.interface'
+import { UrlDownloaderService } from '../url-downloader/url-downloader.service'
+import { DownloadFromS3, Unzip } from './zip-downloader.interface'
 import { join } from 'path'
 import { extract } from 'zip-lib'
 import { DownloaderClientService } from '../downloader-client/downloader-client.service'
@@ -20,7 +21,8 @@ export class ZipDownloaderService {
     private readonly downloaderClientService: DownloaderClientService,
     @Inject(HardwareService) private readonly hardwareService: HardwareService,
     @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService,
-    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
+    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService,
+    @Inject(UrlDownloaderService) private readonly urlDownloaderService: UrlDownloaderService
   ) {}
 
   public async downloadFromUrl({
@@ -28,53 +30,10 @@ export class ZipDownloaderService {
     outputDirectory,
     fileName
   }: DownloadFromUrl): Promise<string> {
-    const url = new URL(fileUrl)
-    const finishedFilePath = join(outputDirectory, `${fileName}.zip`)
-    const tempZipPath = finishedFilePath + tempName
-
-    if (!existsSync(outputDirectory)) {
-      mkdirSync(outputDirectory, { recursive: true })
-    }
-
-    const fileStream = createWriteStream(tempZipPath)
-
-    return new Promise((resolve, reject) => {
-      https
-        .get(url, (response) => {
-          const totalSize = parseInt(response.headers['content-length'] || '0', 10)
-          let downloadedBytes = 0
-          const setDownloadingProgress = (status: ProcessStatus, value: number): void =>
-            this.processProgressService.set({
-              processName: `Downloading ${fileName}`,
-              status,
-              currentValue: value,
-              maxValue: totalSize,
-              minValue: 0,
-              unit: 'bytes'
-            })
-
-          this.userLoggerService.info(`Downloading file ${fileName} size ${totalSize} ...`)
-
-          response.pipe(fileStream)
-
-          setDownloadingProgress('started', 0)
-
-          response.on('data', (chunk) => {
-            downloadedBytes += chunk.length
-
-            setDownloadingProgress('inProgress', downloadedBytes)
-          })
-
-          fileStream.on('finish', async () => {
-            fileStream.close()
-            await fsPromises.rename(tempZipPath, finishedFilePath)
-            setDownloadingProgress('finished', downloadedBytes)
-            resolve(finishedFilePath)
-          })
-        })
-        .on('error', (err) => {
-          reject(err)
-        })
+    return this.urlDownloaderService.download({
+      fileName: `${fileName}.zip`,
+      fileUrl,
+      outputDirectory
     })
   }
 

@@ -6,7 +6,11 @@ import { exec } from 'child_process'
 import { ChildProcess } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join } from 'path'
-import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
+import { promises as fsPromises } from 'fs'
+import {
+  imageFields,
+  MCGameVersion
+} from '../../../entities/mc-game-version/mc-game-version.entity'
 import { DownloaderService } from '../downloader/downloader.service'
 import { HardwareService } from '../hardware/hardware.service'
 import { UserConfigService } from '../user-config/user-config.service'
@@ -130,6 +134,24 @@ export class LauncherService {
       const modpackDir = await this.downloaderService.downloadModpack(version)
 
       const updatedVersion = version.update({ folder: modpackDir })
+      await updatedVersion.updateMetadata(updatedVersion.getData())
+
+      await Promise.all(
+        imageFields.map(async (field) => {
+          if (updatedVersion[field]) {
+            const imagePath = await this.downloaderService.downloadImage({
+              fileUrl: updatedVersion[field] as string,
+              fileName: `${field}.png`,
+              outputDirectory: join(modpackDir, updatedVersion.metadataDirName)
+            })
+
+            const file = await fsPromises.readFile(imagePath, 'base64')
+
+            await updatedVersion.updateMetadata({ [field]: imagePath })
+            updatedVersion.update({ [field]: `data:image/png;base64,${file}` })
+          }
+        })
+      )
 
       return await this.installForgeGame(updatedVersion)
     } catch (error) {

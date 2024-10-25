@@ -1,9 +1,8 @@
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { ListBox } from 'primereact/listbox'
-import { FC } from 'react'
+import { FC, JSX } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { MCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
@@ -17,9 +16,9 @@ const AvailableVersions: FC = () => {
   const { getCustomMCVersions, installGame } = useInjection(IVersions.$)
   const versions = useObservable(getCustomMCVersions(), [])
 
-  const onSubmit = (data) => installGame(data.value)
+  const onSubmit = (data): void => installGame(data.value)
 
-  const Versionemplate: FC = (option: IMCGameVersion) => {
+  const Versionemplate = (option: IMCGameVersion): JSX.Element => {
     return (
       <div className="flex items-center">
         <img alt={option.name} src={option.icon} style={{ width: '50px', marginRight: '.5rem' }} />
