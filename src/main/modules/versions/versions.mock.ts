@@ -5,7 +5,7 @@ export const versions = [
     version: '1.19.2',
     forge: '43.3.13',
     name: 'FreshCraft Industrial DLC',
-    icon: 'https://ipfs.io/ipfs/',
+    icon: 'https://ipfs.io/ipfs/Qme7m2j4WLKC6PytN1BaUTEvQAYPNYJjumJecntojK93ue',
     coverImage: 'https://ipfs.io/ipfs/QmY8k1DTWdv7Nys5BvtNhrbWgapFRgWzTkRWKRJHfUEC94',
     titleImage: 'https://ipfs.io/ipfs/QmavSmyjdhC8YgVG1Wc4UhyNq4ngiScj5oZG1Kqb1Hcik7',
     description: 'FreshCraft Industrial DLC'
@@ -27,7 +27,7 @@ export const versions = [
     version: '1.19.2',
     forge: '43.3.13',
     name: 'FreshCraft Fantasy DLC',
-    icon: 'https://ipfs.io/ipfs/',
+    icon: 'https://ipfs.io/ipfs/QmTxEyWXiq7CQT616PFkBcQhsJia6y39bTpanPgBpxg2wk',
     coverImage: 'https://ipfs.io/ipfs/QmdmcSKpUh8Zay2jgYGECmKAYrC7LKJEhs3RbBFnVLy3zL',
     titleImage: 'https://ipfs.io/ipfs/QmavSmyjdhC8YgVG1Wc4UhyNq4ngiScj5oZG1Kqb1Hcik7',
     description: 'FreshCraft Fantasy DLC'

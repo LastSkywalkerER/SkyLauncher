@@ -4,11 +4,12 @@ import { ListBox } from 'primereact/listbox'
 import { FC } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { MCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.entity'
+import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 
 interface FormValue {
-  value: MCGameVersion
+  value: IMCGameVersion
 }
 
 const AvailableVersions: FC = () => {
@@ -17,6 +18,15 @@ const AvailableVersions: FC = () => {
   const versions = useObservable(getCustomMCVersions(), [])
 
   const onSubmit = (data) => installGame(data.value)
+
+  const Versionemplate: FC = (option: IMCGameVersion) => {
+    return (
+      <div className="flex items-center">
+        <img alt={option.name} src={option.icon} style={{ width: '50px', marginRight: '.5rem' }} />
+        <div>{option.name}</div>
+      </div>
+    )
+  }
 
   return (
     <form
@@ -28,7 +38,13 @@ const AvailableVersions: FC = () => {
         control={control}
         name="value"
         render={({ field }) => (
-          <ListBox {...field} options={versions} optionLabel="name" className={'w-fit'} />
+          <ListBox
+            {...field}
+            options={versions}
+            optionLabel="name"
+            className={'w-fit'}
+            itemTemplate={Versionemplate}
+          />
         )}
       />
 
