@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import { RouteNames } from './routeNames'
 
@@ -15,10 +15,7 @@ export const routes = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: '*',
-        element: <div>Not Found</div>
-      },
-      {
+        index: true,
         path: RouteNames.Home,
         element: <Home />
       },
@@ -33,6 +30,10 @@ export const routes = createBrowserRouter([
       {
         path: RouteNames.Settings,
         element: <Settings />
+      },
+      {
+        path: '*',
+        element: <Navigate to={RouteNames.Home} />
       }
     ]
   }

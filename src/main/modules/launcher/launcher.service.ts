@@ -159,7 +159,7 @@ export class LauncherService {
 
       return await this.installForgeGame(updatedVersion)
     } catch (error) {
-      this.userLoggerService.error(`Error while downloading custom modpack: `, error)
+      this.userLoggerService.error(`Error while installing custom modpack: `, error)
       return version
     }
   }
@@ -172,7 +172,7 @@ export class LauncherService {
 
       return await this.installNativeGame(version)
     } catch (error) {
-      this.userLoggerService.error(`Error while downloading custom modpack: `, error)
+      this.userLoggerService.error(`Error while checking custom modpack: `, error)
       return version
     }
   }

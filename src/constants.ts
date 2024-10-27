@@ -1,6 +1,6 @@
 export const platform = process.platform
 export const arch = process.arch
-export const launcherName = 'SkyLauncher'
+export const launcherName = 'sky-launcher'
 export const versionsFolder = 'versions'
 export const forgeVersionSeparator = '-forge-'
 export const defaultModpackIcon =
