@@ -1,4 +1,4 @@
-import { readdir, stat as fsStat } from 'node:fs/promises'
+import { stat as fsStat, readdir } from 'node:fs/promises'
 import { join } from 'path'
 import { DirMeta } from './interfaces'
 

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { settingsList } from '../../shared/config/settings.config'
 
-import { LauncherSettings, ISettings } from './interfaces'
+import { ISettings, LauncherSettings } from './interfaces'
 import { NodeApi } from '../NodeApi'
 import { INodeApi } from '../NodeApi/interfaces'
 import { BehaviorSubject, Observable } from 'rxjs'

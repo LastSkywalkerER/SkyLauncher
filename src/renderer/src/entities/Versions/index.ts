@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify'
-import { BehaviorSubject, from, Observable, tap } from 'rxjs'
+import { BehaviorSubject, Observable, from, tap } from 'rxjs'
 import { RendererApi } from '../../../../api/types'
 
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
@@ -17,8 +17,6 @@ export class Versions implements IVersions {
   constructor(@inject(INodeApi.$) nodeApi: NodeApi) {
     this._nodeApi = nodeApi.getMainProcessApi()
 
-    this._nodeApi.getLocalMCVersions().then((data) => this._localMCVersions.next(data))
-
     this.getCustomMCVersions = this.getCustomMCVersions.bind(this)
     this.checkLocalMCVersions = this.checkLocalMCVersions.bind(this)
     this.getLocalMCVersions = this.getLocalMCVersions.bind(this)
@@ -27,6 +25,8 @@ export class Versions implements IVersions {
     this.launchGame = this.launchGame.bind(this)
     this.checkGame = this.checkGame.bind(this)
     this.installGame = this.installGame.bind(this)
+
+    this.checkLocalMCVersions()
   }
 
   public getCustomMCVersions(): Observable<IMCGameVersion[]> {
@@ -35,7 +35,11 @@ export class Versions implements IVersions {
 
   public checkLocalMCVersions(): void {
     from(this._nodeApi.getLocalMCVersions())
-      .pipe(tap((data) => this._localMCVersions.next(data)))
+      .pipe(
+        tap((data) => {
+          this._localMCVersions.next(data)
+        })
+      )
       .subscribe()
   }
 
@@ -70,18 +74,16 @@ export class Versions implements IVersions {
     })
   }
 
-  public installGame(version: IMCGameVersion): void {
-    from(
+  public installGame(version: IMCGameVersion): Observable<IMCGameVersion> {
+    return from(
       this._nodeApi.installGame({
         version
       })
+    ).pipe(
+      tap((data) => {
+        this._version.next(data)
+        this.checkLocalMCVersions()
+      })
     )
-      .pipe(
-        tap((data) => {
-          this._version.next(data)
-          this.checkLocalMCVersions()
-        })
-      )
-      .subscribe()
   }
 }

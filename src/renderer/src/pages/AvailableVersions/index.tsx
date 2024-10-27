@@ -2,10 +2,12 @@ import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { ListBox } from 'primereact/listbox'
 import { FC, JSX } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
+import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
+import { Loading } from '../../widgets/Loading'
 
 interface FormValue {
   value: IMCGameVersion
@@ -15,8 +17,11 @@ const AvailableVersions: FC = () => {
   const { handleSubmit, control } = useForm<FormValue>()
   const { getCustomMCVersions, installGame } = useInjection(IVersions.$)
   const versions = useObservable(getCustomMCVersions(), [])
+  const { execute: executeInstallGame, loading } = useObservableRequest(installGame)
 
-  const onSubmit = (data): void => installGame(data.value)
+  const onSubmit = (data): void => {
+    executeInstallGame(data.value)
+  }
 
   const Versionemplate = (option: IMCGameVersion): JSX.Element => {
     return (
@@ -47,9 +52,13 @@ const AvailableVersions: FC = () => {
         )}
       />
 
-      <Button className={'w-fit'} type={'submit'}>
-        Install
-      </Button>
+      {loading ? (
+        <Loading />
+      ) : (
+        <Button className={'w-fit'} type={'submit'}>
+          Install
+        </Button>
+      )}
     </form>
   )
 }

@@ -88,15 +88,22 @@ export class MCGameVersion implements IMCGameVersion {
 
     const filePath = join(this.folder, this.metadataDirName, metadataJsonName)
 
+    const dir = join(this.folder, this.metadataDirName)
+
     try {
       if (fs.existsSync(filePath)) {
         const fileData = await fs.promises.readFile(filePath, 'utf8')
+
         const jsonContent = JSON.parse(fileData) as IMCGameVersion
 
         const updatedData = { ...jsonContent, ...newMetadata }
 
         await fs.promises.writeFile(filePath, JSON.stringify(updatedData, null, 2), 'utf8')
       } else {
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir)
+        }
+
         await fs.promises.writeFile(filePath, JSON.stringify(newMetadata, null, 2), 'utf8')
       }
     } catch (error) {

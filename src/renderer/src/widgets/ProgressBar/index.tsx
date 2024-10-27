@@ -1,5 +1,5 @@
 import { useInjection } from 'inversify-react'
-import { useEffect, useRef, FC } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { ProgressBar as PrimeProgressBar, ProgressBarProps } from 'primereact/progressbar'
 import { Toast } from 'primereact/toast'
 import { IProcessProgress } from '../../entities/ProcessProgress/interfaces'

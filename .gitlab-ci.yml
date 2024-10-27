@@ -3,15 +3,15 @@ stages:
   - release
 
 variables:
-  NODE_VERSION: $(cat .nvmrc | sed 's/^v//')  # Удаление 'v' из начала строки
+  NODE_VERSION: $(cat .nvmrc | sed 's/^v//') # Удаление 'v' из начала строки
 
 build:
   stage: build
-  image: macos-latest  # Использование macOS образа
+  image: macos-latest # Использование macOS образа
   script:
     - echo "Using Node.js version $NODE_VERSION"
-    - brew install node@${NODE_VERSION}  # Установка нужной версии Node.js
-    - brew install --cask wine  # Установка Wine для сборки Windows
+    - brew install node@${NODE_VERSION} # Установка нужной версии Node.js
+    - brew install --cask wine # Установка Wine для сборки Windows
     - yarn install
 
     # Генерация .env файла из секретов GitLab
@@ -30,7 +30,7 @@ build:
 
 release:
   stage: release
-  image: macos-latest  # Использование macOS образа
+  image: macos-latest # Использование macOS образа
   dependencies:
     - build
   script:

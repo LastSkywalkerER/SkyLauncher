@@ -10,7 +10,7 @@ export interface IVersions {
   setCurrentMCVersion(version: IMCGameVersion): void
   launchGame(version: IMCGameVersion): void
   checkGame(version: IMCGameVersion): void
-  installGame(version: IMCGameVersion): void
+  installGame(version: IMCGameVersion): Observable<IMCGameVersion>
 }
 
 export namespace IVersions {

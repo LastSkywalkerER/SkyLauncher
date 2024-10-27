@@ -3,7 +3,7 @@ name: Build and Release Electron App
 on:
   push:
     branches:
-      - main  # Запуск при каждом пуше в ветку main
+      - main # Запуск при каждом пуше в ветку main
 
 jobs:
   build:
@@ -61,7 +61,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}  # Использование версии из .nvmrc без 'v'
+          node-version: ${{ env.NODE_VERSION }} # Использование версии из .nvmrc без 'v'
           cache: 'yarn'
 
       - name: Install dependencies
@@ -123,10 +123,10 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем ваш персональный токен
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем ваш персональный токен
         with:
-          tag_name: release-${{ github.run_number }}  # Имя тега для релиза
-          release_name: Release ${{ github.run_number }}  # Имя релиза
+          tag_name: release-${{ github.run_number }} # Имя тега для релиза
+          release_name: Release ${{ github.run_number }} # Имя релиза
           draft: false
           prerelease: false
 
@@ -154,18 +154,18 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/macos/${{ env.macos_file }}  # Используем имя файла из переменной
+          asset_path: dist/macos/${{ env.macos_file }} # Используем имя файла из переменной
           asset_name: ${{ env.macos_file }}
           asset_content_type: application/octet-stream
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем ваш PAT_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем ваш PAT_TOKEN
 
       - name: Upload Windows build artifact
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/windows/${{ env.windows_file }}  # Используем имя файла из переменной
+          asset_path: dist/windows/${{ env.windows_file }} # Используем имя файла из переменной
           asset_name: ${{ env.windows_file }}
           asset_content_type: application/octet-stream
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Используем ваш PAT_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем ваш PAT_TOKEN

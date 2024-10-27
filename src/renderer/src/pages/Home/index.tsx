@@ -1,10 +1,12 @@
 import { useInjection } from 'inversify-react'
 import { FC, HTMLAttributes } from 'react'
+import { useNavigate } from 'react-router-dom'
 import play from '../../../../../resources/images/play_button_big.png'
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import cx from 'classnames'
+import { RouteNames } from '../../shared/routes/routeNames'
 import { Loading } from '../../widgets/Loading'
 
 const BigButton: FC<HTMLAttributes<HTMLButtonElement>> = ({ children, className, ...props }) => (
@@ -33,6 +35,7 @@ const getButtonStatus = (version: IMCGameVersion): ButtonStatus => {
 const Home: FC = () => {
   const { getCurrentMCVersion, launchGame } = useInjection(IVersions.$)
   const currentVersion = useObservable(getCurrentMCVersion(), null)
+  const navigate = useNavigate()
 
   if (!currentVersion) {
     return (
@@ -43,6 +46,10 @@ const Home: FC = () => {
   }
 
   const buttonStatus = getButtonStatus(currentVersion)
+  const handlePlayButton = () => {
+    launchGame(currentVersion)
+    navigate(RouteNames.Logs)
+  }
 
   return (
     <div className="flex flex-col justify-between items-center h-full mt-[20px]">
@@ -53,7 +60,7 @@ const Home: FC = () => {
       <div>{currentVersion?.title && <p>{currentVersion?.title}</p>}</div>
       {buttonStatus === 'installed' && <Loading />}
       {buttonStatus === 'checked' && (
-        <BigButton onClick={() => launchGame(currentVersion)}>
+        <BigButton onClick={handlePlayButton}>
           <img src={play} alt="play" />
         </BigButton>
       )}

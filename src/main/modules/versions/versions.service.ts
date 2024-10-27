@@ -4,13 +4,14 @@ import { getForgeVersionList, getVersionList } from '@xmcl/installer'
 import { join } from 'path'
 import { forgeVersionSeparator, versionsFolder } from '../../../constants'
 import {
-  imageFields,
-  MCGameVersion
+  MCGameVersion,
+  imageFields
 } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
 
 import { findFoldersWithTargetFolder } from '../../utils/filesystem/findFoldersWithTargetFolder'
 import { getFoldersInDirectory } from '../../utils/filesystem/getFoldersInDirectory'
+import { sortVersions } from '../../utils/versionSorter'
 import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
 
@@ -91,34 +92,42 @@ export class VersionsService {
       onError: this.userLoggerService.error
     })
 
-    const foundModpacksVersions: MCGameVersion[] = await Promise.all(
+    const foundModpacksVersions: (MCGameVersion | null)[] = await Promise.all(
       foundModpacks.map(async ({ path, name }) => {
         const versionDirs = await getFoldersInDirectory({
           dir: join(path, versionsFolder),
           onError: this.userLoggerService.error
         })
 
-        const version = versionDirs.reduce((acc, { name: versionName }) => {
-          const finalVersion = { ...acc, name, folder: path }
+        const resolvedVersions = await Promise.all(
+          versionDirs.map(async ({ name: versionName }) => {
+            try {
+              return await Version.parse(path, versionName)
+            } catch (error) {
+              return null
+            }
+          })
+        )
+        const resolvedVersionName = sortVersions(
+          resolvedVersions
+            .map((resolvedVersion) => resolvedVersion?.id)
+            .filter((data) => !!data) as string[]
+        )[0]
+        const [mcVersion, forgeVersion] = resolvedVersionName.split(forgeVersionSeparator)
+        const resolvedVersion = resolvedVersions.find(
+          (version) => version?.id === resolvedVersionName
+        )
 
-          if (versionName.includes(forgeVersionSeparator)) {
-            const [mcVersion, forgeVersion] = versionName.split(forgeVersionSeparator)
-
-            return { ...finalVersion, version: mcVersion, forge: forgeVersion }
-          }
-
-          return { ...finalVersion, version: versionName }
-        }, {} as IMCGameVersion)
-
-        return new MCGameVersion({ ...version })
-      })
-    )
-
-    const resolvedVersions: (MCGameVersion | undefined)[] = await Promise.all(
-      foundModpacksVersions.map(async (version): Promise<MCGameVersion | undefined> => {
-        if (!version.folder) {
-          return
+        if (!resolvedVersion) {
+          return null
         }
+
+        const version = new MCGameVersion({
+          version: mcVersion,
+          forge: forgeVersion,
+          name,
+          folder: path
+        })
 
         const metadata = await version.getMetadata()
 
@@ -134,30 +143,10 @@ export class VersionsService {
           )
         }
 
-        try {
-          const resolvedVersion = await Version.parse(version.folder, version.fullVersion)
-
-          // const issueReport = await diagnose(resolvedVersion.id, resolvedVersion.minecraftDirectory)
-
-          // if (issueReport.issues.length === 0) {
-          return version.update({ java: String(resolvedVersion.javaVersion.majorVersion) })
-          // }
-          //
-          // this.userLoggerService.error(
-          //   `Issues in ${version.folder} with version ${version.name}: `,
-          //   issueReport
-          // )
-        } catch (error) {
-          this.userLoggerService.error(
-            `Error in ${version.folder} with version ${version.name}: `,
-            error
-          )
-        }
-
-        return
+        return version.update({ java: String(resolvedVersion.javaVersion.majorVersion) })
       })
     )
 
-    return resolvedVersions.filter((data) => !!data)
+    return foundModpacksVersions.filter((data) => !!data) as MCGameVersion[]
   }
 }

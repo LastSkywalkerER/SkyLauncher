@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, createWriteStream, promises as fsPromises } from 'fs'
+import { createWriteStream, existsSync, promises as fsPromises, mkdirSync } from 'fs'
 import { Inject, Injectable } from '@nestjs/common'
 import { ProcessStatus } from '../../../../dtos/process-progress.dto'
 

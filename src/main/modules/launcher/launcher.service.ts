@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { launch, LaunchOption, Version } from '@xmcl/core'
+import { LaunchOption, Version, launch } from '@xmcl/core'
 
 import { install, installForge, installLibraries } from '@xmcl/installer'
 import { exec } from 'child_process'
@@ -8,8 +8,8 @@ import { existsSync } from 'node:fs'
 import { join } from 'path'
 import { promises as fsPromises } from 'fs'
 import {
-  imageFields,
-  MCGameVersion
+  MCGameVersion,
+  imageFields
 } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { DownloaderService } from '../downloader/downloader.service'
 import { HardwareService } from '../hardware/hardware.service'
@@ -134,7 +134,10 @@ export class LauncherService {
       const modpackDir = await this.downloaderService.downloadModpack(version)
 
       const updatedVersion = version.update({ folder: modpackDir })
-      await updatedVersion.updateMetadata(updatedVersion.getData())
+
+      const newMetadata = updatedVersion.getData()
+      imageFields.forEach((field) => delete newMetadata[field])
+      await updatedVersion.updateMetadata(newMetadata)
 
       await Promise.all(
         imageFields.map(async (field) => {

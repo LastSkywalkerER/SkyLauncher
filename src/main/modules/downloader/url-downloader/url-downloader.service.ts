@@ -1,13 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { createWriteStream, mkdirSync, promises as fsPromises } from 'fs'
+import { createWriteStream, promises as fsPromises, mkdirSync } from 'fs'
 import * as https from 'https'
 import { existsSync } from 'node:fs'
 import { join } from 'path'
 import { ProcessStatus } from '../../../../dtos/process-progress.dto'
-// import { HardwareService } from '../../hardware/hardware.service'
 import { ProcessProgressService } from '../../process-progress/process-progress.service'
 import { UserLoggerService } from '../../user-logger/user-logger.service'
-import { DownloaderClientService } from '../downloader-client/downloader-client.service'
 import { DownloadFromUrl } from './url-downloader.interface'
 
 const tempName = '.temp'
@@ -15,9 +13,6 @@ const tempName = '.temp'
 @Injectable()
 export class UrlDownloaderService {
   constructor(
-    @Inject(DownloaderClientService)
-    // private readonly downloaderClientService: DownloaderClientService,
-    // @Inject(HardwareService) private readonly hardwareService: HardwareService,
     @Inject(ProcessProgressService)
     private readonly processProgressService: ProcessProgressService,
     @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
@@ -39,6 +34,7 @@ export class UrlDownloaderService {
         .get(url, (response) => {
           const totalSize = parseInt(response.headers['content-length'] || '0', 10)
           let downloadedBytes = 0
+
           const setDownloadingProgress = (status: ProcessStatus, value: number): void =>
             this.processProgressService.set({
               processName: `Downloading ${fileName}`,
