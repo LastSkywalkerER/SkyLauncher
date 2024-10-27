@@ -1,22 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Version } from '@xmcl/core'
 import { getForgeVersionList, getVersionList } from '@xmcl/installer'
+import { promises as fsPromises } from 'fs'
 import { join } from 'path'
+
 import { forgeVersionSeparator, versionsFolder } from '../../../constants'
 import {
-  MCGameVersion,
-  imageFields
+  imageFields,
+  MCGameVersion
 } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
-
 import { findFoldersWithTargetFolder } from '../../utils/filesystem/findFoldersWithTargetFolder'
 import { getFoldersInDirectory } from '../../utils/filesystem/getFoldersInDirectory'
 import { sortVersions } from '../../utils/versionSorter'
 import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
-
 import { versions } from './versions.mock'
-import { promises as fsPromises } from 'fs'
 
 @Injectable()
 export class VersionsService {

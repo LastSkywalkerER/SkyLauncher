@@ -1,10 +1,10 @@
-import { Controller, Inject } from '@nestjs/common'
 import { IpcHandle } from '@doubleshot/nest-electron'
+import { Controller, Inject } from '@nestjs/common'
 import { Payload } from '@nestjs/microservices'
-import { type ConfigKeys, type UserConfigData } from '../../../dtos/config.dto'
 
-import { UserConfigService } from './user-config.service'
 import { IPCHandleNames } from '../../../constants'
+import { type ConfigKeys, type UserConfigData } from '../../../dtos/config.dto'
+import { UserConfigService } from './user-config.service'
 
 @Controller()
 export class UserConfigController {

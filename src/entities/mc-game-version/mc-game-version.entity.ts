@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import { join } from 'path'
+
 import { defaultModpackCover, defaultModpackIcon, forgeVersionSeparator } from '../../constants'
 import {
   GameInstallationStatus,

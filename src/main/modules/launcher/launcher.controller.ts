@@ -1,12 +1,13 @@
-import { Controller, Inject } from '@nestjs/common'
 import { IpcHandle } from '@doubleshot/nest-electron'
+import { Controller, Inject } from '@nestjs/common'
+import { Payload } from '@nestjs/microservices'
+
+import { IPCHandleNames } from '../../../constants'
 import { type GameData } from '../../../dtos/launcher.dto'
 import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
-import { LauncherService } from './launcher.service'
-import { Payload } from '@nestjs/microservices'
-import { IPCHandleNames } from '../../../constants'
 import { UserLoggerService } from '../user-logger/user-logger.service'
+import { LauncherService } from './launcher.service'
 
 @Controller()
 export class LauncherController {

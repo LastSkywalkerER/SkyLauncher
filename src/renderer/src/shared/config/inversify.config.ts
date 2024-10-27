@@ -1,8 +1,9 @@
-import { Container } from 'inversify'
-import { INodeApi } from '@renderer/entities/NodeApi/interfaces'
 import { NodeApi } from '@renderer/entities/NodeApi'
-import { ISettings } from '@renderer/entities/Settings/interfaces'
+import { INodeApi } from '@renderer/entities/NodeApi/interfaces'
 import { Settings } from '@renderer/entities/Settings'
+import { ISettings } from '@renderer/entities/Settings/interfaces'
+import { Container } from 'inversify'
+
 import { ProcessProgress } from '../../entities/ProcessProgress'
 import { IProcessProgress } from '../../entities/ProcessProgress/interfaces'
 import { Versions } from '../../entities/Versions'

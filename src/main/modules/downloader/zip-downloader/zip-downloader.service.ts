@@ -1,16 +1,16 @@
-import { createWriteStream, existsSync, promises as fsPromises, mkdirSync } from 'fs'
+import { HardwareService } from '@main/modules/hardware/hardware.service'
 import { Inject, Injectable } from '@nestjs/common'
-import { ProcessStatus } from '../../../../dtos/process-progress.dto'
+import { createWriteStream, existsSync, mkdirSync, promises as fsPromises } from 'fs'
+import { join } from 'path'
+import { extract } from 'zip-lib'
 
+import { ProcessStatus } from '../../../../dtos/process-progress.dto'
 import { ProcessProgressService } from '../../process-progress/process-progress.service'
 import { UserLoggerService } from '../../user-logger/user-logger.service'
+import { DownloaderClientService } from '../downloader-client/downloader-client.service'
 import { DownloadFromUrl } from '../url-downloader/url-downloader.interface'
 import { UrlDownloaderService } from '../url-downloader/url-downloader.service'
 import { DownloadFromS3, Unzip } from './zip-downloader.interface'
-import { join } from 'path'
-import { extract } from 'zip-lib'
-import { DownloaderClientService } from '../downloader-client/downloader-client.service'
-import { HardwareService } from '@main/modules/hardware/hardware.service'
 
 const tempName = '.temp'
 

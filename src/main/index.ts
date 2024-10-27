@@ -1,13 +1,14 @@
 import 'reflect-metadata'
 
-import { NestFactory } from '@nestjs/core'
-import { app, systemPreferences } from 'electron'
-import type { MicroserviceOptions } from '@nestjs/microservices'
 import { ElectronIpcTransport } from '@doubleshot/nest-electron'
-import { AppModule } from './app.module'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { ValidationPipe } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import type { MicroserviceOptions } from '@nestjs/microservices'
+import { app, systemPreferences } from 'electron'
+
 import { platform } from '../constants'
+import { AppModule } from './app.module'
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 

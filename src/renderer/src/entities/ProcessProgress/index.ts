@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify'
 import { BehaviorSubject, Observable } from 'rxjs'
+
 import { RendererApi } from '../../../../api/types'
 import { ProcessProgressData } from '../../../../dtos/process-progress.dto'
 import { NodeApi } from '../NodeApi'

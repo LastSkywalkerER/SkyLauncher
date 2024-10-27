@@ -1,12 +1,12 @@
 import './index.css'
 import 'primeicons/primeicons.css'
 
-import { PrimeReactProvider } from 'primereact/api'
+import { inversifyContainer } from '@renderer/shared/config/inversify.config'
 import { routes } from '@renderer/shared/routes/routes'
+import { Provider } from 'inversify-react'
+import { PrimeReactProvider } from 'primereact/api'
 import { FC } from 'react'
 import { RouterProvider } from 'react-router-dom'
-import { Provider } from 'inversify-react'
-import { inversifyContainer } from '@renderer/shared/config/inversify.config'
 
 export const App: FC = () => {
   return (

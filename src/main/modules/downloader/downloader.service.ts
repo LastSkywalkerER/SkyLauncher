@@ -1,14 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common'
 import { existsSync } from 'node:fs'
+
+import { Inject, Injectable } from '@nestjs/common'
+import { join } from 'path'
+
+import { BucketNames } from '../../../constants'
 import { MCGameVersion } from '../../../entities/mc-game-version/mc-game-version.entity'
+import { HardwareService } from '../hardware/hardware.service'
 import { UserConfigService } from '../user-config/user-config.service'
 import { UserLoggerService } from '../user-logger/user-logger.service'
 import { DownloadFromUrl } from './url-downloader/url-downloader.interface'
 import { UrlDownloaderService } from './url-downloader/url-downloader.service'
 import { ZipDownloaderService } from './zip-downloader/zip-downloader.service'
-import { join } from 'path'
-import { HardwareService } from '../hardware/hardware.service'
-import { BucketNames } from '../../../constants'
 
 @Injectable()
 export class DownloaderService {

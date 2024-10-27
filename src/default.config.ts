@@ -1,5 +1,6 @@
 import { app } from 'electron'
 import { join } from 'path'
+
 import { BucketNames, launcherName } from './constants'
 import { UserConfigData } from './dtos/config.dto'
 

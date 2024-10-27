@@ -1,14 +1,14 @@
+import { useInjection } from 'inversify-react'
+import { Avatar } from 'primereact/avatar'
 import { MegaMenu } from 'primereact/megamenu'
 import { MenuItem } from 'primereact/menuitem'
 import { Ripple } from 'primereact/ripple'
+import { useNavigate } from 'react-router-dom'
 
 import icon from '../../../../../resources/icons/icon.png'
-import { routeLinks } from '../../shared/routes/routeNames'
-import { useNavigate } from 'react-router-dom'
-import { Avatar } from 'primereact/avatar'
-import { useInjection } from 'inversify-react'
 import { ISettings } from '../../entities/Settings/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
+import { routeLinks } from '../../shared/routes/routeNames'
 
 export const Topbar = () => {
   const navigate = useNavigate()

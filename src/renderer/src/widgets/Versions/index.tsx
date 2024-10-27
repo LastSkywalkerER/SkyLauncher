@@ -1,12 +1,13 @@
-import { Dock as PrimeDock } from 'primereact/dock'
-import { Tooltip } from 'primereact/tooltip'
-import { MenuItem } from 'primereact/menuitem'
+import cx from 'classnames'
 import { useInjection } from 'inversify-react'
+import { Dock as PrimeDock } from 'primereact/dock'
+import { MenuItem } from 'primereact/menuitem'
+import { Tooltip } from 'primereact/tooltip'
 import { FC } from 'react'
+
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
-import cx from 'classnames'
 
 export const Dock: FC = () => {
   const { getLocalMCVersions, setCurrentMCVersion, getCurrentMCVersion } = useInjection(IVersions.$)

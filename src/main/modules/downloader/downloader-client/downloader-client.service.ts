@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Client } from 'minio'
 import { ConfigService } from '@nestjs/config'
+import { Client } from 'minio'
 
 @Injectable()
 export class DownloaderClientService {

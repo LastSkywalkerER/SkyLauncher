@@ -3,8 +3,8 @@ import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { FC, useEffect } from 'react'
 import { FieldPath, FieldPathValue, SubmitHandler, useForm } from 'react-hook-form'
-import { LauncherSettings } from '../../entities/Settings/interfaces'
 
+import { LauncherSettings } from '../../entities/Settings/interfaces'
 import { settingsList } from '../../shared/config/settings.config'
 import { InputFieldControlled } from '../../widgets/InputField'
 

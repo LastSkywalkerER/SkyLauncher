@@ -1,7 +1,8 @@
 import { useInjection } from 'inversify-react'
-import { FC, useEffect, useRef } from 'react'
 import { ProgressBar as PrimeProgressBar, ProgressBarProps } from 'primereact/progressbar'
 import { Toast } from 'primereact/toast'
+import { FC, useEffect, useRef } from 'react'
+
 import { IProcessProgress } from '../../entities/ProcessProgress/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 

@@ -1,7 +1,8 @@
-import { Controller, Inject } from '@nestjs/common'
-import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
 import { IpcHandle } from '@doubleshot/nest-electron'
+import { Controller, Inject } from '@nestjs/common'
+
 import { IPCHandleNames } from '../../../constants'
+import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
 import { VersionsService } from './versions.service'
 
 @Controller()

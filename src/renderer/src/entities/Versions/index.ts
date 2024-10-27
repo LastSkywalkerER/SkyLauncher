@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
-import { BehaviorSubject, Observable, from, tap } from 'rxjs'
-import { RendererApi } from '../../../../api/types'
+import { BehaviorSubject, from, Observable, tap } from 'rxjs'
 
+import { RendererApi } from '../../../../api/types'
 import { IMCGameVersion } from '../../../../entities/mc-game-version/mc-game-version.interface'
 import { NodeApi } from '../NodeApi'
 import { INodeApi } from '../NodeApi/interfaces'

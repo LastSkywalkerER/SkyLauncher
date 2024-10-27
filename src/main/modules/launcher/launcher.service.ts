@@ -1,15 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { LaunchOption, Version, launch } from '@xmcl/core'
-
-import { install, installForge, installLibraries } from '@xmcl/installer'
-import { exec } from 'child_process'
 import { ChildProcess } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import { join } from 'path'
+
+import { Inject, Injectable } from '@nestjs/common'
+import { launch, LaunchOption, Version } from '@xmcl/core'
+import { install, installForge, installLibraries } from '@xmcl/installer'
+import { exec } from 'child_process'
 import { promises as fsPromises } from 'fs'
+import { join } from 'path'
+
 import {
-  MCGameVersion,
-  imageFields
+  imageFields,
+  MCGameVersion
 } from '../../../entities/mc-game-version/mc-game-version.entity'
 import { DownloaderService } from '../downloader/downloader.service'
 import { HardwareService } from '../hardware/hardware.service'

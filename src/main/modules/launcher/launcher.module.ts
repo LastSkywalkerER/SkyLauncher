@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
-import { LauncherService } from './launcher.service'
-import { LauncherController } from './launcher.controller'
+
 import { DownloaderModule } from '../downloader/downloader.module'
+import { LauncherController } from './launcher.controller'
+import { LauncherService } from './launcher.service'
 
 @Module({
   imports: [DownloaderModule],

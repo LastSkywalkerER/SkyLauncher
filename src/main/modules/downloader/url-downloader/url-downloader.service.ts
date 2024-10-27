@@ -1,8 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { createWriteStream, promises as fsPromises, mkdirSync } from 'fs'
-import * as https from 'https'
 import { existsSync } from 'node:fs'
+
+import { Inject, Injectable } from '@nestjs/common'
+import { createWriteStream, mkdirSync, promises as fsPromises } from 'fs'
+import * as https from 'https'
 import { join } from 'path'
+
 import { ProcessStatus } from '../../../../dtos/process-progress.dto'
 import { ProcessProgressService } from '../../process-progress/process-progress.service'
 import { UserLoggerService } from '../../user-logger/user-logger.service'

@@ -1,13 +1,14 @@
 import { useInjection } from 'inversify-react'
 import { FC, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
+
+import background from '../../../../../resources/images/splash_screen.png'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import { PageLoading } from '../../widgets/Loading'
 import { ProgressBar } from '../../widgets/ProgressBar'
 import { Topbar } from '../../widgets/Topbar'
 import { Dock } from '../../widgets/Versions'
-import background from '../../../../../resources/images/splash_screen.png'
 
 const Layout: FC = () => {
   const { getCurrentMCVersion } = useInjection(IVersions.$)

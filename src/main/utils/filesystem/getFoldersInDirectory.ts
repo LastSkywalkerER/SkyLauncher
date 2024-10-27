@@ -1,5 +1,7 @@
 import { readdir } from 'node:fs/promises'
+
 import { join } from 'path'
+
 import { DirMeta } from './interfaces'
 
 /**

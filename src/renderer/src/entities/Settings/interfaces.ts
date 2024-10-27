@@ -1,5 +1,6 @@
 import { interfaces } from 'inversify'
 import { Observable } from 'rxjs'
+
 import { UserConfigData } from '../../../../dtos/config.dto'
 
 export interface LauncherSettings extends UserConfigData {}

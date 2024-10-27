@@ -6,6 +6,7 @@
     "@electron-toolkit/eslint-config-ts/recommended",
     "@electron-toolkit/eslint-config-prettier"
   ],
+  "plugins": ["simple-import-sort"],
   "rules": {
     "@typescript-eslint/no-namespace": [
       "warn",
@@ -13,6 +14,9 @@
         "allowDeclarations": true,
         "allowDefinitionFiles": true
       }
-    ]
+    ],
+    // add the import sorting rule
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
   }
 }

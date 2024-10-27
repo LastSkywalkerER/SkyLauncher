@@ -1,6 +1,7 @@
 import { interfaces } from 'inversify'
-import { ConfigKeys, UserConfigData } from '../../../../dtos/config.dto'
 import { Subscription } from 'rxjs'
+
+import { ConfigKeys, UserConfigData } from '../../../../dtos/config.dto'
 
 export interface INodeApi {
   setConfig(config: UserConfigData): Promise<void>

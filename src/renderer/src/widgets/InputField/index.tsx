@@ -1,6 +1,6 @@
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputText, InputTextProps } from 'primereact/inputtext'
-import { FC, ForwardRefRenderFunction, PropsWithoutRef, RefAttributes, forwardRef } from 'react'
+import { FC, forwardRef, ForwardRefRenderFunction, PropsWithoutRef, RefAttributes } from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
 export interface InputFieldProps

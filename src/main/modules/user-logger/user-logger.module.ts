@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common'
+
 import { UserLoggerService } from './user-logger.service'
 
 @Global()

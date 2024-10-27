@@ -1,8 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { DownloadFolderOptions } from './dir-downloader.interface'
 import * as path from 'node:path'
+
+import { Inject, Injectable } from '@nestjs/common'
 import { createWriteStream, existsSync, mkdirSync } from 'fs'
+
 import { DownloaderClientService } from '../downloader-client/downloader-client.service'
+import { DownloadFolderOptions } from './dir-downloader.interface'
 
 @Injectable()
 export class DirDownloaderService {

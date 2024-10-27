@@ -1,9 +1,9 @@
 import { injectable } from 'inversify'
+import { ReplaySubject, Subscription } from 'rxjs'
+
 import { RendererApi } from '../../../../api/types'
 import { ConfigKeys, UserConfigData } from '../../../../dtos/config.dto'
-
 import { INodeApi } from './interfaces'
-import { ReplaySubject, Subscription } from 'rxjs'
 
 @injectable()
 export class NodeApi implements INodeApi {
