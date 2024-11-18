@@ -2,8 +2,8 @@ import { Window } from '@doubleshot/nest-electron'
 import { Injectable } from '@nestjs/common'
 import { BrowserWindow } from 'electron'
 
-import { IPCSendNames } from '../../../constants'
-import { ProcessProgressData } from '../../../dtos/process-progress.dto'
+import { IPCSendNames } from '../../../shared/constants'
+import { ProcessProgressData } from '../../../shared/dtos/process-progress.dto'
 
 @Injectable()
 export class ProcessProgressService {

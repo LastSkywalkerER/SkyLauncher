@@ -1,4 +1,4 @@
-import { UserConfigData } from '../../../../dtos/config.dto'
+import { UserConfigData } from '../../../../shared/dtos/config.dto'
 
 export const settingsList: { fieldName: keyof UserConfigData }[] = [
   { fieldName: 'userId' },

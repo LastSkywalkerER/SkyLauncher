@@ -1,7 +1,7 @@
 import { interfaces } from 'inversify'
 import { Observable } from 'rxjs'
 
-import { ProcessProgressData } from '../../../../dtos/process-progress.dto'
+import { ProcessProgressData } from '../../../../shared/dtos/process-progress.dto'
 
 export interface IProcessProgress {
   getProgress(): Observable<Record<string, ProcessProgressData>>

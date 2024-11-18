@@ -7,7 +7,7 @@ import { NestFactory } from '@nestjs/core'
 import type { MicroserviceOptions } from '@nestjs/microservices'
 import { app, systemPreferences } from 'electron'
 
-import { platform } from '../constants'
+import { platform } from '../shared/constants'
 import { AppModule } from './app.module'
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'

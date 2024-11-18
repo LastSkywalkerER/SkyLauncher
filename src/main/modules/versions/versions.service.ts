@@ -4,12 +4,12 @@ import { getForgeVersionList, getVersionList } from '@xmcl/installer'
 import { promises as fsPromises } from 'fs'
 import { join } from 'path'
 
-import { forgeVersionSeparator, versionsFolder } from '../../../constants'
+import { forgeVersionSeparator, versionsFolder } from '../../../shared/constants'
 import {
   imageFields,
   MCGameVersion
-} from '../../../entities/mc-game-version/mc-game-version.entity'
-import { IMCGameVersion } from '../../../entities/mc-game-version/mc-game-version.interface'
+} from '../../../shared/entities/mc-game-version/mc-game-version.entity'
+import { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { findFoldersWithTargetFolder } from '../../utils/filesystem/findFoldersWithTargetFolder'
 import { getFoldersInDirectory } from '../../utils/filesystem/getFoldersInDirectory'
 import { sortVersions } from '../../utils/versionSorter'

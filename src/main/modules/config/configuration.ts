@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 
-import { arch, platform } from '../../../constants'
+import { arch, platform } from '../../../shared/constants'
 
 config()
 

@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { app } from 'electron'
 import { join } from 'path'
 
-import { launcherName } from '../../../constants'
+import { launcherName } from '../../../shared/constants'
 import { UserConfigService } from '../user-config/user-config.service'
 
 @Injectable()

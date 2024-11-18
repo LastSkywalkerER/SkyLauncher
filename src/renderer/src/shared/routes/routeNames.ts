@@ -1,5 +1,7 @@
 export enum RouteNames {
   Home = '/',
+  Register = '/register',
+  Login = '/login',
   Settings = '/settings',
   Logs = '/logs',
   AvailableVersions = '/available-versions'

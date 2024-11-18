@@ -2,7 +2,7 @@ import { Window } from '@doubleshot/nest-electron'
 import { Injectable } from '@nestjs/common'
 import { BrowserWindow } from 'electron'
 
-import { IPCSendNames } from '../../../constants'
+import { IPCSendNames } from '../../../shared/constants'
 
 @Injectable()
 export class UserLoggerService {

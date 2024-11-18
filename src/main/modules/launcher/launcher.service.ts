@@ -11,7 +11,7 @@ import { join } from 'path'
 import {
   imageFields,
   MCGameVersion
-} from '../../../entities/mc-game-version/mc-game-version.entity'
+} from '../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { DownloaderService } from '../downloader/downloader.service'
 import { HardwareService } from '../hardware/hardware.service'
 import { UserConfigService } from '../user-config/user-config.service'

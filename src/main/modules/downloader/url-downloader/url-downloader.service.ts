@@ -5,7 +5,7 @@ import { createWriteStream, mkdirSync, promises as fsPromises } from 'fs'
 import * as https from 'https'
 import { join } from 'path'
 
-import { ProcessStatus } from '../../../../dtos/process-progress.dto'
+import { ProcessStatus } from '../../../../shared/dtos/process-progress.dto'
 import { ProcessProgressService } from '../../process-progress/process-progress.service'
 import { UserLoggerService } from '../../user-logger/user-logger.service'
 import { DownloadFromUrl } from './url-downloader.interface'

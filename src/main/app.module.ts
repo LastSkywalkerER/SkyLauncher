@@ -9,6 +9,7 @@ import { UserConfigModule } from './modules/user-config/user-config.module'
 import { UserLoggerModule } from './modules/user-logger/user-logger.module'
 import { VersionsModule } from './modules/versions/versions.module'
 import { createWindow } from './utils/window/createWindow'
+import { RequestsModule } from './modules/requests/requests.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { createWindow } from './utils/window/createWindow'
     HardwareModule,
     UserConfigModule,
     UserLoggerModule,
-    ProcessProgressModule
+    ProcessProgressModule,
+    RequestsModule
   ]
 })
 export class AppModule {}

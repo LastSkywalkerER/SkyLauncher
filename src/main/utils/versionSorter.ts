@@ -1,4 +1,4 @@
-import { forgeVersionSeparator } from '../../constants'
+import { forgeVersionSeparator } from '../../shared/constants'
 
 export const sortVersions = (fullVersions: string[]): string[] =>
   fullVersions.sort((fullVersionPrev, fullVersionNext) => {
