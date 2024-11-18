@@ -35,6 +35,7 @@ jobs:
           MAIN_VITE_MINIO_ACCESSKEY: ${{ secrets.MAIN_VITE_MINIO_ACCESSKEY }}
           MAIN_VITE_MINIO_SECRETKEY: ${{ secrets.MAIN_VITE_MINIO_SECRETKEY }}
           MAIN_VITE_CURSEFORGE_APIKEY: ${{ secrets.MAIN_VITE_CURSEFORGE_APIKEY }}
+          RENDERER_VITE_BASE_URL: ${{ secrets.RENDERER_VITE_BASE_URL }}
           RENDERER_VITE_IP: ${{ secrets.RENDERER_VITE_IP }}
           RENDERER_VITE_PORT: ${{ secrets.RENDERER_VITE_PORT }}
         run: |
