@@ -31,6 +31,22 @@ export class LauncherController {
     return
   }
 
+  @IpcHandle(IPCHandleNames.UpdateGame)
+  public async handleUpdateGame(
+    @Payload() { version }: GameData
+  ): Promise<IMCGameVersion | undefined> {
+    console.log({ version })
+    try {
+      const fullVersion = new MCGameVersion(version)
+
+      return (await this.launcherService.updateCustomModpack(fullVersion)).getData()
+    } catch (error) {
+      this.userLoggerService.error(error)
+    }
+
+    return
+  }
+
   @IpcHandle(IPCHandleNames.CheckGame)
   public async handleCheckGame(
     @Payload() { version }: GameData

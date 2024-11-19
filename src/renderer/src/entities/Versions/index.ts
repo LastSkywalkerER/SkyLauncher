@@ -25,6 +25,7 @@ export class Versions implements IVersions {
     this.launchGame = this.launchGame.bind(this)
     this.checkGame = this.checkGame.bind(this)
     this.installGame = this.installGame.bind(this)
+    this.updateGame = this.updateGame.bind(this)
 
     this.checkLocalMCVersions()
   }
@@ -32,14 +33,31 @@ export class Versions implements IVersions {
   public getCustomMCVersions(): Observable<IMCLocalGameVersion[]> {
     return combineLatest([from(this._nodeApi.getCustomMCVersions()), this._localMCVersions]).pipe(
       map(([versions, installedVersions]) => {
-        // Получаем массив установленных версий
-        const installedVersionsSet = new Set(installedVersions.map((version) => version.name))
+        // Создаем объект с установленными версиями
+        const installedVersionsMap = installedVersions.reduce<Record<string, IMCGameVersion>>(
+          (acc, version) => {
+            acc[version.name] = version
+            return acc
+          },
+          {}
+        )
 
-        // Создаем новый массив, добавляя флаг isInstalled
-        return versions.map((version) => ({
-          ...version,
-          isInstalled: installedVersionsSet.has(version.name)
-        }))
+        return versions.map((version) => {
+          const installedVersion = installedVersionsMap[version.name]
+
+          return {
+            ...installedVersion,
+            ...(version && {
+              ...Object.keys(version).reduce((acc, key) => {
+                if (version[key]) {
+                  acc[key] = version[key]
+                }
+                return acc
+              }, {} as Partial<IMCGameVersion>)
+            }),
+            isInstalled: !!installedVersion
+          }
+        })
       })
     )
     // return from(this._nodeApi.getCustomMCVersions())
@@ -100,6 +118,8 @@ export class Versions implements IVersions {
   }
 
   public updateGame(version: IMCGameVersion): Observable<IMCGameVersion> {
+    console.log({ version })
+
     return from(
       this._nodeApi.updateGame({
         version

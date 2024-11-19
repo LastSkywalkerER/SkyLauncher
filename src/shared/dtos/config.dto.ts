@@ -1,6 +1,8 @@
 export type UserConfigData = {
   userName?: string
   userId?: string
+  accessToken?: string
+  minecraftAccessExpiration?: string
 
   javaPath?: string
   modpacksPath?: string

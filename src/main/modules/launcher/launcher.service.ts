@@ -164,6 +164,28 @@ export class LauncherService {
     }
   }
 
+  public async updateCustomModpack(version: MCGameVersion): Promise<MCGameVersion> {
+    if (!version.folder) {
+      return this.installCustomModpack(version)
+    }
+
+    try {
+      const exists = await fsPromises.stat(version.folder).catch(() => false)
+
+      if (exists) {
+        await fsPromises.rm(version.folder, { recursive: true, force: true })
+        this.userLoggerService.info(`Directory "${version.folder}" deleted successfully.`)
+      } else {
+        this.userLoggerService.info(`Directory "${version.folder}" does not exist.`)
+      }
+
+      return this.installCustomModpack(version)
+    } catch (error) {
+      this.userLoggerService.error(`Error deleting directory "${version.folder}":`, error)
+      return version
+    }
+  }
+
   public async checkLocalModpack(version: MCGameVersion): Promise<MCGameVersion> {
     try {
       if (version.forge) {
@@ -190,6 +212,7 @@ export class LauncherService {
     const javaPath = this.hardwareService.getJavaExecutablePath(version.java)
     const userName = this.userConfigService.get('userName')
     const userId = this.userConfigService.get('userId')
+    const accessToken = this.userConfigService.get('accessToken')
     const minMemory = this.userConfigService.get('javaArgsMinMemory')
     const maxMemory = this.userConfigService.get('javaArgsMaxMemory')
     const width = this.userConfigService.get('resolutionWidth')
@@ -201,6 +224,7 @@ export class LauncherService {
       javaPath: javaPath,
       version: version.fullVersion,
       gameProfile: { name: userName, id: userId },
+      accessToken,
       //   userType: 'legacy',
       // resourcePath: root,
       minMemory,

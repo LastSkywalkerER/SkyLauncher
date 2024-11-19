@@ -1,7 +1,7 @@
 export const versions = [
   {
     downloadUrl:
-      'https://storage.yandexcloud.net/freshcraft-launcher/modpacks/Freshcraft%20Industrial%20DLC/FreshCraft%20Industrial%20DLC.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEw1dl6KZYWcMKTeCcBAE6%2F20241014%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241014T082432Z&X-Amz-Expires=2592000&X-Amz-Signature=9E8A3DA6A38D7A5C8B6F2BCE95BAF98F4CA4225CB18626D036B1E4E578FBB142&X-Amz-SignedHeaders=host',
+      'https://storage.yandexcloud.net/freshcraft-launcher/modpacks/Freshcraft%20Industrial%20DLC/FreshCraft%20Industrial%20DLC.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEw1dl6KZYWcMKTeCcBAE6%2F20241119%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241119T182611Z&X-Amz-Expires=2592000&X-Amz-Signature=8292C40AD94B9BCCCA05C7073421F82B9887C0B826E7D70EB29E2498326411FA&X-Amz-SignedHeaders=host',
     version: '1.19.2',
     forge: '43.3.13',
     name: 'FreshCraft Industrial DLC',
@@ -12,7 +12,7 @@ export const versions = [
   },
   {
     downloadUrl:
-      'https://storage.yandexcloud.net/freshcraft-launcher/modpacks/FreshCraft/FreshCraft.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEw1dl6KZYWcMKTeCcBAE6%2F20241014%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241014T083823Z&X-Amz-Expires=2592000&X-Amz-Signature=986DF4C364C20B995C4119EDBFA05D481950AECAB429FB4B58FF10598C729D61&X-Amz-SignedHeaders=host',
+      'https://storage.yandexcloud.net/freshcraft-launcher/modpacks/FreshCraft/FreshCraft.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEw1dl6KZYWcMKTeCcBAE6%2F20241119%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241119T181308Z&X-Amz-Expires=2592000&X-Amz-Signature=DFA83A925460B48F13C45563369C2BA1B9E5856EB0085145721848CBFD630AF4&X-Amz-SignedHeaders=host',
     version: '1.19.2',
     forge: '43.3.13',
     name: 'FreshCraft',
@@ -23,7 +23,7 @@ export const versions = [
   },
   {
     downloadUrl:
-      'https://storage.yandexcloud.net/freshcraft-launcher/modpacks/FreshCraft%20Fantasy%20DLC/FreshCraft%20Fantasy%20DLC.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEw1dl6KZYWcMKTeCcBAE6%2F20241014%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241014T084356Z&X-Amz-Expires=2592000&X-Amz-Signature=21DEB27CBC09CCA7265016E656CB30F18D2E056AB5574941CDA0D124E0048A93&X-Amz-SignedHeaders=host',
+      'https://storage.yandexcloud.net/freshcraft-launcher/modpacks/FreshCraft%20Fantasy%20DLC/FreshCraft%20Fantasy%20DLC.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEw1dl6KZYWcMKTeCcBAE6%2F20241119%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241119T182526Z&X-Amz-Expires=2592000&X-Amz-Signature=072BCA16014EDF7D9FB3A179807C44F2C61FCD95091E6CD0C423854D11DF7BBF&X-Amz-SignedHeaders=host',
     version: '1.19.2',
     forge: '43.3.13',
     name: 'FreshCraft Fantasy DLC',

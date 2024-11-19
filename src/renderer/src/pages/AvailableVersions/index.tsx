@@ -24,11 +24,7 @@ const AvailableVersions: FC = () => {
     useObservableRequest(updateGame)
 
   const onSubmit = (data): void => {
-    if (data.value.isInstalled) {
-      executeUpdateGame(data.value)
-    }
-
-    executeInstallGame(data.value)
+    data.value.isInstalled ? executeUpdateGame(data.value) : executeInstallGame(data.value)
   }
 
   const VersionTemplate = (option: IMCLocalGameVersion): JSX.Element => {
