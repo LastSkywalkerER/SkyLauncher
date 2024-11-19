@@ -18,6 +18,8 @@ export const rendererApi = {
     ipcRenderer.invoke(IPCHandleNames.CheckGame, data),
   installGame: (data: GameData): Promise<IMCGameVersion> =>
     ipcRenderer.invoke(IPCHandleNames.InstallGame, data),
+  updateGame: (data: GameData): Promise<IMCGameVersion> =>
+    ipcRenderer.invoke(IPCHandleNames.UpdateGame, data),
   setConfig: (data: UserConfigData): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.SetConfig, data),
   getConfig: <T extends ConfigKeys>(data: T): Promise<Required<UserConfigData>[T]> =>

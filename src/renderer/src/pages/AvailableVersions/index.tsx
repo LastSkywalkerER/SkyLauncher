@@ -2,29 +2,36 @@ import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { ListBox } from 'primereact/listbox'
 import { FC, JSX } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 
-import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
-import { IVersions } from '../../entities/Versions/interfaces'
+import { IMCLocalGameVersion, IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { Loading } from '../../widgets/Loading'
 
 interface FormValue {
-  value: IMCGameVersion
+  value: IMCLocalGameVersion
 }
 
 const AvailableVersions: FC = () => {
   const { handleSubmit, control } = useForm<FormValue>()
-  const { getCustomMCVersions, installGame } = useInjection(IVersions.$)
+  const { value } = useWatch({ control })
+  const { getCustomMCVersions, installGame, updateGame } = useInjection(IVersions.$)
   const versions = useObservable(getCustomMCVersions(), [])
-  const { execute: executeInstallGame, loading } = useObservableRequest(installGame)
+  const { execute: executeInstallGame, isLoading: isLoadingInstall } =
+    useObservableRequest(installGame)
+  const { execute: executeUpdateGame, isLoading: isLoadingUpdate } =
+    useObservableRequest(updateGame)
 
   const onSubmit = (data): void => {
+    if (data.value.isInstalled) {
+      executeUpdateGame(data.value)
+    }
+
     executeInstallGame(data.value)
   }
 
-  const Versionemplate = (option: IMCGameVersion): JSX.Element => {
+  const VersionTemplate = (option: IMCLocalGameVersion): JSX.Element => {
     return (
       <div className="flex items-center">
         <img alt={option.name} src={option.icon} style={{ width: '50px', marginRight: '.5rem' }} />
@@ -48,17 +55,19 @@ const AvailableVersions: FC = () => {
             options={versions}
             optionLabel="name"
             className={'w-fit'}
-            itemTemplate={Versionemplate}
+            itemTemplate={VersionTemplate}
           />
         )}
       />
 
-      {loading ? (
+      {isLoadingInstall || isLoadingUpdate ? (
         <Loading />
       ) : (
-        <Button className={'w-fit'} type={'submit'}>
-          Install
-        </Button>
+        value && (
+          <Button className={'w-fit'} type={'submit'}>
+            {value.isInstalled ? 'Update' : 'Install'}
+          </Button>
+        )
       )}
     </form>
   )

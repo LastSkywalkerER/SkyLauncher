@@ -5,8 +5,8 @@ interface UseObservableRequestResult<T, P extends unknown[]> {
   execute: (...params: P) => void
   data: T | null
   error: Error | null
-  loading: boolean
-  loaded: boolean
+  isLoading: boolean
+  isLoaded: boolean
 }
 
 export const useObservableRequest = <T, P extends unknown[]>(
@@ -14,8 +14,8 @@ export const useObservableRequest = <T, P extends unknown[]>(
 ): UseObservableRequestResult<T, P> => {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<Error | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [loaded, setLoaded] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [isLoaded, setLoaded] = useState<boolean>(false)
 
   const execute = useCallback(
     (...params: P) => {
@@ -46,5 +46,5 @@ export const useObservableRequest = <T, P extends unknown[]>(
     [createObservable]
   )
 
-  return { execute, data, error, loading, loaded }
+  return { execute, data, error, isLoading, isLoaded }
 }

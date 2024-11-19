@@ -9,8 +9,6 @@ import { RouteNames } from '../routes/routeNames'
 export const AuthGuard: FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {
   const { data, isLoading, isLoaded } = useLoadableState<IUser, UserData>(IUser.$)
 
-  console.log({ data, isLoading, isLoaded })
-
   if (isLoading) {
     return (
       <div className={'w-full h-full'}>

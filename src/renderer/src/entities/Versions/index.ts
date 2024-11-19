@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify'
-import { BehaviorSubject, from, Observable, tap } from 'rxjs'
+import { BehaviorSubject, combineLatest, from, map, Observable, tap } from 'rxjs'
 
 import { RendererApi } from '../../../../shared/api/types'
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { NodeApi } from '../NodeApi'
 import { INodeApi } from '../NodeApi/interfaces'
-import { IVersions } from './interfaces'
+import { IMCLocalGameVersion, IVersions } from './interfaces'
 
 @injectable()
 export class Versions implements IVersions {
@@ -29,8 +29,20 @@ export class Versions implements IVersions {
     this.checkLocalMCVersions()
   }
 
-  public getCustomMCVersions(): Observable<IMCGameVersion[]> {
-    return from(this._nodeApi.getCustomMCVersions())
+  public getCustomMCVersions(): Observable<IMCLocalGameVersion[]> {
+    return combineLatest([from(this._nodeApi.getCustomMCVersions()), this._localMCVersions]).pipe(
+      map(([versions, installedVersions]) => {
+        // Получаем массив установленных версий
+        const installedVersionsSet = new Set(installedVersions.map((version) => version.name))
+
+        // Создаем новый массив, добавляя флаг isInstalled
+        return versions.map((version) => ({
+          ...version,
+          isInstalled: installedVersionsSet.has(version.name)
+        }))
+      })
+    )
+    // return from(this._nodeApi.getCustomMCVersions())
   }
 
   public checkLocalMCVersions(): void {
@@ -77,6 +89,19 @@ export class Versions implements IVersions {
   public installGame(version: IMCGameVersion): Observable<IMCGameVersion> {
     return from(
       this._nodeApi.installGame({
+        version
+      })
+    ).pipe(
+      tap((data) => {
+        this._version.next(data)
+        this.checkLocalMCVersions()
+      })
+    )
+  }
+
+  public updateGame(version: IMCGameVersion): Observable<IMCGameVersion> {
+    return from(
+      this._nodeApi.updateGame({
         version
       })
     ).pipe(

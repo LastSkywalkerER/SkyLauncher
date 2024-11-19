@@ -3,8 +3,12 @@ import { Observable } from 'rxjs'
 
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
 
+export interface IMCLocalGameVersion extends IMCGameVersion {
+  isInstalled: boolean
+}
+
 export interface IVersions {
-  getCustomMCVersions(): Observable<IMCGameVersion[]>
+  getCustomMCVersions(): Observable<IMCLocalGameVersion[]>
   checkLocalMCVersions(): void
   getLocalMCVersions(): Observable<IMCGameVersion[]>
   getCurrentMCVersion(): Observable<IMCGameVersion | null>
@@ -12,6 +16,7 @@ export interface IVersions {
   launchGame(version: IMCGameVersion): void
   checkGame(version: IMCGameVersion): void
   installGame(version: IMCGameVersion): Observable<IMCGameVersion>
+  updateGame(version: IMCGameVersion): Observable<IMCGameVersion>
 }
 
 export namespace IVersions {
