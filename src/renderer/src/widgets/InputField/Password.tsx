@@ -1,34 +1,34 @@
 import { FloatLabel } from 'primereact/floatlabel'
-import { InputText, InputTextProps } from 'primereact/inputtext'
+import { Password, PasswordProps } from 'primereact/password'
 import { FC, forwardRef, ForwardRefRenderFunction, PropsWithoutRef, RefAttributes } from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
 import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
 
 export interface InputFieldProps
-  extends PropsWithoutRef<InputTextProps & RefAttributes<HTMLInputElement>> {
+  extends PropsWithoutRef<PasswordProps & RefAttributes<HTMLInputElement>> {
   label?: string
   error?: string
 }
 
-export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, ...props }) => {
+export const PasswordFieldComponent: FC<InputFieldProps> = ({ label, error, ...props }) => {
   return (
     <FloatLabel>
-      <InputText id={label} {...props} invalid={!!error} />
+      <Password id={label} {...props} invalid={!!error} />
       <label htmlFor={label}>{label}</label>
       {error ?? <span className={'text-red-600'}>{error}</span>}
     </FloatLabel>
   )
 }
 
-export const InputFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, InputFieldProps> = (
+export const PasswordFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, InputFieldProps> = (
   { label, error, ...props },
   ref
 ) => {
   return (
     <div className={'flex flex-col'}>
       <FloatLabel>
-        <InputText id={label} ref={ref} {...props} invalid={!!error} />
+        <Password id={label} inputRef={ref} {...props} invalid={!!error} />
         <label htmlFor={label}>{label}</label>
       </FloatLabel>
       <span className={'text-red-600'}>{error}</span>
@@ -36,9 +36,9 @@ export const InputFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, Inpu
   )
 }
 
-export const InputField = forwardRef(InputFieldRenderer)
+export const PasswordField = forwardRef(PasswordFieldRenderer)
 
-export const InputFieldControlled = <
+export const PasswordFieldControlled = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
@@ -60,7 +60,7 @@ export const InputFieldControlled = <
       rules={rules}
       shouldUnregister={shouldUnregister}
       render={({ field }) => (
-        <InputField {...props} {...field} label={label || capitalizeFirstLetter(name)} />
+        <PasswordField {...props} {...field} label={label || capitalizeFirstLetter(name)} />
       )}
     />
   )

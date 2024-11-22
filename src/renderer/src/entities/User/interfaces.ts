@@ -1,21 +1,23 @@
 import { interfaces } from 'inversify'
+import { Observable } from 'rxjs'
 
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
-import { LoginData, RegisterData } from '../BackendApi/interfaces'
+import { LoginData, LoginResponse, RegisterData } from '../BackendApi/interfaces'
 import { ILoadableState } from '../LoadableState/interfaces'
 
 export interface UserData {
-  userId: UserConfigData['userId']
+  // userId: UserConfigData['userId']
   userName: UserConfigData['userName']
-  accessToken: string
+  // accessToken: string
 }
 
 export interface IUser extends ILoadableState<UserData> {
   getUser: () => UserData
 
-  login: (data: LoginData) => Promise<void>
-  register: (data: RegisterData) => Promise<void>
-  getMinecraftProfile: () => Promise<unknown>
+  login: (data: LoginData) => Observable<LoginResponse>
+  register: (data: RegisterData) => Observable<LoginResponse>
+  offlineLogin: (data: UserData) => void
+  getMinecraftProfile: () => Promise<void>
   getProfile: () => Promise<unknown>
 }
 

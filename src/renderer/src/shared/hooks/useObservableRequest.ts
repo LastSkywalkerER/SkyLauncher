@@ -9,7 +9,7 @@ interface UseObservableRequestResult<T, P extends unknown[]> {
   isLoaded: boolean
 }
 
-export const useObservableRequest = <T, P extends unknown[]>(
+export const useObservableRequest = <P extends unknown[], T>(
   createObservable: (...params: P) => Observable<T>
 ): UseObservableRequestResult<T, P> => {
   const [data, setData] = useState<T | null>(null)

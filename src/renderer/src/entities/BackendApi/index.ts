@@ -2,7 +2,15 @@ import { inject, injectable } from 'inversify'
 
 import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
 import { IHttpClient } from '../HttpClient/interfaces'
-import { IBackendApi, LoginData, LoginResponse, ProfileResponse, RegisterData } from './interfaces'
+import {
+  ErrorResponse,
+  IBackendApi,
+  LoginData,
+  LoginResponse,
+  MinecraftProfileResponse,
+  ProfileResponse,
+  RegisterData
+} from './interfaces'
 
 @injectable()
 export class BackendApi implements IBackendApi {
@@ -19,12 +27,19 @@ export class BackendApi implements IBackendApi {
     this.register = this.register.bind(this)
   }
 
-  public async getMinecraftProfile(): Promise<unknown> {
-    const { body } = await this._httpClient.request<unknown>({
-      url: 'v1/profile/minecraft'
-    })
+  public async getMinecraftProfile(): Promise<MinecraftProfileResponse> {
+    try {
+      const { body } = await this._httpClient.request<MinecraftProfileResponse>({
+        url: 'v1/profile/minecraft'
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async getProfile(): Promise<ProfileResponse> {

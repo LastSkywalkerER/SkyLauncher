@@ -1,7 +1,6 @@
 import { interfaces } from 'inversify'
 
 export interface LoginData {
-  userName: string
   email: string
   password: string
 }
@@ -27,13 +26,30 @@ export interface ProfileResponse {
   }
 }
 
+export interface MinecraftProfileResponse {
+  username: string
+  uuid: string
+  minecraft_access_token: string
+  minecraft_access_expires_in: string
+  created_at: string
+}
+
 export interface IBackendApi {
   login: (data: LoginData) => Promise<LoginResponse>
   register: (data: RegisterData) => Promise<LoginResponse>
   logout: () => Promise<unknown>
   refresh: () => Promise<unknown>
   getProfile: () => Promise<ProfileResponse>
-  getMinecraftProfile: () => Promise<unknown>
+  getMinecraftProfile: () => Promise<MinecraftProfileResponse>
+}
+
+export interface ErrorResponse {
+  response?: {
+    data?: {
+      error?: string
+      message?: string
+    }
+  }
 }
 
 export namespace IBackendApi {

@@ -1,4 +1,3 @@
-import { useInjection } from 'inversify-react'
 import { Avatar } from 'primereact/avatar'
 import { MegaMenu } from 'primereact/megamenu'
 import { MenuItem } from 'primereact/menuitem'
@@ -6,14 +5,13 @@ import { Ripple } from 'primereact/ripple'
 import { useNavigate } from 'react-router-dom'
 
 import icon from '../../../../../resources/icons/icon.png'
-import { ISettings } from '../../entities/Settings/interfaces'
-import { useObservable } from '../../shared/hooks/useObservable'
+import { IUser, UserData } from '../../entities/User/interfaces'
+import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { routeLinks } from '../../shared/routes/routeNames'
 
 export const Topbar = () => {
   const navigate = useNavigate()
-  const { getSettings } = useInjection(ISettings.$)
-  const settings = useObservable(getSettings(), null)
+  const { data } = useLoadableState<IUser, UserData>(IUser.$)
 
   const itemRenderer = (item) => {
     return (
@@ -37,12 +35,12 @@ export const Topbar = () => {
   }))
 
   const start = () => {
-    return (
+    return data ? (
       <div className={'flex items-center gap-5 mr-5'}>
         <Avatar template={<img src={icon} alt="icon" />} shape="circle" />
-        <h3>{settings?.userName}</h3>
+        <h3>{data.userName}</h3>
       </div>
-    )
+    ) : null
   }
 
   return (

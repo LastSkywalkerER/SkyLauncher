@@ -4,4 +4,5 @@ export interface ILoadableState<T> {
   data$: BehaviorSubject<T | null>
   isLoaded$: BehaviorSubject<boolean>
   isLoading$: BehaviorSubject<boolean>
+  error$: BehaviorSubject<Error | null>
 }

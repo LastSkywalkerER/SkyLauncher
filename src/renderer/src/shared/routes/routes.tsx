@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
+import { Background } from '../../app/Background'
 import { AuthGuard } from '../Guards/AuthGuard'
 import { RouteNames } from './routeNames'
 
@@ -11,11 +12,13 @@ const Settings = lazy(() => import('../../pages/Settings'))
 const AvailableVersions = lazy(() => import('../../pages/AvailableVersions'))
 const Login = lazy(() => import('../../pages/Auth/LoginForm'))
 const Register = lazy(() => import('../../pages/Auth/RegisterForm'))
+const OfflineLogin = lazy(() => import('../../pages/Auth/OfflineForm'))
+const CheckMCProfileForm = lazy(() => import('../../pages/Auth/CheckMCProfileForm'))
 
 export const routes = createBrowserRouter([
   {
     path: RouteNames.Home,
-    element: <Layout />,
+    element: <Background />,
     children: [
       {
         path: RouteNames.Login,
@@ -26,29 +29,43 @@ export const routes = createBrowserRouter([
         element: <Register />
       },
       {
-        index: true,
+        path: RouteNames.OfflineLogin,
+        element: <OfflineLogin />
+      },
+      {
+        path: RouteNames.CheckMinecraftProfile,
+        element: <CheckMCProfileForm />
+      },
+      {
         path: RouteNames.Home,
         element: (
           <AuthGuard>
-            <Home />
+            <Layout />
           </AuthGuard>
-        )
-      },
-      {
-        path: RouteNames.AvailableVersions,
-        element: <AvailableVersions />
-      },
-      {
-        path: RouteNames.Logs,
-        element: <Logs />
-      },
-      {
-        path: RouteNames.Settings,
-        element: <Settings />
-      },
-      {
-        path: '*',
-        element: <Navigate to={RouteNames.Home} />
+        ),
+        children: [
+          {
+            index: true,
+            path: RouteNames.Home,
+            element: <Home />
+          },
+          {
+            path: RouteNames.AvailableVersions,
+            element: <AvailableVersions />
+          },
+          {
+            path: RouteNames.Logs,
+            element: <Logs />
+          },
+          {
+            path: RouteNames.Settings,
+            element: <Settings />
+          },
+          {
+            path: '*',
+            element: <Navigate to={RouteNames.Home} />
+          }
+        ]
       }
     ]
   }
