@@ -21,6 +21,7 @@ const Settings: FC = () => {
 
   useEffect(() => {
     getSettings().subscribe((data) => {
+      console.log(data)
       data &&
         Object.entries(data).map(([key, value]) =>
           setValue(

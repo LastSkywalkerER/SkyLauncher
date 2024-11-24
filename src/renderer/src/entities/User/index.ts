@@ -49,7 +49,6 @@ export class User extends LoadableState<UserData> implements IUser {
   }
 
   public offlineLogin({ userName }: UserData): void {
-    console.log(userName)
     try {
       this._settings.setSettings({
         userName

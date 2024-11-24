@@ -9,6 +9,7 @@ export const defaultModpackCover =
   'https://ipfs.io/ipfs/QmQMy5KZWkE7BAyEPtRqyjaSkXsHda2ZzCC8kFbyV8V9em'
 export const websiteLink = 'https://freshcraft.org/'
 export const termsLink = 'https://freshcraft.org/'
+export const xboxConnectionLink = 'https://freshcraft.org/'
 
 export enum BucketNames {
   Java = 'java',

@@ -1,8 +1,9 @@
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
 
 export const settingsList: { fieldName: keyof UserConfigData }[] = [
-  { fieldName: 'userId' },
   { fieldName: 'userName' },
+  { fieldName: 'userId' },
+  { fieldName: 'accessToken' },
 
   { fieldName: 'modpacksPath' },
   { fieldName: 'javaPath' },

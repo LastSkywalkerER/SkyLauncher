@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import Store from 'electron-store'
-import { merge } from 'ts-deepmerge'
 
 import { defaults } from '../../../shared/default.config'
 import { ConfigKeys, UserConfigData } from '../../../shared/dtos/config.dto'
@@ -10,7 +9,7 @@ export class UserConfigService {
   private _store = new Store({ defaults })
 
   public set(value: UserConfigData): void {
-    this._store.set(merge(defaults, value))
+    this._store.set(value)
   }
 
   public get<T extends ConfigKeys>(key: T): Required<UserConfigData>[T] {
