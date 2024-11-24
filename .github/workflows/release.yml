@@ -151,22 +151,14 @@ jobs:
           fi
           echo "windows_file=${windows_file}" >> $GITHUB_ENV  # Установка переменной окружения
 
-      - name: Upload macOS build artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/macos/${{ env.macos_file }} # Используем имя файла из переменной
-          asset_name: ${{ env.macos_file }}
-          asset_content_type: application/octet-stream
+      - name: Upload macOS build artifact using GitHub CLI
+        run: |
+          gh release upload "${{ steps.create_release.outputs.tag_name }}" "dist/macos/${{ env.macos_file }}" --clobber
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем ваш PAT_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
-      - name: Upload Windows build artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/windows/${{ env.windows_file }} # Используем имя файла из переменной
-          asset_name: ${{ env.windows_file }}
-          asset_content_type: application/octet-stream
+      - name: Upload Windows build artifact using GitHub CLI
+        run: |
+          gh release upload "${{ steps.create_release.outputs.tag_name }}" "dist/windows/${{ env.windows_file }}" --clobber
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем ваш PAT_TOKEN
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
