@@ -153,12 +153,12 @@ jobs:
 
       - name: Upload macOS build artifact using GitHub CLI
         run: |
-          gh release upload "${{ steps.create_release.outputs.tag_name }}" "dist/macos/${{ env.macos_file }}" --clobber
+          gh release upload "release-${{ github.run_number }}" "dist/macos/${{ env.macos_file }}" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
       - name: Upload Windows build artifact using GitHub CLI
         run: |
-          gh release upload "${{ steps.create_release.outputs.tag_name }}" "dist/windows/${{ env.windows_file }}" --clobber
+          gh release upload "release-${{ github.run_number }}" "dist/windows/${{ env.windows_file }}" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
