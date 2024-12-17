@@ -8,14 +8,10 @@ import { type RequestData, type ResponseData } from '../dtos/request.dto'
 import { type IMCGameVersion } from '../entities/mc-game-version/mc-game-version.interface'
 
 export const rendererApi = {
-  getCustomMCVersions: (): Promise<IMCGameVersion[]> =>
-    ipcRenderer.invoke(IPCHandleNames.GetCustomMCVersions),
   getLocalMCVersions: (): Promise<IMCGameVersion[]> =>
     ipcRenderer.invoke(IPCHandleNames.GetLocalMCVersions),
   launchGame: (data: GameData): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.LaunchGame, data),
-  checkGame: (data: GameData): Promise<IMCGameVersion> =>
-    ipcRenderer.invoke(IPCHandleNames.CheckGame, data),
   installGame: (data: GameData): Promise<IMCGameVersion> =>
     ipcRenderer.invoke(IPCHandleNames.InstallGame, data),
   updateGame: (data: GameData): Promise<IMCGameVersion> =>

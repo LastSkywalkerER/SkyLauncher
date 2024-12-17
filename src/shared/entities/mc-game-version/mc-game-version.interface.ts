@@ -1,10 +1,11 @@
+import { Modloader, ModpackProvider } from '../../constants'
+
 export interface IMCGameVersion {
   jsonUrl?: string
   downloadUrl?: string
   folder?: string
   version: string
   fullVersion: string
-  forge?: string
   java?: string
   icon: string
   coverImage?: string
@@ -14,6 +15,10 @@ export interface IMCGameVersion {
   titleImage?: string
   title?: string
   description?: string
+  modpackProvider: ModpackProvider
+
+  modloader?: Modloader
+  modloaderVersion?: string
 }
 
 export interface GameInstallationStatus {
@@ -21,6 +26,8 @@ export interface GameInstallationStatus {
   native?: boolean
   forge?: boolean
   libs?: boolean
+  modloader?: boolean
+  mods?: boolean
 }
 
 export interface ServerData {

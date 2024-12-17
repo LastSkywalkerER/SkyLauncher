@@ -1,6 +1,6 @@
 {
   "name": "sky-launcher",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha",
   "license": "MIT",
   "description": "Minecraft Launcher for sky purposes",
   "main": "./out/main/index.js",
@@ -29,9 +29,12 @@
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.3.8",
+    "@nestjs/cqrs": "^11.0.0",
     "@nestjs/microservices": "^10.3.8",
-    "@xmcl/core": "^2.13.0",
-    "@xmcl/installer": "^5.4.0",
+    "@xmcl/core": "^2.14.0",
+    "@xmcl/curseforge": "^2.2.0",
+    "@xmcl/installer": "6.0.0",
+    "@xmcl/task": "^4.1.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
     "class-transformer": "^0.5.1",
@@ -52,7 +55,8 @@
     "rxjs": "^7.8.1",
     "tailwindcss": "^3.4.13",
     "ts-deepmerge": "^7.0.1",
-    "undici": "^6.20.0",
+    "undici": "^7.3.0",
+    "uuid": "^11.0.5",
     "zip-lib": "^1.0.4"
   },
   "devDependencies": {
@@ -77,5 +81,6 @@
     "typescript": "^5.5.2",
     "vite": "^5.3.1",
     "vite-plugin-node-polyfills": "^0.22.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

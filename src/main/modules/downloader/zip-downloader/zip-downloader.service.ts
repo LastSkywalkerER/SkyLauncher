@@ -1,3 +1,5 @@
+import { readdir, rename, rmdir } from 'node:fs/promises'
+
 import { HardwareService } from '@main/modules/hardware/hardware.service'
 import { Inject, Injectable } from '@nestjs/common'
 import { createWriteStream, existsSync, mkdirSync, promises as fsPromises } from 'fs'
@@ -53,6 +55,7 @@ export class ZipDownloaderService {
     let downloadedBytes = 0
     const setDownloadingProgress = (status: ProcessStatus, value: number): void =>
       this.processProgressService.set({
+        id: '',
         processName: `Downloading ${fileName}`,
         status,
         currentValue: value,
@@ -99,6 +102,7 @@ export class ZipDownloaderService {
     let unzipItemAmount = 0
     const setUnzipProgress = (status: ProcessStatus, value: number, maxValue: number = 0): void =>
       this.processProgressService.set({
+        id: '',
         processName: `Extracting ${zipPath.split('/').at(-1)}`,
         status,
         currentValue: value,
@@ -124,6 +128,8 @@ export class ZipDownloaderService {
         }
       })
 
+      await this.removeDoubleDirectories(outputDirectory)
+
       this.userLoggerService.info(`Extraction complete. Files are saved in ${outputDirectory}`)
 
       // Удаление ZIP файла после успешного разархивирования
@@ -133,6 +139,39 @@ export class ZipDownloaderService {
     } catch (err) {
       this.userLoggerService.error(`Error during extraction: ${err}`)
       setUnzipProgress('finished', currentUnzipItemIndex, unzipItemAmount)
+    }
+  }
+
+  private async removeDoubleDirectories(outputDirectory: string): Promise<void> {
+    try {
+      // Получаем список содержимого директории
+      const contents = await readdir(outputDirectory, { withFileTypes: true })
+
+      // Фильтруем содержимое, оставляя только директории
+      const directories = contents.filter((item) => item.isDirectory())
+
+      // Проверяем, что в директории ровно одна поддиректория и больше ничего
+      if (directories.length !== 1 || contents.length !== 1) {
+        return
+      }
+
+      // Получаем путь к этой единственной поддиректории
+      const singleDirectory = join(outputDirectory, directories[0].name)
+
+      // Переносим содержимое единственной директории на уровень выше
+      const itemsInSingleDirectory = await readdir(singleDirectory)
+      for (const item of itemsInSingleDirectory) {
+        const srcPath = join(singleDirectory, item)
+        const destPath = join(outputDirectory, item)
+        await rename(srcPath, destPath)
+      }
+
+      // Удаляем пустую директорию
+      await rmdir(singleDirectory)
+
+      console.log('Содержимое перемещено и поддиректория удалена.')
+    } catch (error) {
+      console.error('Произошла ошибка:', error)
     }
   }
 

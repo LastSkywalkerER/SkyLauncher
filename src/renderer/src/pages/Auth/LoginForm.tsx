@@ -65,9 +65,9 @@ const LoginForm: FC = () => {
         <Loading />
       ) : (
         <div className={'flex items-center gap-10'}>
-          <Button severity="secondary">
-            <Link to={RouteNames.OfflineLogin}>Go offline</Link>
-          </Button>
+          <Link to={RouteNames.OfflineLogin}>
+            <Button severity="secondary">Go offline</Button>
+          </Link>
           <Button type="submit">Login</Button>
         </div>
       )}

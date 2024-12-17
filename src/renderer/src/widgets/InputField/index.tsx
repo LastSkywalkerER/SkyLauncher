@@ -1,6 +1,13 @@
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputText, InputTextProps } from 'primereact/inputtext'
-import { FC, forwardRef, ForwardRefRenderFunction, PropsWithoutRef, RefAttributes } from 'react'
+import {
+  FC,
+  forwardRef,
+  ForwardRefRenderFunction,
+  PropsWithoutRef,
+  ReactNode,
+  RefAttributes
+} from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
 import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
@@ -50,7 +57,7 @@ export const InputFieldControlled = <
   rules,
   shouldUnregister,
   ...props
-}: Omit<ControllerProps<TFieldValues, TName>, 'render'> & InputFieldProps) => {
+}: Omit<ControllerProps<TFieldValues, TName>, 'render'> & InputFieldProps): ReactNode => {
   return (
     <Controller
       name={name}

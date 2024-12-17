@@ -2,8 +2,8 @@ name: Build and Release Electron App
 
 on:
   push:
-    branches:
-      - main # Запуск при каждом пуше в ветку main
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*' # X.Y.Z и X.Y.Z-alpha/beta
 
 jobs:
   build:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Нужно для получения истории коммитов
 
       - name: Check current working directory and list files
         run: |
@@ -26,7 +28,6 @@ jobs:
           echo ".env.example content:"
           cat .env.example
 
-      # Генерация .env файла из всех секретов с префиксами MAIN_VITE_ и RENDERER_VITE_
       - name: Generate .env file from .env.example
         env:
           MAIN_VITE_MINIO_ENDPOINT: ${{ secrets.MAIN_VITE_MINIO_ENDPOINT }}
@@ -35,40 +36,29 @@ jobs:
           MAIN_VITE_MINIO_ACCESSKEY: ${{ secrets.MAIN_VITE_MINIO_ACCESSKEY }}
           MAIN_VITE_MINIO_SECRETKEY: ${{ secrets.MAIN_VITE_MINIO_SECRETKEY }}
           MAIN_VITE_CURSEFORGE_APIKEY: ${{ secrets.MAIN_VITE_CURSEFORGE_APIKEY }}
+          MAIN_VITE_JAVA_BASE_URL: ${{ secrets.MAIN_VITE_JAVA_BASE_URL }}
           RENDERER_VITE_BASE_URL: ${{ secrets.RENDERER_VITE_BASE_URL }}
           RENDERER_VITE_IP: ${{ secrets.RENDERER_VITE_IP }}
-          RENDERER_VITE_PORT: ${{ secrets.RENDERER_VITE_PORT }}
-        run: |
-          # Проверка существования .env.example
-          if [ ! -f .env.example ]; then
-            echo ".env.example not found!"
-            exit 1
-          fi
+          RENDERER_VITE_WEB_URL: ${{ secrets.RENDERER_VITE_WEB_URL }}
+          RENDERER_VITE_TERMS_URL: ${{ secrets.RENDERER_VITE_TERMS_URL }}
+          RENDERER_VITE_XBOX_URL: ${{ secrets.RENDERER_VITE_XBOX_URL }}
+          RENDERER_VITE_ICON_URL: ${{ secrets.RENDERER_VITE_ICON_URL }}
+          RENDERER_VITE_COVER_URL: ${{ secrets.RENDERER_VITE_COVER_URL }}
+          RENDERER_VITE_CURSEFORGE_APIKEY: ${{ secrets.RENDERER_VITE_CURSEFORGE_APIKEY }}
+        run: envsubst < .env.example > .env
 
-          # Замена всех переменных в формате ${VARIABLE} на их значения из переменных окружения
-          envsubst < .env.example > .env
-
-          echo ".env file generated:"
-          cat .env
-
-      # Чтение версии Node.js из файла .nvmrc и удаление 'v' в начале
       - name: Use Node.js version from .nvmrc
-        id: nvmrc_version
-        run: |
-          NODE_VERSION=$(cat .nvmrc | sed 's/^v//')  # Удаление 'v' из начала строки
-          echo "Using Node.js version $NODE_VERSION"
-          echo "NODE_VERSION=$NODE_VERSION" >> $GITHUB_ENV  # Сохранение переменной в окружении
+        run: echo "NODE_VERSION=$(cat .nvmrc | sed 's/^v//')" >> $GITHUB_ENV
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }} # Использование версии из .nvmrc без 'v'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install --frozen-lockfile
 
-      # Установка Wine на macOS для сборки Windows .exe
       - name: Install Wine on macOS
         run: brew install --cask wine-stable
 
@@ -107,6 +97,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Получение всех тегов для истории коммитов
 
       - name: Download macOS build artifacts
         uses: actions/download-artifact@v3
@@ -120,14 +112,32 @@ jobs:
           name: windows-dist
           path: dist/windows
 
+      - name: Get commit messages since last tag
+        id: commit_logs
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1))
+          echo "Last tag: $LAST_TAG"
+          echo "Commits since last tag:"
+
+          if [ "$LAST_TAG" != "" ]; then
+            git log "$LAST_TAG"..HEAD --pretty=format:"- %s" > commit_messages.txt
+          else
+            git log --pretty=format:"- %s" > commit_messages.txt
+          fi
+
+          echo "commit_body<<EOF" >> $GITHUB_ENV
+          cat commit_messages.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Используем ваш персональный токен
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
-          tag_name: release-${{ github.run_number }} # Имя тега для релиза
-          release_name: Release ${{ github.run_number }} # Имя релиза
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: ${{ env.commit_body }}
           draft: false
           prerelease: false
 
@@ -137,9 +147,9 @@ jobs:
           macos_file=$(find . -name "*.dmg" | xargs -n 1 basename)
           if [ -z "$macos_file" ]; then
             echo "No macOS build artifact found."
-            exit 1  # Завершение работы с ошибкой, если артефакт не найден
+            exit 1
           fi
-          echo "macos_file=${macos_file}" >> $GITHUB_ENV  # Установка переменной окружения
+          echo "macos_file=${macos_file}" >> $GITHUB_ENV
 
       - name: Find Windows build artifact
         id: windows_artifact
@@ -147,18 +157,18 @@ jobs:
           windows_file=$(find . -name "*.exe" | xargs -n 1 basename)
           if [ -z "$windows_file" ]; then
             echo "No Windows build artifact found."
-            exit 1  # Завершение работы с ошибкой, если артефакт не найден
+            exit 1
           fi
-          echo "windows_file=${windows_file}" >> $GITHUB_ENV  # Установка переменной окружения
+          echo "windows_file=${windows_file}" >> $GITHUB_ENV
 
       - name: Upload macOS build artifact using GitHub CLI
         run: |
-          gh release upload "release-${{ github.run_number }}" "dist/macos/${{ env.macos_file }}" --clobber
+          gh release upload "${{ github.ref_name }}" "dist/macos/${{ env.macos_file }}" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
       - name: Upload Windows build artifact using GitHub CLI
         run: |
-          gh release upload "release-${{ github.run_number }}" "dist/windows/${{ env.windows_file }}" --clobber
+          gh release upload "${{ github.ref_name }}" "dist/windows/${{ env.windows_file }}" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}

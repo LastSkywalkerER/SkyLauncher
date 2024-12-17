@@ -1,77 +1,52 @@
+import { ChildProcess } from 'node:child_process'
+
 import { IpcHandle } from '@doubleshot/nest-electron'
 import { Controller, Inject } from '@nestjs/common'
+import { CommandBus } from '@nestjs/cqrs'
 import { Payload } from '@nestjs/microservices'
 
 import { IPCHandleNames } from '../../../shared/constants'
 import { type GameData } from '../../../shared/dtos/launcher.dto'
 import { MCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
-import { UserLoggerService } from '../user-logger/user-logger.service'
-import { LauncherService } from './launcher.service'
+import { getInstallCommand } from '../installer/installer.commands'
+import { getUpdateCommand } from '../updater/updater.commands'
+import { LaunchModpackCommand } from './launch-modpack/launch-modpack.command'
 
 @Controller()
 export class LauncherController {
-  constructor(
-    @Inject(LauncherService) private readonly launcherService: LauncherService,
-    @Inject(UserLoggerService) private readonly userLoggerService: UserLoggerService
-  ) {}
+  constructor(@Inject(CommandBus) private readonly commandBus: CommandBus) {}
 
   @IpcHandle(IPCHandleNames.InstallGame)
   public async handleInstallGame(
     @Payload() { version }: GameData
   ): Promise<IMCGameVersion | undefined> {
-    try {
-      const fullVersion = new MCGameVersion(version)
+    const fullVersion = new MCGameVersion(version)
 
-      return (await this.launcherService.installCustomModpack(fullVersion)).getData()
-    } catch (error) {
-      this.userLoggerService.error(error)
-    }
+    const Command = getInstallCommand(version.modpackProvider)
+    const command = new Command(fullVersion)
 
-    return
+    return (await this.commandBus.execute(command)).getData()
   }
 
   @IpcHandle(IPCHandleNames.UpdateGame)
   public async handleUpdateGame(
     @Payload() { version }: GameData
   ): Promise<IMCGameVersion | undefined> {
-    console.log({ version })
-    try {
-      const fullVersion = new MCGameVersion(version)
+    const fullVersion = new MCGameVersion(version)
 
-      return (await this.launcherService.updateCustomModpack(fullVersion)).getData()
-    } catch (error) {
-      this.userLoggerService.error(error)
-    }
+    const Command = getUpdateCommand(version.modpackProvider)
+    const command = new Command(fullVersion)
 
-    return
-  }
-
-  @IpcHandle(IPCHandleNames.CheckGame)
-  public async handleCheckGame(
-    @Payload() { version }: GameData
-  ): Promise<IMCGameVersion | undefined> {
-    try {
-      const fullVersion = new MCGameVersion(version)
-
-      const data = (await this.launcherService.checkLocalModpack(fullVersion)).getData()
-
-      return data
-    } catch (error) {
-      this.userLoggerService.error(error)
-    }
-
-    return
+    return (await this.commandBus.execute(command)).getData()
   }
 
   @IpcHandle(IPCHandleNames.LaunchGame)
-  public async handleLaunchGame(@Payload() { version }: GameData): Promise<void> {
-    try {
-      const fullVersion = new MCGameVersion(version)
+  public async handleLaunchGame(@Payload() { version }: GameData): Promise<ChildProcess> {
+    const fullVersion = new MCGameVersion(version)
 
-      await this.launcherService.launchGame(fullVersion)
-    } catch (error) {
-      this.userLoggerService.error(error)
-    }
+    const command = new LaunchModpackCommand(fullVersion)
+
+    return await this.commandBus.execute<LaunchModpackCommand, ChildProcess>(command)
   }
 }

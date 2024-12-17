@@ -2,8 +2,8 @@ import { Button } from 'primereact/button'
 import { FC, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 
-import { xboxConnectionLink } from '../../../../shared/constants'
 import { IUser, UserData } from '../../entities/User/interfaces'
+import { environment } from '../../shared/config/environments'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { RouteNames } from '../../shared/routes/routeNames'
 import { Loading } from '../../widgets/Loading'
@@ -33,7 +33,7 @@ const CheckMCProfileForm: FC = () => {
           <a
             target={'_blank'}
             className={'underline cursor-pointer'}
-            href={xboxConnectionLink}
+            href={environment.xboxConnectionLink}
             rel="noreferrer"
           >
             Connect Xbox
@@ -47,9 +47,9 @@ const CheckMCProfileForm: FC = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <Button severity="secondary">
-          <Link to={RouteNames.OfflineLogin}>Go offline</Link>
-        </Button>
+        <Link to={RouteNames.OfflineLogin}>
+          <Button severity="secondary">Go offline</Button>
+        </Link>
       )}
     </div>
   )

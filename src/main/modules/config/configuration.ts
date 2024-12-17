@@ -4,7 +4,7 @@ import { arch, platform } from '../../../shared/constants'
 
 config()
 
-export default () => ({
+const defaultConfig = {
   hardware: {
     platform: platform,
     architecture: arch
@@ -16,5 +16,10 @@ export default () => ({
       (process.env.MAIN_VITE_MINIO_USESSL || import.meta.env.MAIN_VITE_MINIO_USESSL) === 'true',
     accessKey: process.env.MAIN_VITE_MINIO_ACCESSKEY || import.meta.env.MAIN_VITE_MINIO_ACCESSKEY,
     secretKey: process.env.MAIN_VITE_MINIO_SECRETKEY || import.meta.env.MAIN_VITE_MINIO_SECRETKEY
-  }
-})
+  },
+  curseForgeApiKey:
+    process.env.MAIN_VITE_CURSEFORGE_APIKEY || import.meta.env.MAIN_VITE_CURSEFORGE_APIKEY,
+  javaBaseUrl: process.env.MAIN_VITE_JAVA_BASE_URL || import.meta.env.MAIN_VITE_JAVA_BASE_URL
+}
+
+export default (): typeof defaultConfig => defaultConfig

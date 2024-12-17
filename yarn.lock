@@ -482,11 +482,6 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
-"@fastify/busboy@^2.0.0":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.1.tgz#b9da6a878a371829a0502c9b6c1c143ef6663f4d"
-  integrity sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==
-
 "@gar/promisify@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -625,6 +620,11 @@
     iterare "1.2.1"
     path-to-regexp "3.3.0"
     tslib "2.7.0"
+
+"@nestjs/cqrs@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/cqrs/-/cqrs-11.0.0.tgz#daf2539520476a33b7e916b8b10b91a0bb3eda8e"
+  integrity sha512-AD4WblJaXVm9n6x1Dy9S/eltqM64U8JqJLgouxyB60cbM+bgWbljKJIS9YLr72V5FhiM6A/IrfbV0YCxsQykpA==
 
 "@nestjs/microservices@^10.3.8":
   version "10.4.4"
@@ -1097,21 +1097,28 @@
   resolved "https://registry.yarnpkg.com/@xmcl/asm/-/asm-1.0.1.tgz#a995b88b8269ff56027a42eda8592fc1e5ca7e10"
   integrity sha512-7vCVgm1E1IZ2cujiitFk9550Vgu2XAOn1ff90di638fMmTK0XkFMXKsSR/nGZmYKt+XiTMI/0B3TvreqbVjOug==
 
-"@xmcl/core@2.13.0", "@xmcl/core@^2.13.0":
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/@xmcl/core/-/core-2.13.0.tgz#d6b18458a26369d86e48f70c51620cb14d819817"
-  integrity sha512-1BslEWUr234zZZTq9Q3QDm8APReYx7phy6PY5fodiztwblYbgipsd89vfx+Qvjc1xWpGtjei0AvxubUDeMFTgA==
+"@xmcl/core@2.14.0", "@xmcl/core@^2.14.0":
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/@xmcl/core/-/core-2.14.0.tgz#b8553a353b280cba6bcf43113ea4614f17e0e5e6"
+  integrity sha512-jiHKVM+PC5o/Ccskpg+rTEC3xoOSfsecslrXCHZDnoN3MAqLpmLzssAPhePfPwhtHqooZsU92qO2pcBIKtNlaA==
   dependencies:
     "@xmcl/unzip" "2.1.2"
 
-"@xmcl/file-transfer@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@xmcl/file-transfer/-/file-transfer-1.0.6.tgz#e5f138b85674184d90cc3982c3d79386d6c4a6ad"
-  integrity sha512-WVnCTyHTqUUIMsqgGnkmQqov9/qxKWWBj+wjn6pMotpCJHu3gKkLqVoD76IQeTgUBIoh5sGgGbYMZmpRlqCGzw==
+"@xmcl/curseforge@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@xmcl/curseforge/-/curseforge-2.2.0.tgz#348e15bfe131df0e8b2ec9fcd7f04a5a75965a5c"
+  integrity sha512-W1b92Z1IYItIyplq2poWP1NL47buE4LOHWEU+duHCj0xWHI5y4ya2pIyXQhNzsBCSJ+ZZBXzPx/27hBl2PUwcA==
+  dependencies:
+    undici "7.1.1"
+
+"@xmcl/file-transfer@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@xmcl/file-transfer/-/file-transfer-2.0.0.tgz#99fcdcb1ae570a35559eeb0d37098542ca8e20fc"
+  integrity sha512-nTwhup5lxKL96Pm9EKH+iM5qcUIVVITWoZ8QH297K/8/Y/sAI/joD9R4Zl2hDbUglWGRjbzGYbnIL2Twpn8AnA==
   dependencies:
     "@types/http-cache-semantics" "^4.0.1"
     http-cache-semantics "^4.1.1"
-    undici "6.0.1"
+    undici "7.1.1"
 
 "@xmcl/forge-site-parser@2.0.9":
   version "2.0.9"
@@ -1120,25 +1127,25 @@
   dependencies:
     node-html-parser "^6.1.5"
 
-"@xmcl/installer@^5.4.0":
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/@xmcl/installer/-/installer-5.4.0.tgz#dc8531798110eb2055f5d552e279dccc40aefe82"
-  integrity sha512-Y4UK6WWogDdgvcAUQnUPoJidlkuVQP5dSV5QueJhKeEJAA3lmGklwV8Dp8z0/92ITQ45OBsB7g08qV3eec4G6w==
+"@xmcl/installer@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@xmcl/installer/-/installer-6.0.0.tgz#76670a0c18ac7d08e777100cb4605fb1da1b893e"
+  integrity sha512-QEBdH52YmWp986eQMcr4505kpotTy5QSDJ6yhyP1r/wmoPPu68vA/OA28oqAnUrU4NvW4kzOLsfp5yU0p/f61Q==
   dependencies:
     "@xmcl/asm" "1.0.1"
-    "@xmcl/core" "2.13.0"
-    "@xmcl/file-transfer" "1.0.6"
+    "@xmcl/core" "2.14.0"
+    "@xmcl/file-transfer" "2.0.0"
     "@xmcl/forge-site-parser" "2.0.9"
-    "@xmcl/task" "4.1.0"
+    "@xmcl/task" "4.1.1"
     "@xmcl/unzip" "2.1.2"
-    undici "6.0.1"
+    undici "7.1.1"
     yauzl "^2.10.0"
     yazl "^2.5.1"
 
-"@xmcl/task@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@xmcl/task/-/task-4.1.0.tgz#70763ee2a2768d65bbf25c1edc3b346b794b9864"
-  integrity sha512-5Gqo/gltcenXTvRUz3H1Q2tNw9wWbOjeOVd9TeRNtBAOaKmdTD7iMhOIbdei71BSZ9FkVEhcUjO+PL+y+WNHoQ==
+"@xmcl/task@4.1.1", "@xmcl/task@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@xmcl/task/-/task-4.1.1.tgz#43a67d581f727276a3cec9c8a85b0aacdf516d62"
+  integrity sha512-UdTf37uBG26hx3UW8oDM5TFTodV0CMTgUKOQu5XGMc2iVEKXuC5rUgVMf6Av7aDAxbgb5LedK/5Ik1lDP9CRRA==
 
 "@xmcl/unzip@2.1.2":
   version "2.1.2"
@@ -5958,17 +5965,15 @@ undici-types@~6.19.2:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
   integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
-undici@6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-6.0.1.tgz#385572addca36d1c2b280629cb694b726170027e"
-  integrity sha512-eZFYQLeS9BiXpsU0cuFhCwfeda2MnC48EVmmOz/eCjsTgmyTdaHdVsPSC/kwC2GtW2e0uH0HIPbadf3/bRWSxw==
-  dependencies:
-    "@fastify/busboy" "^2.0.0"
+undici@7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-7.1.1.tgz#f11eceeaaaa34ff8a28da31b68b0b4a8d75562f0"
+  integrity sha512-WZkQ6eH9f5ZT93gaIffsbUaDpBwjbpvmMbfaEhOnbdUneurTESeRxwPGwjI28mRFESH3W3e8Togijh37ptOQqA==
 
-undici@^6.20.0:
-  version "6.20.0"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-6.20.0.tgz#3b94d967693759ea625a3b78b2097213f30405a1"
-  integrity sha512-AITZfPuxubm31Sx0vr8bteSalEbs9wQb/BOBi9FPlD9Qpd6HxZ4Q0+hI742jBhkPb4RT2v5MQzaW5VhRVyj+9A==
+undici@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-7.3.0.tgz#87e48cc9728f3d09bf7b34635e9b63886873ac3e"
+  integrity sha512-Qy96NND4Dou5jKoSJ2gm8ax8AJM/Ey9o9mz7KN1bb9GP+G0l20Zw8afxTnY2f4b7hmhn/z8aC2kfArVQlAhFBw==
 
 unique-filename@^2.0.0:
   version "2.0.1"
@@ -6037,6 +6042,11 @@ util@^0.12.3, util@^0.12.4, util@^0.12.5:
     is-generator-function "^1.0.7"
     is-typed-array "^1.1.3"
     which-typed-array "^1.1.2"
+
+uuid@^11.0.5:
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.0.5.tgz#07b46bdfa6310c92c3fb3953a8720f170427fc62"
+  integrity sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"

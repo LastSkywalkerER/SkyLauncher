@@ -47,7 +47,7 @@ const Home: FC = () => {
   }
 
   const buttonStatus = getButtonStatus(currentVersion)
-  const handlePlayButton = () => {
+  const handlePlayButton = (): void => {
     launchGame(currentVersion)
     navigate(RouteNames.Logs)
   }

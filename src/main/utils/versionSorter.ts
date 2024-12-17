@@ -1,18 +1,17 @@
-import { forgeVersionSeparator } from '../../shared/constants'
-
 export const sortVersions = (fullVersions: string[]): string[] =>
   fullVersions.sort((fullVersionPrev, fullVersionNext) => {
-    const [mcVersionPrev, forgeVersionPrev] = fullVersionPrev.split(forgeVersionSeparator)
-    const [mcVersionNext, forgeVersionNext] = fullVersionNext.split(forgeVersionSeparator)
+    const [mcVersionPrev, , modpackVersionPrev] = fullVersionPrev.split('-')
+    const [mcVersionNext, , modpackVersionNext] = fullVersionNext.split('-')
 
-    const parseVersion = (version) => (version ? version.split('.').map(Number) : null)
+    const parseVersion = (version): string[] | null =>
+      version ? version.split('.').map(Number) : null
 
     const mcVersionPrevParts = parseVersion(mcVersionPrev)
-    const forgeVersionPrevParts = parseVersion(forgeVersionPrev)
+    const modpackVersionPrevParts = parseVersion(modpackVersionPrev)
     const mcVersionNextParts = parseVersion(mcVersionNext)
-    const forgeVersionNextParts = parseVersion(forgeVersionNext)
+    const modpackVersionNextParts = parseVersion(modpackVersionNext)
 
-    const compareVersions = (versionA, versionB) => {
+    const compareVersions = (versionA, versionB): number => {
       for (let i = 0; i < Math.max(versionA.length, versionB.length); i++) {
         const partA = versionA[i] || 0
         const partB = versionB[i] || 0
@@ -21,11 +20,11 @@ export const sortVersions = (fullVersions: string[]): string[] =>
       return 0
     }
 
-    if (forgeVersionPrevParts && forgeVersionNextParts) {
-      return compareVersions(forgeVersionPrevParts, forgeVersionNextParts)
-    } else if (!forgeVersionPrevParts && !forgeVersionNextParts) {
+    if (modpackVersionPrevParts && modpackVersionNextParts) {
+      return compareVersions(modpackVersionPrevParts, modpackVersionNextParts)
+    } else if (!modpackVersionPrevParts && !modpackVersionNextParts) {
       return compareVersions(mcVersionPrevParts, mcVersionNextParts)
     } else {
-      return forgeVersionPrevParts ? -1 : 1
+      return modpackVersionPrevParts ? -1 : 1
     }
   })

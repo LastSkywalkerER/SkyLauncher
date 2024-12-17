@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common'
 
-import { DownloaderModule } from '../downloader/downloader.module'
+import { LaunchModpackModule } from './launch-modpack/launch-modpack.module'
 import { LauncherController } from './launcher.controller'
-import { LauncherService } from './launcher.service'
 
 @Module({
-  imports: [DownloaderModule],
-  providers: [LauncherService],
+  imports: [LaunchModpackModule],
   controllers: [LauncherController]
 })
 export class LauncherModule {}

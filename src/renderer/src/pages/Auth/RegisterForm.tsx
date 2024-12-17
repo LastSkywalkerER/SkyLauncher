@@ -5,9 +5,9 @@ import { FC } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
 
-import { termsLink } from '../../../../shared/constants'
 import { LoginResponse, RegisterData } from '../../entities/BackendApi/interfaces'
 import { IUser } from '../../entities/User/interfaces'
+import { environment } from '../../shared/config/environments'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { RouteNames } from '../../shared/routes/routeNames'
 import { InputFieldControlled } from '../../widgets/InputField'
@@ -82,7 +82,7 @@ const RegisterForm: FC = () => {
                 <a
                   className={'underline cursor-pointer'}
                   target={'_blank'}
-                  href={termsLink}
+                  href={environment.termsLink}
                   rel="noreferrer"
                 >
                   terms
@@ -104,9 +104,9 @@ const RegisterForm: FC = () => {
         <Loading />
       ) : (
         <div className={'flex items-center gap-10'}>
-          <Button severity="secondary">
-            <Link to={RouteNames.OfflineLogin}>Go offline</Link>
-          </Button>
+          <Link to={RouteNames.OfflineLogin}>
+            <Button severity="secondary">Go offline</Button>
+          </Link>
           <Button type="submit">Register</Button>
         </div>
       )}

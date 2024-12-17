@@ -48,9 +48,9 @@ const OfflineForm: FC = () => {
       ) : (
         <div className={'flex items-center gap-10'}>
           <Button type="submit">Login</Button>
-          <Button severity="secondary">
-            <Link to={RouteNames.Login}>Go online</Link>
-          </Button>
+          <Link to={RouteNames.Login}>
+            <Button severity="secondary">Go online</Button>
+          </Link>
         </div>
       )}
     </form>

@@ -4,6 +4,7 @@ import { BrowserWindow } from 'electron'
 
 import { IPCSendNames } from '../../../shared/constants'
 import { ProcessProgressData } from '../../../shared/dtos/process-progress.dto'
+import { ProcessProgress } from './process-progress'
 
 @Injectable()
 export class ProcessProgressService {
@@ -29,5 +30,11 @@ export class ProcessProgressService {
 
     this._activeProcessesMap[data.processName] = data
     this._progressLog(data)
+  }
+
+  public getLogger(): ProcessProgress {
+    return new ProcessProgress((data: ProcessProgressData): void => {
+      this.mainWindow.webContents.send(IPCSendNames.ProcessProgress, data)
+    })
   }
 }

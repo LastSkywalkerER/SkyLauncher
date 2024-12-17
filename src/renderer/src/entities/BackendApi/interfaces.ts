@@ -1,5 +1,7 @@
 import { interfaces } from 'inversify'
 
+import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
+
 export interface LoginData {
   email: string
   password: string
@@ -31,7 +33,6 @@ export interface MinecraftProfileResponse {
   uuid: string
   minecraft_access_token: string
   minecraft_access_expires_in: string
-  created_at: string
 }
 
 export interface IBackendApi {
@@ -41,6 +42,7 @@ export interface IBackendApi {
   refresh: () => Promise<unknown>
   getProfile: () => Promise<ProfileResponse>
   getMinecraftProfile: () => Promise<MinecraftProfileResponse>
+  getCustomMCVersions: () => Promise<IMCGameVersion[]>
 }
 
 export interface ErrorResponse {

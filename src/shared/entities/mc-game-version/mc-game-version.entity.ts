@@ -1,7 +1,10 @@
-import * as fs from 'fs'
-import { join } from 'path'
-
-import { defaultModpackCover, defaultModpackIcon, forgeVersionSeparator } from '../../constants'
+import {
+  defaultModpackCover,
+  defaultModpackIcon,
+  Modloader,
+  modloaderList,
+  ModpackProvider
+} from '../../constants'
 import {
   GameInstallationStatus,
   IMCGameVersion,
@@ -9,11 +12,14 @@ import {
   ServerData
 } from './mc-game-version.interface'
 
-const metadataJsonName = 'info.json'
-export const imageFields: (keyof IMCGameVersion)[] = ['icon', 'coverImage', 'titleImage']
-
 export class MCGameVersion implements IMCGameVersion {
-  public metadataDirName = 'metadata'
+  public static metadataDirName = 'metadata'
+  public static metadataJsonName = 'info.json'
+  public static imageFields: (keyof IMCGameVersion)[] = ['icon', 'coverImage', 'titleImage']
+  public static versionsFolder = 'versions'
+  public static worldsFolder = 'worlds'
+  public static modsFolder = 'mods'
+  public static manifestName = 'manifest.json'
 
   icon: string
   name: string
@@ -26,42 +32,56 @@ export class MCGameVersion implements IMCGameVersion {
   forge?: string
   java?: string
   server?: ServerData
-  status?: GameInstallationStatus
+  status: GameInstallationStatus
   coverImage?: string
   titleImage?: string
   title?: string
   description?: string
+  modpackProvider: ModpackProvider
+
+  modloader?: Modloader
+  modloaderVersion?: string
 
   constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'fullVersion'>) {
-    if (!data.folder && !data.jsonUrl && !data.downloadUrl) {
-      throw Error('MC Version have no source')
-    }
+    this.modloader = data.modloader
+    this.modloaderVersion = data.modloaderVersion
 
-    this.fullVersion =
-      data.fullVersion || data.forge
-        ? `${data.version}${forgeVersionSeparator}${data.forge}`
-        : data.version
-    this.version = data.version
+    const { fullVersion, version, modloaderVersion, modloader } =
+      MCGameVersion.getParsedNewVersion(data)
+
+    this.fullVersion = fullVersion
+    this.version = version
+    this.modloaderVersion = modloaderVersion
+    this.modloader = modloader
+
     this.folder = data.folder
     this.jsonUrl = data.jsonUrl
     this.name = data.name || this.fullVersion
     this.downloadUrl = data.downloadUrl
     this.icon = data.icon || defaultModpackIcon
-    this.forge = data.forge
+
     this.java = data.java
-    this.status = data.status
+    this.status = {
+      modloader: false,
+      libs: false,
+      forge: false,
+      native: false,
+      assets: false,
+      mods: false,
+      ...data.status
+    }
     this.server = data.server
     this.coverImage = data.coverImage || defaultModpackCover
     this.titleImage = data.titleImage
     this.title = data.title
     this.description = data.description
+    this.modpackProvider = data.modpackProvider
   }
 
   public getData(): IMCGameVersion {
     return {
       folder: this.folder,
       version: this.version,
-      forge: this.forge,
       java: this.java,
       status: this.status,
       icon: this.icon,
@@ -73,7 +93,10 @@ export class MCGameVersion implements IMCGameVersion {
       coverImage: this.coverImage,
       description: this.description,
       title: this.title,
-      titleImage: this.titleImage
+      titleImage: this.titleImage,
+      modpackProvider: this.modpackProvider,
+      modloaderVersion: this.modloaderVersion,
+      modloader: this.modloader
     }
   }
 
@@ -82,60 +105,78 @@ export class MCGameVersion implements IMCGameVersion {
     return this
   }
 
-  public async updateMetadata(newMetadata: Partial<IMCGameVersion>): Promise<void> {
-    if (!this.folder) {
-      throw Error('Modpack not installed')
-    }
-
-    const filePath = join(this.folder, this.metadataDirName, metadataJsonName)
-
-    const dir = join(this.folder, this.metadataDirName)
-
-    try {
-      if (fs.existsSync(filePath)) {
-        const fileData = await fs.promises.readFile(filePath, 'utf8')
-
-        const jsonContent = JSON.parse(fileData) as IMCGameVersion
-
-        const updatedData = { ...jsonContent, ...newMetadata }
-
-        await fs.promises.writeFile(filePath, JSON.stringify(updatedData, null, 2), 'utf8')
-      } else {
-        if (!fs.existsSync(dir)) {
-          fs.mkdirSync(dir)
-        }
-
-        await fs.promises.writeFile(filePath, JSON.stringify(newMetadata, null, 2), 'utf8')
-      }
-    } catch (error) {
-      console.error('Metadata file error:', error)
-    }
-  }
-
-  public async getMetadata(): Promise<IMCGameVersion | null> {
-    if (!this.folder) {
-      throw Error('Modpack not installed')
-    }
-
-    const filePath = join(this.folder, this.metadataDirName, metadataJsonName)
-
-    try {
-      if (fs.existsSync(filePath)) {
-        const fileData = await fs.promises.readFile(filePath, 'utf8')
-        const jsonContent = JSON.parse(fileData) as IMCGameVersion
-
-        return jsonContent
-      } else {
-        return null
-      }
-    } catch (error) {
-      console.error('Error with reading metadata:', error)
-      return null
-    }
-  }
-
   public updateStatus(status?: GameInstallationStatus): MCGameVersion {
     Object.assign(this as object, { status: { ...this.getData().status, ...status } })
     return this
+  }
+
+  public static getParsedNewVersion({
+    version,
+    modloaderVersion,
+    fullVersion,
+    modloader
+  }: Partial<
+    Pick<IMCGameVersion, 'version' | 'modloaderVersion' | 'modloader' | 'fullVersion'>
+  >): Pick<IMCGameVersion, 'version' | 'modloaderVersion' | 'modloader' | 'fullVersion'> {
+    if (fullVersion) {
+      return {
+        ...MCGameVersion.parseFullVersion(fullVersion),
+        fullVersion: fullVersion
+      }
+    }
+
+    const localFullVersion =
+      version && modloader && modloaderVersion
+        ? `${version}-${modloader}-${modloaderVersion}`
+        : version
+
+    return {
+      fullVersion: localFullVersion!,
+      version: version!,
+      modloader: modloader!,
+      modloaderVersion: modloaderVersion!
+    }
+  }
+
+  public updateVersion(
+    data: Partial<
+      Pick<IMCGameVersion, 'version' | 'modloaderVersion' | 'modloader' | 'fullVersion'>
+    >
+  ): MCGameVersion {
+    Object.assign(
+      this as object,
+      MCGameVersion.getParsedNewVersion({
+        version: data.version || this.version,
+        modloaderVersion: data.modloaderVersion || this.modloaderVersion,
+        fullVersion: data.fullVersion,
+        modloader: data.modloader || this.modloader
+      })
+    )
+
+    return this
+  }
+
+  public static parseFullVersion(fullVersion: string): {
+    version: string
+    modloader?: Modloader
+    modloaderVersion?: string
+  } {
+    const [version, modloader, modloaderVersion] = fullVersion.split('-')
+
+    if (modloader && modloaderList.includes(modloader as Modloader)) {
+      return {
+        modloader: modloader as Modloader,
+        modloaderVersion,
+        version
+      }
+    }
+
+    if (modloader && !modloaderList.includes(modloader as Modloader)) {
+      throw Error(`Unsupported modloader ${modloader}`)
+    }
+
+    return {
+      version
+    }
   }
 }

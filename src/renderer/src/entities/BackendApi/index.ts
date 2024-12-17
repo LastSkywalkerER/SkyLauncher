@@ -1,5 +1,8 @@
 import { inject, injectable } from 'inversify'
 
+import { Modloader, ModpackProvider } from '../../../../shared/constants'
+import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
+import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
 import { IHttpClient } from '../HttpClient/interfaces'
 import {
@@ -11,6 +14,7 @@ import {
   ProfileResponse,
   RegisterData
 } from './interfaces'
+import { versions } from './versions.mock'
 
 @injectable()
 export class BackendApi implements IBackendApi {
@@ -30,7 +34,7 @@ export class BackendApi implements IBackendApi {
   public async getMinecraftProfile(): Promise<MinecraftProfileResponse> {
     try {
       const { body } = await this._httpClient.request<MinecraftProfileResponse>({
-        url: 'v1/profile/minecraft'
+        url: 'v1/profile/minecraft-auth'
       })
 
       return body
@@ -103,5 +107,23 @@ export class BackendApi implements IBackendApi {
     })
 
     return body
+  }
+
+  public async getCustomMCVersions(): Promise<IMCGameVersion[]> {
+    return [
+      new MCGameVersion({
+        version: '1.20.1',
+        modloader: Modloader.Forge,
+        modloaderVersion: '47.3.12',
+        modpackProvider: ModpackProvider.Forge
+      }).getData(),
+      ...versions.map((version) => {
+        return new MCGameVersion({
+          ...(version as IMCGameVersion),
+
+          modpackProvider: ModpackProvider.FreshCraft
+        }).getData()
+      })
+    ]
   }
 }

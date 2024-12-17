@@ -14,11 +14,11 @@ export class HardwareService {
   ) {}
 
   public getPlatform(): typeof process.platform {
-    return this.configService.get('hardware.platform') || process.platform
+    return this.configService.get('hardwarePlatform') || process.platform
   }
 
   public getArchitecture(): typeof process.arch {
-    return this.configService.get('hardware.architecture') || process.arch
+    return this.configService.get('hardwareArchitecture') || process.arch
   }
 
   /**
@@ -43,6 +43,10 @@ export class HardwareService {
       this.getJavaDir(version),
       this.getPlatform() === 'win32' ? '/bin/java.exe' : '/bin/java'
     )
+  }
+
+  public getPlatformPathDevider(): string {
+    return this.getPlatform() === 'win32' ? '\\' : '/'
   }
 
   public multiplatformJoin(...paths: string[]): string {

@@ -34,11 +34,24 @@ export class UrlDownloaderService {
     return new Promise((resolve, reject) => {
       https
         .get(url, (response) => {
+          if (response.statusCode === 302 && response.headers['location']) {
+            resolve(
+              this.download({
+                fileUrl: response.headers['location'] as string,
+                outputDirectory,
+                fileName
+              })
+            )
+
+            return
+          }
+
           const totalSize = parseInt(response.headers['content-length'] || '0', 10)
           let downloadedBytes = 0
 
           const setDownloadingProgress = (status: ProcessStatus, value: number): void =>
             this.processProgressService.set({
+              id: '',
               processName: `Downloading ${fileName}`,
               status,
               currentValue: value,
@@ -54,12 +67,14 @@ export class UrlDownloaderService {
           setDownloadingProgress('started', 0)
 
           response.on('data', (chunk) => {
+            console.log({ downloadedBytes })
             downloadedBytes += chunk.length
 
             setDownloadingProgress('inProgress', downloadedBytes)
           })
 
           fileStream.on('finish', async () => {
+            console.log('finished', downloadedBytes)
             fileStream.close()
             await fsPromises.rename(tempZipPath, finishedFilePath)
             setDownloadingProgress('finished', downloadedBytes)
@@ -67,6 +82,7 @@ export class UrlDownloaderService {
           })
         })
         .on('error', (err) => {
+          console.log({ err })
           reject(err)
         })
     })
