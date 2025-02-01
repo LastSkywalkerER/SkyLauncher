@@ -63,8 +63,6 @@ export class Versions implements IVersions {
         .find((string) => modloaderList.includes(string.toLowerCase() as Modloader))
         ?.toLowerCase() as Modloader
 
-      console.log({ data, mainFile })
-
       return new MCGameVersion({
         name: mainFile?.fileName.replace('.zip', ''),
         icon: data.logo.url,
@@ -165,8 +163,6 @@ export class Versions implements IVersions {
   }
 
   public updateGame(version: IMCGameVersion): Observable<IMCGameVersion> {
-    console.log({ version })
-
     return from(
       this._nodeApi.updateGame({
         version

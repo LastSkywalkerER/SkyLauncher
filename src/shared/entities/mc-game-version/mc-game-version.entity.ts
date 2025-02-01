@@ -25,6 +25,7 @@ export class MCGameVersion implements IMCGameVersion {
   name: string
   version: string
   fullVersion: string
+  modpackProvider: ModpackProvider
 
   jsonUrl?: string
   folder?: string
@@ -37,15 +38,10 @@ export class MCGameVersion implements IMCGameVersion {
   titleImage?: string
   title?: string
   description?: string
-  modpackProvider: ModpackProvider
-
   modloader?: Modloader
   modloaderVersion?: string
 
   constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'fullVersion'>) {
-    this.modloader = data.modloader
-    this.modloaderVersion = data.modloaderVersion
-
     const { fullVersion, version, modloaderVersion, modloader } =
       MCGameVersion.getParsedNewVersion(data)
 
@@ -120,8 +116,10 @@ export class MCGameVersion implements IMCGameVersion {
   >): Pick<IMCGameVersion, 'version' | 'modloaderVersion' | 'modloader' | 'fullVersion'> {
     if (fullVersion) {
       return {
-        ...MCGameVersion.parseFullVersion(fullVersion),
-        fullVersion: fullVersion
+        modloaderVersion,
+        fullVersion,
+        modloader,
+        ...MCGameVersion.parseFullVersion(fullVersion)
       }
     }
 

@@ -77,7 +77,6 @@ export class InstallerService {
   }
 
   public async installVersion(target: MCGameVersion): Promise<MCGameVersion> {
-    console.log({ installVersion: target })
     const localTarget = target.update({})
 
     if (!localTarget.jsonUrl) {
@@ -171,8 +170,8 @@ export class InstallerService {
       )
 
       const response = await getForgeVersionList({
-        minecraft: localTarget.version,
-        dispatcher: this._agent
+        minecraft: localTarget.version
+        // dispatcher: this._agent
       })
 
       const newestRecommended = response.versions.find((item) => item.type === 'latest')
@@ -193,15 +192,6 @@ export class InstallerService {
       //   localTarget.folder!,
       //   { java: javaPath }
       // )
-
-      console.log(
-        { mcversion: localTarget.version, version: localTarget.modloaderVersion },
-        localTarget.folder!,
-        {
-          java: javaPath,
-          dispatcher: this._agent
-        }
-      )
 
       await this.handleTask(
         installForgeTask(

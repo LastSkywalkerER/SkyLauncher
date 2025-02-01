@@ -1111,14 +1111,14 @@
   dependencies:
     undici "7.1.1"
 
-"@xmcl/file-transfer@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@xmcl/file-transfer/-/file-transfer-2.0.0.tgz#99fcdcb1ae570a35559eeb0d37098542ca8e20fc"
-  integrity sha512-nTwhup5lxKL96Pm9EKH+iM5qcUIVVITWoZ8QH297K/8/Y/sAI/joD9R4Zl2hDbUglWGRjbzGYbnIL2Twpn8AnA==
+"@xmcl/file-transfer@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@xmcl/file-transfer/-/file-transfer-2.0.1.tgz#da3b28ea561a837f9d938b19ade9cdd43c0767e8"
+  integrity sha512-y3ZdOu1HJa29N1P0jximfqTZhnb44LoUJBYRjbuklkXtNWPA/8p/xzh8IGhMQgvz7fKVilwt3awkxLNr1c4DSg==
   dependencies:
     "@types/http-cache-semantics" "^4.0.1"
     http-cache-semantics "^4.1.1"
-    undici "7.1.1"
+    undici "7.2.3"
 
 "@xmcl/forge-site-parser@2.0.9":
   version "2.0.9"
@@ -1127,18 +1127,18 @@
   dependencies:
     node-html-parser "^6.1.5"
 
-"@xmcl/installer@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@xmcl/installer/-/installer-6.0.0.tgz#76670a0c18ac7d08e777100cb4605fb1da1b893e"
-  integrity sha512-QEBdH52YmWp986eQMcr4505kpotTy5QSDJ6yhyP1r/wmoPPu68vA/OA28oqAnUrU4NvW4kzOLsfp5yU0p/f61Q==
+"@xmcl/installer@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@xmcl/installer/-/installer-6.0.1.tgz#3a347a71352b5994bc08a1d563af956339947021"
+  integrity sha512-kWdvPOtf3mZdXBCApLA1dHd8ravH9u9hariGfnzIptZVhxgEoQ3YerbTdUSGHYC84JJ3CR5EC6HRMZ6u+quoqg==
   dependencies:
     "@xmcl/asm" "1.0.1"
     "@xmcl/core" "2.14.0"
-    "@xmcl/file-transfer" "2.0.0"
+    "@xmcl/file-transfer" "2.0.1"
     "@xmcl/forge-site-parser" "2.0.9"
     "@xmcl/task" "4.1.1"
     "@xmcl/unzip" "2.1.2"
-    undici "7.1.1"
+    undici "7.2.3"
     yauzl "^2.10.0"
     yazl "^2.5.1"
 
@@ -5969,6 +5969,11 @@ undici@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/undici/-/undici-7.1.1.tgz#f11eceeaaaa34ff8a28da31b68b0b4a8d75562f0"
   integrity sha512-WZkQ6eH9f5ZT93gaIffsbUaDpBwjbpvmMbfaEhOnbdUneurTESeRxwPGwjI28mRFESH3W3e8Togijh37ptOQqA==
+
+undici@7.2.3:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-7.2.3.tgz#e3e8ff2ddee1c3ab624b3a4f275093cff4b2fc77"
+  integrity sha512-2oSLHaDalSt2/O/wHA9M+/ZPAOcU2yrSP/cdBYJ+YxZskiPYDSqHbysLSlD7gq3JMqOoJI5O31RVU3BxX/MnAA==
 
 undici@^7.3.0:
   version "7.3.0"
