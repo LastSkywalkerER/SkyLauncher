@@ -101,13 +101,13 @@ jobs:
           fetch-depth: 0  # Получение всех тегов для истории коммитов
 
       - name: Download macOS build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: macos-dist
           path: dist/macos
 
       - name: Download Windows build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-dist
           path: dist/windows
