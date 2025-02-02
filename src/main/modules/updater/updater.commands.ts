@@ -7,7 +7,7 @@ class CommandNotImplemented extends UpdateCommandBase {
   constructor(public readonly target: MCGameVersion) {
     super(target)
 
-    throw Error(`${target.modpackProvider} installer not implemented`)
+    throw Error(`${target.modpackProvider} updater not implemented`)
   }
 }
 
