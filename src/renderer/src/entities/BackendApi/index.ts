@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 
-import { Modloader, ModpackProvider } from '../../../../shared/constants'
+import { ModpackProvider } from '../../../../shared/constants'
 import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
