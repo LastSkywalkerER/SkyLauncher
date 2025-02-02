@@ -29,9 +29,16 @@ const AvailableVersions: FC = () => {
 
   const VersionTemplate = (option: IMCLocalGameVersion): JSX.Element => {
     return (
-      <div className="flex items-center">
-        <img alt={option.name} src={option.icon} style={{ width: '50px', marginRight: '.5rem' }} />
-        <div>{option.name}</div>
+      <div className={'flex justify-between'}>
+        <div className="flex items-center">
+          <img
+            alt={option.name}
+            src={option.icon}
+            style={{ width: '50px', marginRight: '.5rem' }}
+          />
+          <div>{option.name}</div>
+        </div>
+        {option.isInstalled && <span>(installed)</span>}
       </div>
     )
   }
@@ -50,8 +57,10 @@ const AvailableVersions: FC = () => {
             {...field}
             options={versions}
             optionLabel="name"
-            className={'w-fit'}
+            className={'w-full h-3/4'}
             itemTemplate={VersionTemplate}
+            virtualScrollerOptions={{ itemSize: 75 }}
+            listStyle={{ height: '100%' }}
           />
         )}
       />
