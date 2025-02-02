@@ -110,20 +110,12 @@ export class BackendApi implements IBackendApi {
   }
 
   public async getCustomMCVersions(): Promise<IMCGameVersion[]> {
-    return [
-      new MCGameVersion({
-        version: '1.20.1',
-        modloader: Modloader.Forge,
-        modloaderVersion: '47.3.12',
-        modpackProvider: ModpackProvider.Forge
-      }).getData(),
-      ...versions.map((version) => {
-        return new MCGameVersion({
-          ...(version as IMCGameVersion),
+    return versions.map((version) => {
+      return new MCGameVersion({
+        ...(version as IMCGameVersion),
 
-          modpackProvider: ModpackProvider.FreshCraft
-        }).getData()
-      })
-    ]
+        modpackProvider: ModpackProvider.FreshCraft
+      }).getData()
+    })
   }
 }
