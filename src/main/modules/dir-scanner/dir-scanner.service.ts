@@ -1,4 +1,4 @@
-import { Dirent } from 'node:fs'
+import { Dirent, existsSync } from 'node:fs'
 import { readdir } from 'node:fs/promises'
 
 import { Inject, Injectable } from '@nestjs/common'
@@ -10,6 +10,10 @@ export class DirScannerService {
   constructor(@Inject(UserConfigService) private readonly userConfigService: UserConfigService) {}
   public async getModpacks(): Promise<Dirent[]> {
     const modpacksDir = this.userConfigService.get('modpacksPath')
+
+    if (!existsSync(modpacksDir)) {
+      return []
+    }
 
     // Get the list of all files and folders in the directory
     const items = await readdir(modpacksDir, { withFileTypes: true })

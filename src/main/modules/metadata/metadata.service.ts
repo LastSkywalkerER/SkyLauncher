@@ -22,9 +22,12 @@ export class MetadataService {
   ) {}
 
   public async safe(version: MCGameVersion): Promise<void> {
+    console.log({ version })
     const newMetadata = version.getData()
+    console.log({ newMetadata })
     MCGameVersion.imageFields.forEach((field) => delete newMetadata[field])
-    await this.update(newMetadata)
+    const fsMetadata = new MCGameVersion(newMetadata)
+    // const ramMetadata = new MCGameVersion(newMetadata)
 
     await Promise.all(
       MCGameVersion.imageFields.map(async (field) => {
@@ -35,13 +38,15 @@ export class MetadataService {
             outputDirectory: join(version.folder!, MCGameVersion.metadataDirName)
           })
 
-          const file = await fsPromises.readFile(downloadResponse.filePath, 'base64')
+          // const file = await fsPromises.readFile(downloadResponse.filePath, 'base64')
 
-          await this.update({ ...version.getData(), [field]: downloadResponse.filePath })
-          version.update({ [field]: `data:image/png;base64,${file}` })
+          fsMetadata.update({ [field]: downloadResponse.filePath })
+          // ramMetadata.update({ [field]: `data:image/png;base64,${file}` })
         }
       })
     )
+
+    await this.update(fsMetadata.getData())
   }
 
   public async update(newMetadata: IMCGameVersion): Promise<void> {

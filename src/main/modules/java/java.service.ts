@@ -45,9 +45,10 @@ export class JavaService {
     const versionName = version || String(this.userConfigService.get('javaArgsVersion'))
     const javaDir = this.userConfigService.get('javaPath')
     const installPath = join(javaDir, platform, architecture, versionName)
+    this.logger.log(`Installing java ${versionName}`)
 
     if (!existsSync(installPath)) {
-      mkdirSync(installPath)
+      mkdirSync(installPath, { recursive: true })
     }
 
     const downloadResponse = await this.downloaderService.download({
