@@ -1,5 +1,10 @@
 # SkyLauncher
 
+Run command for launch on Mac
+```bash
+sudo xattr -rd com.apple.quarantine /Applications/SkyLauncher.app
+```
+
 An Electron minecraft launcher
 
 ## Recommended IDE Setup
