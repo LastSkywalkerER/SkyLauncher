@@ -212,6 +212,20 @@ export class InstallerService {
     return localTarget
   }
 
+  // TODO: implement with search in https://bmclapi2.bangbang93.com/optifine/:mcversion
+  // and download from https://bmclapi2.bangbang93.com/optifine/:mcversion/:type/:patch
+  // public async installOptifine(target: MCGameVersion): Promise<MCGameVersion> {
+  //   const localTarget = target.update({})
+  //
+  //   await this.handleTask(
+  //     installOptifineTask().setName(
+  //       `Installing ${localTarget.modloader}-${localTarget.modloaderVersion}`
+  //     )
+  //   )
+  //
+  //   return localTarget
+  // }
+
   public async installModloader(target: MCGameVersion): Promise<MCGameVersion> {
     const localTarget = target.update({})
 

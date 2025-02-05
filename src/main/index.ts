@@ -9,6 +9,7 @@ import { app, systemPreferences } from 'electron'
 
 import { platform } from '../shared/constants'
 import { AppModule } from './app.module'
+import { CustomLoggerService } from './libs/custom-logger/custom-logger.service'
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
@@ -76,6 +77,8 @@ async function bootstrap(): Promise<void> {
       strategy: new ElectronIpcTransport('IpcTransport')
     })
     nestApp.useGlobalPipes(new ValidationPipe())
+    nestApp.useLogger(nestApp.get(CustomLoggerService))
+    // nestApp.useLogger(nestApp.get(WINSTON_MODULE_NEST_PROVIDER))
 
     await nestApp.listen()
   } catch (error) {
