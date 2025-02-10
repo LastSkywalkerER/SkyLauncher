@@ -46,27 +46,27 @@ export class CustomLoggerService implements LoggerService {
     }
   }
 
-  log(message: any, context?: string) {
+  log(message: any, context?: string): void {
     this._ipcLogger([`[LOG]`, message])
     this._winstonLogger.log(message, context)
   }
 
-  error(message: any, trace?: string, context?: string) {
+  error(message: any, trace?: string, context?: string): void {
     this._ipcLogger([`[ERROR]`, message, trace])
     this._winstonLogger.error(message, trace, context)
   }
 
-  warn(message: any, context?: string) {
+  warn(message: any, context?: string): void {
     this._ipcLogger([`[WARN]`, message])
     this._winstonLogger.warn(message, context)
   }
 
-  debug?(message: any, context?: string) {
+  debug?(message: any, context?: string): void {
     this._ipcLogger([`[DEBUG]`, message])
     this._winstonLogger.debug?.(message, context)
   }
 
-  verbose?(message: any, context?: string) {
+  verbose?(message: any, context?: string): void {
     this._ipcLogger([`[VERBOSE]`, message])
     this._winstonLogger.verbose?.(message, context)
   }

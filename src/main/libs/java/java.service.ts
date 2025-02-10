@@ -5,6 +5,7 @@ import { exec } from 'child_process'
 import { mkdirSync } from 'fs'
 import { join } from 'path'
 
+import { UserConfigService } from '../../modules/user-config/user-config.service'
 import { removeNestedDirectories } from '../../utils/filesystem/removeNestedDirectories'
 import {
   DownloadResponse,
@@ -13,7 +14,6 @@ import {
 } from '../downloader/downloader.interface'
 import { HardwareService } from '../hardware/hardware.service'
 import { UnzipService } from '../unzip/unzip.service'
-import { UserConfigService } from '../user-config/user-config.service'
 
 @Injectable()
 export class JavaService {

@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common'
 
-import { HttpsUrlDownloaderModule } from '../downloader/https-url-downloader/https-url-downloader.module'
+import { HttpsUrlDownloaderModule } from '../../libs/downloader/https-url-downloader/https-url-downloader.module'
 import { MetadataService } from './metadata.service'
 
 @Global()

@@ -11,7 +11,7 @@ import { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game
 import {
   type IDownloaderService,
   IDownloaderServiceToken
-} from '../downloader/downloader.interface'
+} from '../../libs/downloader/downloader.interface'
 import { UserConfigService } from '../user-config/user-config.service'
 
 @Injectable()

@@ -5,17 +5,17 @@ import { CommandHandler } from '@nestjs/cqrs'
 import { join } from 'path'
 
 import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
-import { removeNestedDirectories } from '../../../utils/filesystem/removeNestedDirectories'
 import {
   type IDownloaderService,
   IDownloaderServiceToken
-} from '../../downloader/downloader.interface'
-import { JavaService } from '../../java/java.service'
+} from '../../../libs/downloader/downloader.interface'
+import { JavaService } from '../../../libs/java/java.service'
+import { UnzipService } from '../../../libs/unzip/unzip.service'
+import { InstallerService } from '../../../libs/xmcl-core/installer.service'
+import { removeNestedDirectories } from '../../../utils/filesystem/removeNestedDirectories'
 import { MetadataService } from '../../metadata/metadata.service'
-import { UnzipService } from '../../unzip/unzip.service'
 import { UserConfigService } from '../../user-config/user-config.service'
 import { InstallHandlerBase } from '../installer.handler'
-import { InstallerService } from '../installer.service'
 import { InstallModpackCommand } from './install-modpack.command'
 
 @CommandHandler(InstallModpackCommand)

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
 
-import { HttpsUrlDownloaderModule } from '../../downloader/https-url-downloader/https-url-downloader.module'
+import { UndiciDownloaderModule } from '../../../libs/downloader/undici-downloader/undici-downloader.module'
 import { InstallCurseforgeModpackHandler } from './install-curseforge-modpack.handler'
 
 @Module({
-  imports: [HttpsUrlDownloaderModule],
+  imports: [UndiciDownloaderModule],
   providers: [InstallCurseforgeModpackHandler]
 })
 export class InstallCurseforgeModpackModule {}

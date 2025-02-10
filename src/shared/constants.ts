@@ -1,8 +1,7 @@
 export const platform = process.platform
 export const arch = process.arch
 export const launcherName = 'sky-launcher'
-export const versionsFolder = 'versions'
-export const forgeVersionSeparator = '-forge-'
+export const tempExtension = '.temp'
 export const defaultModpackIcon =
   'https://ipfs.io/ipfs/QmbpHKyw9Fyos1Jhk5CsEFwM2uN14bYJ9W1SRWUktXpQQa'
 export const defaultModpackCover =

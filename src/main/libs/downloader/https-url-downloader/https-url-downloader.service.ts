@@ -5,6 +5,7 @@ import { createWriteStream, mkdirSync, promises as fsPromises } from 'fs'
 import * as https from 'https'
 import { join } from 'path'
 
+import { tempExtension } from '../../../../shared/constants'
 import { ProcessProgressService } from '../../process-progress/process-progress.service'
 import { DownloadRequest, DownloadResponse, IDownloaderService } from '../downloader.interface'
 
@@ -13,7 +14,6 @@ export class HttpsUrlDownloaderService implements IDownloaderService {
   private readonly logger = new Logger(HttpsUrlDownloaderService.name)
 
   constructor(
-    @Inject('TEMP_EXT') private readonly tempExt: string,
     @Inject(ProcessProgressService)
     private readonly processProgressService: ProcessProgressService
   ) {}
@@ -26,7 +26,7 @@ export class HttpsUrlDownloaderService implements IDownloaderService {
   }: DownloadRequest): Promise<DownloadResponse> {
     const downloadingProgress = this.processProgressService.getLogger()
     const finishedFilePath = join(outputDirectory, fileName)
-    const tempZipPath = finishedFilePath + this.tempExt
+    const tempZipPath = finishedFilePath + tempExtension
     const backupUrls = additionalUrls || []
 
     if (!fileUrl) {

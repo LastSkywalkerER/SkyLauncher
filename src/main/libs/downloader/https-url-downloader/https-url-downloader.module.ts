@@ -9,10 +9,6 @@ import { HttpsUrlDownloaderService } from './https-url-downloader.service'
       provide: IDownloaderServiceToken,
       useClass: HttpsUrlDownloaderService
     },
-    {
-      provide: 'TEMP_EXT',
-      useValue: '.temp'
-    },
     HttpsUrlDownloaderService
   ],
   exports: [IDownloaderServiceToken]

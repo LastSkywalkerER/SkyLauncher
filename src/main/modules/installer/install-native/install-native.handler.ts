@@ -6,11 +6,11 @@ import { mkdirSync } from 'fs'
 import { join } from 'path'
 
 import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
-import { JavaService } from '../../java/java.service'
+import { JavaService } from '../../../libs/java/java.service'
+import { InstallerService } from '../../../libs/xmcl-core/installer.service'
 import { MetadataService } from '../../metadata/metadata.service'
 import { UserConfigService } from '../../user-config/user-config.service'
 import { InstallHandlerBase } from '../installer.handler'
-import { InstallerService } from '../installer.service'
 import { InstallNativeCommand } from './install-native.command'
 
 @CommandHandler(InstallNativeCommand)

@@ -10,7 +10,7 @@ import {
   installVersionTask
 } from '@xmcl/installer'
 import { Task } from '@xmcl/task'
-import { Agent, Dispatcher, interceptors } from 'undici'
+import { Agent } from 'undici'
 
 import { Modloader } from '../../../shared/constants'
 import { MCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.entity'
@@ -20,18 +20,13 @@ import { ProcessProgressService } from '../process-progress/process-progress.ser
 @Injectable()
 export class InstallerService {
   private logger = new Logger(InstallerService.name)
-  private readonly _agent: Dispatcher
 
   constructor(
-    @Inject('CONNECTIONS_AMOUNT') private readonly connectionsAmount: number,
+    @Inject('UNDICI_CLIENT') private readonly _agent: Agent,
     @Inject(HardwareService) private readonly hardwareService: HardwareService,
     @Inject(ProcessProgressService)
     private readonly processProgressService: ProcessProgressService
-  ) {
-    this._agent = new Agent({
-      connections: this.connectionsAmount
-    }).compose(interceptors.retry(), interceptors.redirect())
-  }
+  ) {}
 
   public async install(target: MCGameVersion): Promise<MCGameVersion> {
     const localTarget = target.update({})

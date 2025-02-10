@@ -1,10 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { app } from 'electron'
 import { join } from 'path'
 
-import { launcherName } from '../../../shared/constants'
-import { UserConfigService } from '../user-config/user-config.service'
+import { UserConfigService } from '../../modules/user-config/user-config.service'
 
 @Injectable()
 export class HardwareService {
@@ -19,14 +17,6 @@ export class HardwareService {
 
   public getArchitecture(): typeof process.arch {
     return this.configService.get('hardwareArchitecture') || process.arch
-  }
-
-  /**
-   * @deprecated Must be replaced by user-config
-   * TODO: Must be replaced by user-config
-   */
-  public async getAppDir(): Promise<string> {
-    return join(app.getPath('appData'), launcherName)
   }
 
   public getJavaDir(version?: string): string {
