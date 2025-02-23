@@ -6,6 +6,8 @@ export const defaultModpackIcon =
   'https://ipfs.io/ipfs/QmbpHKyw9Fyos1Jhk5CsEFwM2uN14bYJ9W1SRWUktXpQQa'
 export const defaultModpackCover =
   'https://ipfs.io/ipfs/QmQMy5KZWkE7BAyEPtRqyjaSkXsHda2ZzCC8kFbyV8V9em'
+export const supabaseFunctionsRoute = '/functions/v1'
+export const defaultMinecraftPath = '.minecraft'
 
 export enum BucketNames {
   Java = 'java',

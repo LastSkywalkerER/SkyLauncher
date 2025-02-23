@@ -58,14 +58,30 @@ export class InstallModpackHandler extends InstallHandlerBase {
         fileUrl: localTarget.downloadUrl
       })
 
+      console.log({ downloadResponse })
+
       const unzipResponse = await this.unzipService.execute({
         inputPath: downloadResponse.filePath,
         outputPath: installPath
       })
 
-      const folder = await removeNestedDirectories(unzipResponse.filePath, localTarget.name)
+      console.log({ unzipResponse })
 
-      localTarget.update({ folder })
+      // Extract .minecraft, if exists
+      const folderWithoutDotMinecraft = await removeNestedDirectories(
+        unzipResponse.filePath,
+        MCGameVersion.defaultMinecraftPath
+      )
+      console.log({ folderWithoutDotMinecraft })
+      // Extract duplicated nested folder, if exists
+      const folderWithoutNest = await removeNestedDirectories(
+        folderWithoutDotMinecraft,
+        localTarget.name
+      )
+
+      console.log({ folderWithoutNest })
+
+      localTarget.update({ folder: folderWithoutNest })
     } else {
       localTarget.update({ folder: installPath })
     }
@@ -75,9 +91,6 @@ export class InstallModpackHandler extends InstallHandlerBase {
     }
 
     localTarget.update(await this.installerService.install(localTarget))
-    // localTarget.update(await this.installerService.installVersion(localTarget))
-    // localTarget.update(await this.installerService.installLibraries(localTarget))
-    // localTarget.update(await this.installerService.installAssets(localTarget))
     localTarget.update(await this.installerService.installModloader(localTarget))
 
     await this.metadataService.safe(localTarget)

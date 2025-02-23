@@ -7,3 +7,6 @@ out
 electron.vite.config.**.mjs
 .idea
 test-scripts
+
+supabase/.branches
+supabase/.temp

@@ -1,8 +1,9 @@
 import { inject, injectable } from 'inversify'
 
-import { ModpackProvider } from '../../../../shared/constants'
+import { ModpackProvider, supabaseFunctionsRoute } from '../../../../shared/constants'
 import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
+import { environment } from '../../shared/config/environments'
 import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
 import { IHttpClient } from '../HttpClient/interfaces'
 import {
@@ -14,7 +15,6 @@ import {
   ProfileResponse,
   RegisterData
 } from './interfaces'
-import { versions } from './versions.mock'
 
 @injectable()
 export class BackendApi implements IBackendApi {
@@ -110,6 +110,14 @@ export class BackendApi implements IBackendApi {
   }
 
   public async getCustomMCVersions(): Promise<IMCGameVersion[]> {
+    const { body: versions } = await this._httpClient.request<IMCGameVersion[]>({
+      url: `${environment.supabaseBaseUrl}${supabaseFunctionsRoute}/get-versions`,
+      // method: 'POST',
+      headers: {
+        Authorization: `Bearer ${environment.supabaseAnonKey}`
+      }
+    })
+
     return versions.map((version) => {
       return new MCGameVersion({
         ...(version as IMCGameVersion),

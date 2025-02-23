@@ -13,13 +13,18 @@ import {
 } from './mc-game-version.interface'
 
 export class MCGameVersion implements IMCGameVersion {
-  public static metadataDirName = 'metadata'
-  public static metadataJsonName = 'info.json'
-  public static imageFields: (keyof IMCGameVersion)[] = ['icon', 'coverImage', 'titleImage']
-  public static versionsFolder = 'versions'
-  public static worldsFolder = 'worlds'
-  public static modsFolder = 'mods'
-  public static manifestName = 'manifest.json'
+  public static readonly metadataDirName = 'metadata'
+  public static readonly metadataJsonName = 'info.json'
+  public static readonly imageFields: (keyof IMCGameVersion)[] = [
+    'icon',
+    'coverImage',
+    'titleImage'
+  ]
+  public static readonly versionsFolder = 'versions'
+  public static readonly worldsFolder = 'worlds'
+  public static readonly modsFolder = 'mods'
+  public static readonly manifestName = 'manifest.json'
+  public static readonly defaultMinecraftPath = '.minecraft'
 
   icon: string
   name: string
