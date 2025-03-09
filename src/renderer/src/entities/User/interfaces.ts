@@ -7,7 +7,9 @@ import { ILoadableState } from '../LoadableState/interfaces'
 
 export interface UserData {
   // userId: UserConfigData['userId']
-  userName: UserConfigData['userName']
+  userName?: UserConfigData['userName']
+  email?: string
+  icon?: string
   // accessToken: string
 }
 
@@ -15,6 +17,7 @@ export interface IUser extends ILoadableState<UserData> {
   getUser: () => UserData
 
   login: (data: LoginData) => Observable<LoginResponse>
+  logout: () => Observable<unknown>
   register: (data: RegisterData) => Observable<LoginResponse>
   offlineLogin: (data: UserData) => void
   getMinecraftProfile: () => Promise<void>

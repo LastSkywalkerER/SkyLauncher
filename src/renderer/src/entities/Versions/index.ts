@@ -142,6 +142,8 @@ export class Versions implements IVersions {
   }
 
   public launchGame(version: IMCGameVersion): void {
+    // TODO: Check User Name
+
     from(
       this._nodeApi.launchGame({
         version

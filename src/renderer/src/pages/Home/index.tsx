@@ -5,7 +5,9 @@ import { useNavigate } from 'react-router-dom'
 
 import play from '../../../../../resources/images/play_button_big.png'
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
+import { IUser, UserData } from '../../entities/User/interfaces'
 import { IVersions } from '../../entities/Versions/interfaces'
+import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservable } from '../../shared/hooks/useObservable'
 import { RouteNames } from '../../shared/routes/routeNames'
 import { Loading } from '../../widgets/Loading'
@@ -36,6 +38,8 @@ const getButtonStatus = (version: IMCGameVersion): ButtonStatus => {
 const Home: FC = () => {
   const { getCurrentMCVersion, launchGame } = useInjection(IVersions.$)
   const currentVersion = useObservable(getCurrentMCVersion(), null)
+  const { data } = useLoadableState<IUser, UserData>(IUser.$)
+
   const navigate = useNavigate()
 
   if (!currentVersion) {
@@ -48,6 +52,12 @@ const Home: FC = () => {
 
   const buttonStatus = getButtonStatus(currentVersion)
   const handlePlayButton = (): void => {
+    if (!data?.userName) {
+      navigate(RouteNames.CheckMinecraftProfile)
+
+      return
+    }
+
     launchGame(currentVersion)
     navigate(RouteNames.Logs)
   }

@@ -5,14 +5,24 @@ import { Ripple } from 'primereact/ripple'
 import { FC, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import icon from '../../../../../resources/icons/icon.png'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
+import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { routeLinks } from '../../shared/routes/routeNames'
 
 export const Topbar: FC = () => {
   const navigate = useNavigate()
-  const { data } = useLoadableState<IUser, UserData>(IUser.$)
+  const {
+    data,
+    instance: { logout }
+  } = useLoadableState<IUser, UserData>(IUser.$)
+  const { execute: executeLogout } = useObservableRequest(logout)
+
+  if (!data) {
+    return null
+  }
+
+  console.log('topbar', data)
 
   const itemRenderer = (item): ReactNode => {
     return (
@@ -27,19 +37,28 @@ export const Topbar: FC = () => {
     )
   }
 
-  const items: MenuItem[] = routeLinks.map(({ name, path }) => ({
-    label: name,
-    template: itemRenderer,
-    command(): void {
-      navigate(path)
+  const items: MenuItem[] = [
+    ...routeLinks.map(({ name, path }) => ({
+      label: name,
+      template: itemRenderer,
+      command(): void {
+        navigate(path)
+      }
+    })),
+    {
+      label: 'Logout',
+      command(): void {
+        console.log('logout')
+        executeLogout()
+      }
     }
-  }))
+  ]
 
   const start = (): ReactNode | null => {
     return data ? (
       <div className={'flex items-center gap-5 mr-5'}>
-        <Avatar template={<img src={icon as string} alt="icon" />} shape="circle" />
-        <h3>{data.userName}</h3>
+        <Avatar template={<img src={data.icon} alt="icon" />} shape="circle" />
+        <h3>{data.userName || 'No MC Account'}</h3>
       </div>
     ) : null
   }

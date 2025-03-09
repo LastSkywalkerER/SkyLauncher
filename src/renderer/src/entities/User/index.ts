@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { from, Observable } from 'rxjs'
 
+import defaultIcon from '../../../../../resources/icons/icon.png'
 import {
   IBackendApi,
   LoginData,
@@ -28,6 +29,7 @@ export class User extends LoadableState<UserData> implements IUser {
 
     this.register = this.register.bind(this)
     this.login = this.login.bind(this)
+    this.logout = this.logout.bind(this)
     this.offlineLogin = this.offlineLogin.bind(this)
     this.getMinecraftProfile = this.getMinecraftProfile.bind(this)
     this.getProfile = this.getProfile.bind(this)
@@ -41,7 +43,30 @@ export class User extends LoadableState<UserData> implements IUser {
   }
 
   public login(data: LoginData): Observable<LoginResponse> {
-    return from(this._backendApi.login(data))
+    const handleLogin = async (): Promise<LoginResponse> => {
+      this.isLoading$.next(true)
+
+      const resposne = await this._backendApi.login(data)
+
+      console.log('login', { resposne })
+
+      this.data$.next({ email: data.email, icon: defaultIcon })
+
+      console.log('login', { email: data.email, icon: defaultIcon })
+
+      this.isLoaded$.next(true)
+      this.isLoading$.next(false)
+
+      return resposne
+    }
+
+    return from(handleLogin())
+  }
+
+  public logout(): Observable<unknown> {
+    this.data$.next(null)
+
+    return from(this._backendApi.logout())
   }
 
   public register(data: RegisterData): Observable<LoginResponse> {
@@ -50,11 +75,13 @@ export class User extends LoadableState<UserData> implements IUser {
 
   public offlineLogin({ userName }: UserData): void {
     try {
+      const oldData = this.data$.getValue()
+
       this._settings.setSettings({
         userName
       })
 
-      this.data$.next({ userName })
+      this.data$.next({ ...oldData, userName, icon: defaultIcon })
     } catch (error) {
       this.error$.next(error as Error)
     } finally {
@@ -64,6 +91,8 @@ export class User extends LoadableState<UserData> implements IUser {
   }
 
   public async getMinecraftProfile(): Promise<void> {
+    const oldData = this.data$.getValue()
+
     this.isLoaded$.next(false)
     this.isLoading$.next(true)
 
@@ -81,7 +110,7 @@ export class User extends LoadableState<UserData> implements IUser {
         minecraftAccessExpiration: response.minecraft_access_expires_in
       })
 
-      this.data$.next({ userName: response.username })
+      this.data$.next({ ...oldData, userName: response.username })
     } catch (error) {
       this.error$.next(error as Error)
     } finally {

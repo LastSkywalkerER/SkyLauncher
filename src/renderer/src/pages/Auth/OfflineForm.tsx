@@ -5,6 +5,7 @@ import { Link, Navigate } from 'react-router-dom'
 
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
+import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { RouteNames } from '../../shared/routes/routeNames'
 import { InputFieldControlled } from '../../widgets/InputField'
 import { Loading } from '../../widgets/Loading'
@@ -14,8 +15,9 @@ const OfflineForm: FC = () => {
     data,
     isLoading,
     isLoaded,
-    instance: { offlineLogin }
+    instance: { offlineLogin, logout }
   } = useLoadableState<IUser, UserData>(IUser.$)
+  const { execute: executeLogout } = useObservableRequest(logout)
 
   const {
     control,
@@ -49,7 +51,9 @@ const OfflineForm: FC = () => {
         <div className={'flex items-center gap-10'}>
           <Button type="submit">Login</Button>
           <Link to={RouteNames.Login}>
-            <Button severity="secondary">Go online</Button>
+            <Button severity="secondary" onClick={executeLogout}>
+              Logout
+            </Button>
           </Link>
         </div>
       )}

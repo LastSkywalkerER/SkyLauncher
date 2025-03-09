@@ -70,14 +70,18 @@ export class BackendApi implements IBackendApi {
   }
 
   public async logout(): Promise<unknown> {
-    const { body } = await this._httpClient.request<unknown>({
-      url: 'v1/auth/logout',
-      method: 'POST'
-    })
+    try {
+      const { body } = await this._httpClient.request<unknown>({
+        url: 'v1/auth/logout',
+        method: 'POST'
+      })
 
-    this._httpClient.removeAuth()
-
-    return body
+      return body
+    } catch (e) {
+      throw e
+    } finally {
+      this._httpClient.removeAuth()
+    }
   }
 
   public async refresh(): Promise<unknown> {

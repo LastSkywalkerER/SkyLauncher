@@ -5,6 +5,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { environment } from '../../shared/config/environments'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
+import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { RouteNames } from '../../shared/routes/routeNames'
 import { Loading } from '../../widgets/Loading'
 
@@ -13,9 +14,10 @@ const CheckMCProfileForm: FC = () => {
     data,
     isLoading,
     isLoaded,
-    instance: { getMinecraftProfile },
+    instance: { getMinecraftProfile, logout },
     error
   } = useLoadableState<IUser, UserData>(IUser.$)
+  const { execute: executeLogout } = useObservableRequest(logout)
 
   useEffect(() => {
     getMinecraftProfile()
@@ -38,18 +40,22 @@ const CheckMCProfileForm: FC = () => {
           >
             Connect Xbox
           </a>
-          <Link className={'underline cursor-pointer'} to={RouteNames.Login}>
-            Try another account.
-          </Link>
         </div>
       </div>
 
       {isLoading ? (
         <Loading />
       ) : (
-        <Link to={RouteNames.OfflineLogin}>
-          <Button severity="secondary">Go offline</Button>
-        </Link>
+        <div className={'flex items-center gap-10'}>
+          <Link to={RouteNames.OfflineLogin}>
+            <Button severity="secondary">Go offline</Button>
+          </Link>
+          <Link to={RouteNames.Login}>
+            <Button className={'underline cursor-pointer'} onClick={executeLogout}>
+              Logout
+            </Button>
+          </Link>
+        </div>
       )}
     </div>
   )
