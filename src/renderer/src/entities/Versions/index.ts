@@ -11,10 +11,10 @@ import {
 } from '../../../../shared/constants'
 import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
-import { environment } from '../../shared/config/environments'
-import { IBackendApi } from '../BackendApi/interfaces'
-import { NodeApi } from '../NodeApi'
-import { INodeApi } from '../NodeApi/interfaces'
+import { environment } from '../../app/config/environments'
+import { IBackendApi } from '../../shared/api/BackendApi/interfaces'
+import { NodeApi } from '../../shared/api/NodeApi'
+import { INodeApi } from '../../shared/api/NodeApi/interfaces'
 import { IMCLocalGameVersion, IVersions } from './interfaces'
 
 @injectable()

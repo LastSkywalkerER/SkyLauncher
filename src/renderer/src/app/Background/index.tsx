@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import background from '../../../../../resources/images/splash_screen.png'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { PageLoading } from '../../widgets/Loading'
+import { PageLoading } from '../../shared/ui/Loading'
 
 export const Background: FC = () => {
   const { getCurrentMCVersion } = useInjection(IVersions.$)

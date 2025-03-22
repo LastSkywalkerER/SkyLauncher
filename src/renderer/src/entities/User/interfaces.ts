@@ -2,7 +2,7 @@ import { interfaces } from 'inversify'
 import { Observable } from 'rxjs'
 
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
-import { LoginData, LoginResponse, RegisterData } from '../BackendApi/interfaces'
+import { LoginData, LoginResponse, RegisterData } from '../../shared/api/BackendApi/interfaces'
 import { ILoadableState } from '../LoadableState/interfaces'
 
 export interface UserData {

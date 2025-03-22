@@ -7,9 +7,9 @@ import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
+import { RouteNames } from '../../app/routes/routeNames'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { RouteNames } from '../../shared/routes/routeNames'
 
 export const Dock: FC = () => {
   const { getLocalMCVersions, setCurrentMCVersion, getCurrentMCVersion } = useInjection(IVersions.$)

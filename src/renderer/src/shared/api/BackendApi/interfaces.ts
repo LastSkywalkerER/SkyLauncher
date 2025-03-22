@@ -1,6 +1,6 @@
 import { interfaces } from 'inversify'
 
-import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
+import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.interface'
 
 export interface LoginData {
   email: string

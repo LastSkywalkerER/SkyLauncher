@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify'
 
-import { ModpackProvider, supabaseFunctionsRoute } from '../../../../shared/constants'
-import { MCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.entity'
-import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
-import { environment } from '../../shared/config/environments'
-import { capitalizeFirstLetter } from '../../shared/utils/capitalizeFirstLetter'
+import { ModpackProvider, supabaseFunctionsRoute } from '../../../../../shared/constants'
+import { MCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.entity'
+import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.interface'
+import { environment } from '../../../app/config/environments'
+import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
 import { IHttpClient } from '../HttpClient/interfaces'
 import {
   ErrorResponse,

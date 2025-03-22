@@ -4,15 +4,15 @@ import { Button } from 'primereact/button'
 import { FC, ReactElement, useEffect } from 'react'
 import { FieldPath, FieldPathValue, SubmitHandler, useForm } from 'react-hook-form'
 
+import { SettingField, settingsList } from '../../app/config/settings.config'
 import { LauncherSettings } from '../../entities/Settings/interfaces'
-import { SettingField, settingsList } from '../../shared/config/settings.config'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import {
   CheckboxFieldControlled,
   DropdownFieldControlled,
   SliderInputFieldControlled
 } from '../../shared/ui'
-import { InputFieldControlled } from '../../widgets/InputField'
+import { InputFieldControlled } from '../../shared/ui/InputField'
 
 const Settings: FC = () => {
   const { setSettings, getSettings } = useInjection(ISettings.$)

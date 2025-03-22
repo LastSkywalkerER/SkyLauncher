@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify'
 import { BehaviorSubject, Observable } from 'rxjs'
 
-import { RendererApi } from '../../../../shared/api/types'
-import { ProcessProgressData } from '../../../../shared/dtos/process-progress.dto'
-import { NodeApi } from '../NodeApi'
-import { INodeApi } from '../NodeApi/interfaces'
+import { RendererApi } from '../../../../../shared/api/types'
+import { ProcessProgressData } from '../../../../../shared/dtos/process-progress.dto'
+import { NodeApi } from '../../../shared/api/NodeApi/index'
+import { INodeApi } from '../../../shared/api/NodeApi/interfaces'
 import { IProcessProgress } from './interfaces'
 
 @injectable()

@@ -4,14 +4,14 @@ import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
 
-import { LoginData, LoginResponse } from '../../entities/BackendApi/interfaces'
+import { RouteNames } from '../../app/routes/routeNames'
 import { IUser } from '../../entities/User/interfaces'
+import { LoginData, LoginResponse } from '../../shared/api/BackendApi/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { RouteNames } from '../../shared/routes/routeNames'
-import { InputFieldControlled } from '../../widgets/InputField'
-import { PasswordFieldControlled } from '../../widgets/InputField/Password'
-import { Loading } from '../../widgets/Loading'
+import { InputFieldControlled } from '../../shared/ui/InputField'
+import { PasswordFieldControlled } from '../../shared/ui/InputField/Password'
+import { Loading } from '../../shared/ui/Loading'
 
 const LoginForm: FC = () => {
   const { login, data$, isLoaded$ } = useInjection(IUser.$)

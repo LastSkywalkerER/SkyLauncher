@@ -1,3 +1,5 @@
 export { CheckboxFieldComponent, CheckboxFieldControlled } from './Checkbox'
 export { DropdownFieldComponent, DropdownFieldControlled } from './Dropdown'
+export { InputFieldComponent, InputFieldControlled } from './InputField'
 export { SliderInputFieldComponent, SliderInputFieldControlled } from './InputSlider'
+export { Loading, PageLoading } from './Loading'

@@ -2,8 +2,8 @@ import { FC, ReactElement } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { IUser, UserData } from '../../entities/User/interfaces'
-import { PageLoading } from '../../widgets/Loading'
-import { useLoadableState } from '../hooks/useLoadableState'
+import { useLoadableState } from '../../shared/hooks/useLoadableState'
+import { PageLoading } from '../../shared/ui/index'
 import { RouteNames } from '../routes/routeNames'
 
 export const AuthGuard: FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {

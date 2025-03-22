@@ -1,15 +1,15 @@
 import { lazy } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import { Background } from '../../app/Background'
+import { Background } from '../Background/index'
 import { AuthGuard } from '../Guards/AuthGuard'
 import { RouteNames } from './routeNames'
 
-const Layout = lazy(() => import('../../app/Layout'))
-const Home = lazy(() => import('../../pages/Home'))
-const Logs = lazy(() => import('../../pages/Logs'))
-const Settings = lazy(() => import('../../pages/Settings'))
-const AvailableVersions = lazy(() => import('../../pages/AvailableVersions'))
+const Layout = lazy(() => import('../Layout/index'))
+const Home = lazy(() => import('../../pages/Home/index'))
+const Logs = lazy(() => import('../../pages/Logs/index'))
+const Settings = lazy(() => import('../../pages/Settings/index'))
+const AvailableVersions = lazy(() => import('../../pages/AvailableVersions/index'))
 const Login = lazy(() => import('../../pages/Auth/LoginForm'))
 const Register = lazy(() => import('../../pages/Auth/RegisterForm'))
 const OfflineLogin = lazy(() => import('../../pages/Auth/OfflineForm'))

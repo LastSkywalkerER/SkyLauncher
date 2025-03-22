@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom'
 
 import play from '../../../../../resources/images/play_button_big.png'
 import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-game-version.interface'
+import { RouteNames } from '../../app/routes/routeNames'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { RouteNames } from '../../shared/routes/routeNames'
-import { Loading } from '../../widgets/Loading'
+import { Loading } from '../../shared/ui/Loading'
 
 const BigButton: FC<HTMLAttributes<HTMLButtonElement>> = ({ children, className, ...props }) => (
   <button
@@ -61,8 +61,6 @@ const Home: FC = () => {
     launchGame(currentVersion)
     navigate(RouteNames.Logs)
   }
-
-  console.log({ currentVersion })
 
   return (
     <div className="flex flex-col justify-between items-center h-full mt-[20px]">

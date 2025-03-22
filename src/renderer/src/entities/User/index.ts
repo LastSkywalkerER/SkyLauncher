@@ -18,7 +18,7 @@ import {
   LoginResponse,
   ProfileResponse,
   RegisterData
-} from '../BackendApi/interfaces'
+} from '../../shared/api/BackendApi/interfaces'
 import { LoadableState } from '../LoadableState'
 import { ISettings, LauncherSettings } from '../Settings/interfaces'
 import { IUser, UserData } from './interfaces'

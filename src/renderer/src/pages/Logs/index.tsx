@@ -1,7 +1,8 @@
 import { LazyLog } from '@melloware/react-logviewer'
-import { INodeApi } from '@renderer/entities/NodeApi/interfaces'
 import { useInjection } from 'inversify-react'
 import { FC, useEffect, useState } from 'react'
+
+import { INodeApi } from '../../shared/api/NodeApi/interfaces'
 
 const Logs: FC = () => {
   const { subscribeOnLogs } = useInjection(INodeApi.$)

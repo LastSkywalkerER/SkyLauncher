@@ -1,14 +1,14 @@
-import { useInjection } from 'inversify-react'
 import { ProgressBar as PrimeProgressBar, ProgressBarProps } from 'primereact/progressbar'
 import { Toast } from 'primereact/toast'
 import { FC, useEffect, useRef } from 'react'
 
-import { IProcessProgress } from '../../entities/ProcessProgress/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
+import { useTransientInjection } from '../../shared/hooks/useTransientInjection'
+import { IProcessProgress } from './service/interfaces'
 
 export const ProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ className, ...props }) => {
   const toast = useRef<Toast | null>(null)
-  const { getProgress } = useInjection(IProcessProgress.$)
+  const { getProgress } = useTransientInjection(IProcessProgress.$)
   const progress = useObservable(getProgress(), {})
 
   useEffect(() => {

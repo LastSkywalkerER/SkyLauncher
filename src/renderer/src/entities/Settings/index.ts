@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify'
 import { from, Observable } from 'rxjs'
 
-import { defaults, settingsList } from '../../shared/config/settings.config'
-import { NodeApi } from '../NodeApi'
-import { INodeApi } from '../NodeApi/interfaces'
+import { defaults, settingsList } from '../../app/config/settings.config'
+import { NodeApi } from '../../shared/api/NodeApi'
+import { INodeApi } from '../../shared/api/NodeApi/interfaces'
 import { ISettings, LauncherSettings } from './interfaces'
 
 @injectable()

@@ -5,14 +5,14 @@ import { FC } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
 
-import { LoginResponse, RegisterData } from '../../entities/BackendApi/interfaces'
+import { environment } from '../../app/config/environments'
+import { RouteNames } from '../../app/routes/routeNames'
 import { IUser } from '../../entities/User/interfaces'
-import { environment } from '../../shared/config/environments'
+import { LoginResponse, RegisterData } from '../../shared/api/BackendApi/interfaces'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { RouteNames } from '../../shared/routes/routeNames'
-import { InputFieldControlled } from '../../widgets/InputField'
-import { PasswordFieldControlled } from '../../widgets/InputField/Password'
-import { Loading } from '../../widgets/Loading'
+import { InputFieldControlled } from '../../shared/ui/InputField'
+import { PasswordFieldControlled } from '../../shared/ui/InputField/Password'
+import { Loading } from '../../shared/ui/Loading'
 
 const RegisterForm: FC = () => {
   const { register } = useInjection(IUser.$)

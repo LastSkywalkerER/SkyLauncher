@@ -3,12 +3,12 @@ import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
 
+import { RouteNames } from '../../app/routes/routeNames'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { RouteNames } from '../../shared/routes/routeNames'
-import { InputFieldControlled } from '../../widgets/InputField'
-import { Loading } from '../../widgets/Loading'
+import { InputFieldControlled } from '../../shared/ui/InputField'
+import { Loading } from '../../shared/ui/Loading'
 
 const OfflineForm: FC = () => {
   const {

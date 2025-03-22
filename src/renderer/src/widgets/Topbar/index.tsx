@@ -5,10 +5,10 @@ import { Ripple } from 'primereact/ripple'
 import { FC, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { routeLinks } from '../../app/routes/routeNames'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { routeLinks } from '../../shared/routes/routeNames'
 
 export const Topbar: FC = () => {
   const navigate = useNavigate()

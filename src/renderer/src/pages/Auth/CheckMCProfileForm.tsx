@@ -2,12 +2,12 @@ import { Button } from 'primereact/button'
 import { FC, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 
+import { environment } from '../../app/config/environments'
+import { RouteNames } from '../../app/routes/routeNames'
 import { IUser, UserData } from '../../entities/User/interfaces'
-import { environment } from '../../shared/config/environments'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { RouteNames } from '../../shared/routes/routeNames'
-import { Loading } from '../../widgets/Loading'
+import { Loading } from '../../shared/ui/Loading'
 
 const CheckMCProfileForm: FC = () => {
   const {
