@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { from, Observable } from 'rxjs'
 
-import { settingsList } from '../../shared/config/settings.config'
+import { defaults, settingsList } from '../../shared/config/settings.config'
 import { NodeApi } from '../NodeApi'
 import { INodeApi } from '../NodeApi/interfaces'
 import { ISettings, LauncherSettings } from './interfaces'
@@ -31,7 +31,12 @@ export class Settings implements ISettings {
     return from(getSettingsPromise())
   }
 
-  public async setSettings(settings: LauncherSettings): Promise<void> {
-    await this._nodeApi.setConfig(settings)
+  // Store new data with mutation of old data
+  public setSettings(settings: LauncherSettings): Observable<void> {
+    return from(this._nodeApi.setConfig(settings))
+  }
+
+  public setDefaults(): Observable<void> {
+    return from(this._nodeApi.setConfig(defaults))
   }
 }

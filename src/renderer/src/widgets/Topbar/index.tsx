@@ -22,8 +22,6 @@ export const Topbar: FC = () => {
     return null
   }
 
-  console.log('topbar', data)
-
   const itemRenderer = (item): ReactNode => {
     return (
       <a

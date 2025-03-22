@@ -1,4 +1,6 @@
 export type UserConfigData = {
+  email?: string
+
   userName?: string
   userId?: string
   accessToken?: string

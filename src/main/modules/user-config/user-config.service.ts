@@ -8,6 +8,7 @@ import { ConfigKeys, UserConfigData } from '../../../shared/dtos/config.dto'
 export class UserConfigService {
   private _store = new Store({ defaults })
 
+  // Store new data with mutation of old data
   public set(value: UserConfigData): void {
     this._store.set(value)
   }

@@ -1,11 +1,12 @@
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
 
 import { LoginData, LoginResponse } from '../../entities/BackendApi/interfaces'
 import { IUser } from '../../entities/User/interfaces'
+import { useObservable } from '../../shared/hooks/useObservable'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { RouteNames } from '../../shared/routes/routeNames'
 import { InputFieldControlled } from '../../widgets/InputField'
@@ -13,24 +14,34 @@ import { PasswordFieldControlled } from '../../widgets/InputField/Password'
 import { Loading } from '../../widgets/Loading'
 
 const LoginForm: FC = () => {
-  const { login } = useInjection(IUser.$)
+  const { login, data$, isLoaded$ } = useInjection(IUser.$)
   const {
     execute: executeLogin,
     isLoading,
     isLoaded,
     error
   } = useObservableRequest<[LoginData], LoginResponse>(login)
-
+  const userData = useObservable(data$, null)
+  const isUserLoaded = useObservable(isLoaded$, false)
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = useForm<LoginData>()
+
+  useEffect(() => {
+    userData?.email && setValue('email', userData?.email)
+  }, [userData?.email])
 
   const onSubmit: SubmitHandler<LoginData> = (data) => executeLogin(data)
 
   if (isLoaded && !error) {
-    return <Navigate to={RouteNames.Home} />
+    return <Navigate to={RouteNames.CheckMinecraftProfile} />
+  }
+
+  if (isUserLoaded && userData?.userName) {
+    return <Navigate to={RouteNames.CheckMinecraftProfile} />
   }
 
   return (
@@ -40,12 +51,14 @@ const LoginForm: FC = () => {
     >
       <div className="flex flex-col gap-10 p-10 bg-[var(--surface-100)] bg-opacity-90 rounded-2xl w-fit">
         <InputFieldControlled
+          className={'w-full'}
           control={control}
           name={'email'}
           error={errors['email'] ? 'Field is required' : undefined}
           rules={{ required: true }}
         />
         <PasswordFieldControlled
+          className={'w-full'}
           control={control}
           name={'password'}
           toggleMask

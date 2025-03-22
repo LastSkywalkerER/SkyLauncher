@@ -15,9 +15,9 @@ const OfflineForm: FC = () => {
     data,
     isLoading,
     isLoaded,
-    instance: { offlineLogin, logout }
+    instance: { offlineLogin }
   } = useLoadableState<IUser, UserData>(IUser.$)
-  const { execute: executeLogout } = useObservableRequest(logout)
+  const { execute: executeOfflineLogin } = useObservableRequest(offlineLogin)
 
   const {
     control,
@@ -25,7 +25,7 @@ const OfflineForm: FC = () => {
     formState: { errors }
   } = useForm<UserData>()
 
-  const onSubmit: SubmitHandler<UserData> = (data) => offlineLogin(data)
+  const onSubmit: SubmitHandler<UserData> = (data) => executeOfflineLogin(data)
 
   if (isLoaded && data?.userName) {
     return <Navigate to={RouteNames.Home} />
@@ -49,12 +49,10 @@ const OfflineForm: FC = () => {
         <Loading />
       ) : (
         <div className={'flex items-center gap-10'}>
-          <Button type="submit">Login</Button>
           <Link to={RouteNames.Login}>
-            <Button severity="secondary" onClick={executeLogout}>
-              Logout
-            </Button>
+            <Button severity="secondary">Back</Button>
           </Link>
+          <Button type="submit">Login</Button>
         </div>
       )}
     </form>

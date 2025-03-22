@@ -1,6 +1,15 @@
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
 
+export const defaults: UserConfigData = {
+  accessToken: '',
+  userId: '',
+  minecraftAccessExpiration: '',
+  userName: ''
+}
+
 export const settingsList: { fieldName: keyof UserConfigData }[] = [
+  { fieldName: 'email' },
+
   { fieldName: 'userName' },
   { fieldName: 'userId' },
   { fieldName: 'accessToken' },

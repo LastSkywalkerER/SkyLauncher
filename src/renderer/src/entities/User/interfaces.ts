@@ -19,7 +19,7 @@ export interface IUser extends ILoadableState<UserData> {
   login: (data: LoginData) => Observable<LoginResponse>
   logout: () => Observable<unknown>
   register: (data: RegisterData) => Observable<LoginResponse>
-  offlineLogin: (data: UserData) => void
+  offlineLogin: (data: UserData) => Observable<void>
   getMinecraftProfile: () => Promise<void>
   getProfile: () => Promise<unknown>
 }

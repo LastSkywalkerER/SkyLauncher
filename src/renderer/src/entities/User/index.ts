@@ -1,5 +1,15 @@
 import { inject, injectable } from 'inversify'
-import { from, Observable } from 'rxjs'
+import {
+  catchError,
+  finalize,
+  from,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  throwError,
+  withLatestFrom
+} from 'rxjs'
 
 import defaultIcon from '../../../../../resources/icons/icon.png'
 import {
@@ -10,7 +20,7 @@ import {
   RegisterData
 } from '../BackendApi/interfaces'
 import { LoadableState } from '../LoadableState'
-import { ISettings } from '../Settings/interfaces'
+import { ISettings, LauncherSettings } from '../Settings/interfaces'
 import { IUser, UserData } from './interfaces'
 
 @injectable()
@@ -33,61 +43,92 @@ export class User extends LoadableState<UserData> implements IUser {
     this.offlineLogin = this.offlineLogin.bind(this)
     this.getMinecraftProfile = this.getMinecraftProfile.bind(this)
     this.getProfile = this.getProfile.bind(this)
+    this.init = this.init.bind(this)
 
     this.isLoaded$.next(true)
     this.isLoading$.next(false)
+
+    this.init().subscribe()
   }
 
-  getUser(): UserData {
+  public init(): Observable<[LauncherSettings | null, UserData | null]> {
+    return this._settings.getSettings().pipe(
+      withLatestFrom(this.data$),
+      tap(([newValue, prevValue]) => {
+        if (newValue?.email) {
+          this.data$.next({ ...prevValue, email: newValue?.email })
+        }
+
+        if (newValue?.userName && !newValue?.accessToken) {
+          this.offlineLogin({ userName: newValue?.userName }).subscribe()
+        }
+      })
+    )
+  }
+
+  public getUser(): UserData {
     return this.data$.getValue() as UserData
   }
 
   public login(data: LoginData): Observable<LoginResponse> {
-    const handleLogin = async (): Promise<LoginResponse> => {
-      this.isLoading$.next(true)
+    return of(null).pipe(
+      tap(() => this.isLoading$.next(true)),
 
-      const resposne = await this._backendApi.login(data)
+      switchMap(() => from(this._backendApi.login(data))),
 
-      console.log('login', { resposne })
+      switchMap((response: LoginResponse) =>
+        this._settings.setSettings({ email: data.email }).pipe(
+          tap(() => {
+            this.data$.next({ email: data.email, icon: defaultIcon })
+          }),
+          switchMap(() => of(response))
+        )
+      ),
 
-      this.data$.next({ email: data.email, icon: defaultIcon })
+      catchError((error) => {
+        this.error$.next(error as Error)
+        return throwError(() => error)
+      }),
 
-      console.log('login', { email: data.email, icon: defaultIcon })
-
-      this.isLoaded$.next(true)
-      this.isLoading$.next(false)
-
-      return resposne
-    }
-
-    return from(handleLogin())
+      finalize(() => {
+        this.isLoaded$.next(true)
+        this.isLoading$.next(false)
+      })
+    )
   }
 
   public logout(): Observable<unknown> {
     this.data$.next(null)
 
-    return from(this._backendApi.logout())
+    return from(this._settings.setDefaults()).pipe(switchMap(() => from(this._backendApi.logout())))
   }
 
   public register(data: RegisterData): Observable<LoginResponse> {
     return from(this._backendApi.register(data))
   }
 
-  public offlineLogin({ userName }: UserData): void {
-    try {
-      const oldData = this.data$.getValue()
+  public offlineLogin({ userName }: UserData): Observable<void> {
+    return this._settings.setDefaults().pipe(
+      withLatestFrom(this.data$),
 
-      this._settings.setSettings({
-        userName
+      switchMap(([, oldData]) =>
+        this._settings.setSettings({ userName }).pipe(
+          tap(() => {
+            this.data$.next({ ...oldData, userName, icon: defaultIcon })
+          })
+        )
+      ),
+
+      catchError((error) => {
+        this.error$.next(error as Error)
+        return throwError(() => error)
+      }),
+
+      finalize(() => {
+        this.isLoaded$.next(true)
+        this.isLoading$.next(false)
       })
-
-      this.data$.next({ ...oldData, userName, icon: defaultIcon })
-    } catch (error) {
-      this.error$.next(error as Error)
-    } finally {
-      this.isLoaded$.next(true)
-      this.isLoading$.next(false)
-    }
+    )
   }
 
   public async getMinecraftProfile(): Promise<void> {

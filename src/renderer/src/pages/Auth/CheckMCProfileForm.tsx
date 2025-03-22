@@ -29,19 +29,21 @@ const CheckMCProfileForm: FC = () => {
 
   return (
     <div className={'relative h-full flex flex-col items-center justify-center gap-10'}>
-      <div className="flex flex-col gap-10 p-10 bg-[var(--surface-100)] bg-opacity-90 rounded-2xl w-fit">
-        <p>{error?.message}</p>
-        <div className={'flex justify-between'}>
-          <a
-            target={'_blank'}
-            className={'underline cursor-pointer'}
-            href={environment.xboxConnectionLink}
-            rel="noreferrer"
-          >
-            Connect Xbox
-          </a>
+      {error?.message && (
+        <div className="flex flex-col gap-10 p-10 bg-[var(--surface-100)] bg-opacity-90 rounded-2xl w-fit">
+          <p>{error?.message}</p>
+          <div className={'flex justify-between'}>
+            <a
+              target={'_blank'}
+              className={'underline cursor-pointer'}
+              href={environment.xboxConnectionLink}
+              rel="noreferrer"
+            >
+              Connect Xbox
+            </a>
+          </div>
         </div>
-      </div>
+      )}
 
       {isLoading ? (
         <Loading />

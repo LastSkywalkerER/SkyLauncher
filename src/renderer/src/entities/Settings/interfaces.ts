@@ -7,7 +7,8 @@ export interface LauncherSettings extends UserConfigData {}
 
 export interface ISettings {
   getSettings: () => Observable<LauncherSettings | null>
-  setSettings: (settings: LauncherSettings) => void
+  setSettings: (settings: LauncherSettings) => Observable<void>
+  setDefaults: () => Observable<void>
 }
 
 export namespace ISettings {
