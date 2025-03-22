@@ -62,13 +62,47 @@ const Home: FC = () => {
     navigate(RouteNames.Logs)
   }
 
+  console.log({ currentVersion })
+
   return (
     <div className="flex flex-col justify-between items-center h-full mt-[20px]">
       <div className={'w-[500px] h-fit'}>
         {currentVersion?.titleImage && <img src={currentVersion?.titleImage} alt="cover" />}
-        {currentVersion?.title && <h3>{currentVersion?.title}</h3>}
       </div>
-      <div>{currentVersion?.title && <p>{currentVersion?.title}</p>}</div>
+      <div className="flex gap-x-5 gap-y-10 flex-wrap p-5 bg-[var(--surface-100)] bg-opacity-90 rounded-2xl w-9/12">
+        {currentVersion?.title && <h3>{currentVersion?.title}</h3>}
+        {currentVersion?.description && <p>{currentVersion?.description}</p>}
+        <div className={'text-xs text-gray-400'}>
+          Additional info:
+          <ul className="list-disc pl-5 space-y-1">
+            {currentVersion?.name && (
+              <li>
+                <strong>Name:</strong> {currentVersion.name}
+              </li>
+            )}
+            {currentVersion?.java && (
+              <li>
+                <strong>Java Version:</strong> {currentVersion.java}
+              </li>
+            )}
+            {currentVersion?.modpackProvider && (
+              <li>
+                <strong>Provider:</strong> {currentVersion.modpackProvider}
+              </li>
+            )}
+            {currentVersion?.fullVersion && (
+              <li>
+                <strong>Version:</strong> {currentVersion.fullVersion}
+              </li>
+            )}
+            {currentVersion?.folder && (
+              <li>
+                <strong>Path:</strong> {currentVersion.folder}
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
       {buttonStatus === 'installed' && <Loading />}
       {buttonStatus === 'checked' && (
         <BigButton onClick={handlePlayButton}>

@@ -1,4 +1,6 @@
+import { javaVersionList } from '../../../../shared/constants'
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
+import { environment } from './environments'
 
 export const defaults: UserConfigData = {
   accessToken: '',
@@ -7,21 +9,83 @@ export const defaults: UserConfigData = {
   userName: ''
 }
 
-export const settingsList: { fieldName: keyof UserConfigData }[] = [
-  { fieldName: 'email' },
+export type SettingsTypes = 'string' | 'slider' | 'options' | 'filePath' | 'checkbox'
+export interface SettingField {
+  fieldName: keyof UserConfigData
+  type: SettingsTypes
+  isNotShow?: boolean
+  options?: (string | number)[]
+  label?: string
+}
 
-  { fieldName: 'userName' },
-  { fieldName: 'userId' },
-  { fieldName: 'accessToken' },
+export const settingsList: SettingField[] = [
+  {
+    fieldName: 'email',
+    type: 'string',
+    label: 'Email'
+  },
 
-  { fieldName: 'modpacksPath' },
-  { fieldName: 'javaPath' },
+  {
+    fieldName: 'userName',
+    type: 'string',
+    label: 'User Name'
+  },
 
-  { fieldName: 'resolutionFullscreen' },
-  { fieldName: 'resolutionHeight' },
-  { fieldName: 'resolutionWidth' },
+  {
+    fieldName: 'userId',
+    type: 'string',
+    label: 'Iser ID',
 
-  { fieldName: 'javaArgsVersion' },
-  { fieldName: 'javaArgsMaxMemory' },
-  { fieldName: 'javaArgsMinMemory' }
+    isNotShow: environment.prod
+  },
+  {
+    fieldName: 'accessToken',
+    type: 'string',
+    label: 'Minecraft Access Token',
+
+    isNotShow: environment.prod
+  },
+
+  {
+    fieldName: 'modpacksPath',
+    type: 'string',
+    label: 'Modpacks Path'
+  },
+  {
+    fieldName: 'javaPath',
+    type: 'string',
+    label: 'Java Path'
+  },
+
+  {
+    fieldName: 'resolutionFullscreen',
+    type: 'checkbox',
+    label: 'Full Screen'
+  },
+
+  // {
+  //   fieldName: 'resolutionHeight',
+  //   type: 'string'
+  // },
+  // {
+  //   fieldName: 'resolutionWidth',
+  //   type: 'string'
+  // },
+
+  {
+    fieldName: 'javaArgsVersion',
+    type: 'options',
+    options: javaVersionList,
+    label: 'Java Version'
+  },
+  {
+    fieldName: 'javaArgsMinMemory',
+    type: 'slider',
+    label: 'Min Java RAM GB'
+  },
+  {
+    fieldName: 'javaArgsMaxMemory',
+    type: 'slider',
+    label: 'Max Java RAM GB'
+  }
 ]

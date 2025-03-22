@@ -11,5 +11,9 @@ export const environment = {
   defaultModpackIcon: import.meta.env.RENDERER_VITE_COVER_URL || defaultModpackIcon,
   defaultModpackCover: import.meta.env.RENDERER_VITE_CURSEFORGE_APIKEY || defaultModpackCover,
   supabaseBaseUrl: import.meta.env.RENDERER_VITE_SUPABASE_URL,
-  supabaseAnonKey: import.meta.env.RENDERER_VITE_SUPABASE_ANON_KEY
+  supabaseAnonKey: import.meta.env.RENDERER_VITE_SUPABASE_ANON_KEY,
+  dev: import.meta.env.DEV,
+  prod: import.meta.env.PROD
 }
+
+console.log(environment)

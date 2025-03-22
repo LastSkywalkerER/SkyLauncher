@@ -57,21 +57,4 @@ export const getCurseForgeLinks = ({
   `https://mediafiles.forgecdn.net/files/${String(fileID).slice(0, 4)}/${String(fileID).slice(4)}/${fileName}`
 ]
 
-export const javaVersionList = {
-  darwin: {
-    arm64: {
-      8: 'https://storage.yandexcloud.net/freshcraft-public/java/darwin/arm64/8.zip',
-      11: 'https://storage.yandexcloud.net/freshcraft-public/java/darwin/arm64/11.zip',
-      17: '',
-      21: ''
-    }
-  },
-  win32: {
-    x64: {
-      8: '',
-      11: '',
-      17: '',
-      21: ''
-    }
-  }
-}
+export const javaVersionList = [8, 11, 17, 21]
