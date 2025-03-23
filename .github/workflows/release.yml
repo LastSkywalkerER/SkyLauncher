@@ -45,6 +45,8 @@ jobs:
           RENDERER_VITE_ICON_URL: ${{ secrets.RENDERER_VITE_ICON_URL }}
           RENDERER_VITE_COVER_URL: ${{ secrets.RENDERER_VITE_COVER_URL }}
           RENDERER_VITE_CURSEFORGE_APIKEY: ${{ secrets.RENDERER_VITE_CURSEFORGE_APIKEY }}
+          RENDERER_VITE_SUPABASE_URL: ${{ secrets.RENDERER_VITE_SUPABASE_URL }}
+          RENDERER_VITE_SUPABASE_ANON_KEY: ${{ secrets.RENDERER_VITE_SUPABASE_ANON_KEY }}
         run: envsubst < .env.example > .env
 
       - name: Use Node.js version from .nvmrc
