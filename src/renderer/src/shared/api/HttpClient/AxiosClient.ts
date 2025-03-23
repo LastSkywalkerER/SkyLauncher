@@ -28,7 +28,7 @@ export class AxiosClient implements IHttpClient {
       headers: headers as RawAxiosRequestHeaders
     })
 
-    return { body: response.data, statusCode: response.status }
+    return { body: response.data, statusCode: response?.status }
   }
 
   public setAuth({ token, type = 'Bearer' }): void {

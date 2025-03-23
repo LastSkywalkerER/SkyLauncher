@@ -31,7 +31,7 @@ export class ProcessProgress implements IProcessProgress {
 
       this._processes.next({ ...filteredPrevValues, [data.processName]: data })
 
-      if (data.status === 'finished') {
+      if (data?.status === 'finished') {
         await new Promise((resolve) =>
           setTimeout(() => resolve(this.filterFinishedProcesses()), 100)
         )

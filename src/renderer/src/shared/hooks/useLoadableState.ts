@@ -12,6 +12,31 @@ export interface LoadebleStateProps<T extends ILoadableState<K>, K> {
   error: Error | null
 }
 
+/**
+ * Custom React hook for working with a loadable state service that exposes reactive properties via RxJS observables.
+ * Automatically subscribes to the service's observable fields and returns their current values.
+ *
+ * @template T - The type of the loadable state service, extending `ILoadableState`.
+ * @template K - The type of the data held within the loadable state.
+ *
+ * @param {interfaces.ServiceIdentifier<T>} identifier - The InversifyJS service identifier used to resolve the loadable state instance.
+ *
+ * @returns {LoadebleStateProps<T, K>} An object containing:
+ * - `data`: The latest value emitted by the `data$` observable.
+ * - `isLoaded`: Whether the data has been successfully loaded.
+ * - `isLoading`: Whether the loading process is ongoing.
+ * - `error`: Any error encountered during the loading process.
+ * - `instance`: The resolved loadable state instance for calling its methods directly if needed.
+ *
+ * @example
+ * const { data, isLoaded, isLoading, error, instance } = useLoadableState(UserState);
+ *
+ * useEffect(() => {
+ *   if (!isLoaded && !isLoading) {
+ *     instance.loadUser(userId);
+ *   }
+ * }, [isLoaded, isLoading]);
+ */
 export const useLoadableState = <T extends ILoadableState<K>, K>(
   identifier: interfaces.ServiceIdentifier<T>
 ): LoadebleStateProps<T, K> => {

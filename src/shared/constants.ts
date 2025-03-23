@@ -18,6 +18,8 @@ export enum IPCHandleNames {
   LaunchGame = 'launch-game',
   InstallGame = 'install-game',
   UpdateGame = 'update-game',
+  RemoveFolder = 'remove-folder',
+  OpenFolder = 'open-folder',
   // CheckGame = 'check-game',
   GetLocalMCVersions = 'get-local-mc-versions',
   // GetCustomMCVersions = 'get-custom-mc-versions',

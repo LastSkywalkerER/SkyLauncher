@@ -15,5 +15,3 @@ export const environment = {
   dev: import.meta.env.DEV,
   prod: import.meta.env.PROD
 }
-
-console.log(environment)

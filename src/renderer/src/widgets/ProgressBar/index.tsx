@@ -15,11 +15,11 @@ export const ProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ className, ..
     const subscribtion = getProgress().subscribe((data) => {
       const notFinishedProcessed = Object.values(data)[0]
 
-      if (notFinishedProcessed.status === 'finished') {
+      if (notFinishedProcessed?.status === 'finished') {
         toast.current?.show({
           severity: 'info',
-          summary: notFinishedProcessed.status,
-          detail: `${notFinishedProcessed.processName} ${notFinishedProcessed.status}`
+          summary: notFinishedProcessed?.status,
+          detail: `${notFinishedProcessed.processName} ${notFinishedProcessed?.status}`
         })
       }
     })

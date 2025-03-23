@@ -9,7 +9,7 @@ import { JavaModule } from './libs/java/java.module'
 import { ProcessProgressModule } from './libs/process-progress/process-progress.module'
 import { UnzipModule } from './libs/unzip/unzip.module'
 import { XmclCoreModule } from './libs/xmcl-core/xmcl-core.module'
-import { DirScannerModule } from './modules/dir-scanner/dir-scanner.module'
+import { FilesystemModule } from './modules/filesystem/filesystem.module'
 import { InstallerModule } from './modules/installer/installer.module'
 import { LauncherModule } from './modules/launcher/launcher.module'
 import { MetadataModule } from './modules/metadata/metadata.module'
@@ -65,7 +65,7 @@ import { createWindow } from './utils/window/createWindow'
     MetadataModule,
     JavaModule,
     CqrsModule.forRoot(),
-    DirScannerModule,
+    FilesystemModule,
     UpdaterModule,
     CustomLoggerModule,
     XmclCoreModule

@@ -48,12 +48,12 @@ export const settingsList: SettingField[] = [
 
   {
     fieldName: 'modpacksPath',
-    type: 'string',
+    type: 'filePath',
     label: 'Modpacks Path'
   },
   {
     fieldName: 'javaPath',
-    type: 'string',
+    type: 'filePath',
     label: 'Java Path'
   },
 

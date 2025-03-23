@@ -3,13 +3,13 @@ import { Controller, Inject } from '@nestjs/common'
 
 import { IPCHandleNames } from '../../../shared/constants'
 import { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
-import { DirScannerService } from '../dir-scanner/dir-scanner.service'
+import { FilesystemService } from '../filesystem/filesystem.service'
 import { MetadataService } from '../metadata/metadata.service'
 
 @Controller()
 export class VersionsController {
   constructor(
-    @Inject(DirScannerService) private readonly dirScannerService: DirScannerService,
+    @Inject(FilesystemService) private readonly dirScannerService: FilesystemService,
     @Inject(MetadataService) private readonly metadataService: MetadataService
   ) {}
 
