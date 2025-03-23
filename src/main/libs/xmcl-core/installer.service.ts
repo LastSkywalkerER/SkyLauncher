@@ -156,8 +156,17 @@ export class InstallerService {
     return localTarget
   }
   public async installForge(target: MCGameVersion): Promise<MCGameVersion> {
+    this.logger.debug(
+      `Begin install forge with version ${target?.version}-${target?.modloader}-${target?.modloaderVersion} for ${target?.name}`
+    )
+
     const localTarget = target.update({})
+    this.logger.debug(
+      `Get local instance ${localTarget?.version}-${localTarget?.modloader}-${localTarget?.modloaderVersion}`
+    )
+
     const javaPath = this.hardwareService.getJavaExecutablePath(localTarget.java)
+    this.logger.debug(`Java path revealed ${javaPath}`)
 
     if (localTarget.modloader && !localTarget.modloaderVersion) {
       this.logger.log(
@@ -168,8 +177,21 @@ export class InstallerService {
         minecraft: localTarget.version,
         dispatcher: this._agent
       })
+      this.logger.debug(
+        `Found ${localTarget.modloader} versions for ${localTarget.version}:
+        ${response.versions.map(({ version, type }) => `${version}-${type}`).join(', ')}`
+      )
 
-      const newestRecommended = response.versions.find((item) => item.type === 'latest')
+      const newestRecommended = response.versions.find(
+        (item) => item.type === 'latest' || item.type === 'recommended'
+      )
+      this.logger.debug(
+        `Found newestRecommended: ${newestRecommended?.version}-${newestRecommended?.type}`
+      )
+
+      if (!newestRecommended) {
+        throw Error('Forge not found')
+      }
 
       localTarget.updateVersion({
         modloader: Modloader.Forge,
