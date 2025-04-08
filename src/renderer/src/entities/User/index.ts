@@ -114,7 +114,7 @@ export class User extends LoadableState<UserData> implements IUser {
       switchMap(([, oldData]) =>
         this._settings.setSettings({ userName }).pipe(
           tap(() => {
-            this.data$.next({ ...oldData, userName, icon: defaultIcon })
+            this.data$.next({ ...oldData, userName, icon: defaultIcon, isOffline: true })
           })
         )
       ),
@@ -133,6 +133,10 @@ export class User extends LoadableState<UserData> implements IUser {
 
   public async getMinecraftProfile(): Promise<void> {
     const oldData = this.data$.getValue()
+
+    if (oldData?.isOffline) {
+      return
+    }
 
     this.isLoaded$.next(false)
     this.isLoading$.next(true)

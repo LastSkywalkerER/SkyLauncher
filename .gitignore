@@ -10,3 +10,5 @@ test-scripts
 
 supabase/.branches
 supabase/.temp
+
+ui-templates

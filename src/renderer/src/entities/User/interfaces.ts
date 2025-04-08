@@ -10,6 +10,7 @@ export interface UserData {
   userName?: UserConfigData['userName']
   email?: string
   icon?: string
+  isOffline?: boolean
   // accessToken: string
 }
 
