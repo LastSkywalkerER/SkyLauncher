@@ -13,5 +13,6 @@ export const environment = {
   supabaseBaseUrl: import.meta.env.RENDERER_VITE_SUPABASE_URL,
   supabaseAnonKey: import.meta.env.RENDERER_VITE_SUPABASE_ANON_KEY,
   dev: import.meta.env.DEV,
-  prod: import.meta.env.PROD
+  prod: import.meta.env.PROD,
+  uiType: import.meta.env.RENDERER_VITE_UI_TYPE
 }

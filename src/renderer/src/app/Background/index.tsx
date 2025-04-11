@@ -7,7 +7,7 @@ import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import { PageLoading } from '../../shared/ui/Loading'
 
-export const Background: FC = () => {
+export const Background: FC<{ image?: string }> = ({ image }) => {
   const { getCurrentMCVersion } = useInjection(IVersions.$)
   const version = useObservable(getCurrentMCVersion(), null)
 
@@ -15,13 +15,15 @@ export const Background: FC = () => {
     <div className="h-screen">
       <img
         className={'absolute top-0 right-0 bottom-0 left-0 w-full h-full object-cover'}
-        src={version?.coverImage || background}
+        src={image || version?.coverImage || background}
         alt="splash"
       />
 
-      <Suspense fallback={<PageLoading />}>
-        <Outlet />
-      </Suspense>
+      <div className="relative h-full">
+        <Suspense fallback={<PageLoading />}>
+          <Outlet />
+        </Suspense>
+      </div>
     </div>
   )
 }
