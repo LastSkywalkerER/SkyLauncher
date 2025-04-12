@@ -3,13 +3,10 @@ name: Build and Release SkyLauncher
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+*'
-    branches:
-      - main
+      - 'SkyLauncher-[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   build-and-release:
-    if: github.ref == 'refs/heads/main' || (github.ref_type == 'tag' && contains(github.ref_name, '.'))
     uses: ./.github/workflows/build-template.yml
     with:
       build_command_mac: yarn build:mac
