@@ -3,7 +3,7 @@ import { Sidebar as PrimereactSidebar } from 'primereact/sidebar'
 import { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { routeLinks } from '../../app/routes/routeNames'
+import { routeLinks } from '../../app/routes/routes'
 
 export const Sidebar: FC = () => {
   const [visible, setVisible] = useState(true)

@@ -6,24 +6,6 @@ export enum RouteNames {
   CheckMinecraftProfile = '/check-minecraft-profile',
   Settings = '/settings',
   Logs = '/logs',
-  AvailableVersions = '/available-versions'
+  AvailableVersions = '/available-versions',
+  Auth = '/auth'
 }
-
-export const routeLinks = [
-  {
-    name: 'Home',
-    path: RouteNames.Home
-  },
-  {
-    name: 'Settings',
-    path: RouteNames.Settings
-  },
-  {
-    name: 'Logs',
-    path: RouteNames.Logs
-  },
-  {
-    name: 'AvailableVersions',
-    path: RouteNames.AvailableVersions
-  }
-]

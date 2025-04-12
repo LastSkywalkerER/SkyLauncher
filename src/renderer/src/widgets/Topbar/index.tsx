@@ -5,7 +5,7 @@ import { Ripple } from 'primereact/ripple'
 import { FC, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { routeLinks } from '../../app/routes/routeNames'
+import { routeLinks } from '../../app/routes/routes'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'

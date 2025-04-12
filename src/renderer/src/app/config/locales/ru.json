@@ -1,0 +1,37 @@
+{
+  "common": {
+    "settings": "Настройки",
+    "login": "Войти",
+    "register": "Регистрация",
+    "logout": "Выйти",
+    "email": "Email",
+    "password": "Пароль",
+    "username": "Имя пользователя",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успешно",
+    "signIn": "Войти с FreshCraft",
+    "signUp": "Регистрация",
+    "goBack": "Назад"
+  },
+  "settings": {
+    "javaPath": "Путь к Java",
+    "javaVersion": "Версия Java",
+    "minMemory": "Минимальная память (ГБ)",
+    "maxMemory": "Максимальная память (ГБ)",
+    "fullscreen": "Полный экран",
+    "modpacksPath": "Путь к модпакам"
+  },
+  "launcher": {
+    "play": "Играть",
+    "install": "Установить",
+    "update": "Обновить",
+    "version": "Версия",
+    "availableVersions": "Доступные версии",
+    "logs": "Логи"
+  }
+} 

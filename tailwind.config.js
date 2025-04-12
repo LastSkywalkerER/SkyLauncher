@@ -6,6 +6,18 @@ export default {
       fontFamily: {
         minecraft: ['Minecraft Ten', 'sans-serif']
       },
+      colors: {
+        primary: {
+          lighter: '#c084fc', // purple-400
+          light: '#a855f7', // purple-500
+          base: '#9333ea', // purple-600
+          dark: '#7e22ce', // purple-700
+          darker: '#6b21a8' // purple-800
+        },
+        secondary: {
+          contrast: '#FFFFFF'
+        }
+      },
       textColor: {
         DEFAULT: '#FFFFFF',
         main: '#FFFFFF'

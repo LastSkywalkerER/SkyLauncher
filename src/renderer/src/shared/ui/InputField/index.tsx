@@ -1,3 +1,4 @@
+import cx from 'classnames'
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputText, InputTextProps } from 'primereact/inputtext'
 import {
@@ -18,10 +19,10 @@ export interface InputFieldProps
   error?: string
 }
 
-export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, ...props }) => {
+export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, className, ...props }) => {
   return (
-    <FloatLabel>
-      <InputText id={label} {...props} invalid={!!error} />
+    <FloatLabel className={cx('flex flex-col', className)}>
+      <InputText className={'w-full h-full'} id={label} {...props} invalid={!!error} />
       <label htmlFor={label}>{label}</label>
       {error ?? <span className={'text-red-600'}>{error}</span>}
     </FloatLabel>
@@ -29,13 +30,13 @@ export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, ...prop
 }
 
 export const InputFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, InputFieldProps> = (
-  { label, error, ...props },
+  { label, error, className, ...props },
   ref
 ) => {
   return (
-    <div className={'flex flex-col'}>
-      <FloatLabel>
-        <InputText id={label} ref={ref} {...props} invalid={!!error} />
+    <div className={cx('flex flex-col', className)}>
+      <FloatLabel className={'w-full h-full'}>
+        <InputText className={'w-full h-full'} id={label} ref={ref} {...props} invalid={!!error} />
         <label htmlFor={label}>{label}</label>
       </FloatLabel>
       <span className={'text-red-600'}>{error}</span>

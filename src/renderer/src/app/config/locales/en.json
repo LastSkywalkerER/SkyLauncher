@@ -1,0 +1,49 @@
+{
+  "common": {
+    "settings": "Settings",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "username": "Username",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "success": "Success",
+    "goBack": "Back"
+  },
+  "errors": {
+    "error": "Error",
+    "required": "Field is required"
+  },
+  "settings": {
+    "javaPath": "Java Path",
+    "javaVersion": "Java Version",
+    "minMemory": "Min Memory (GB)",
+    "maxMemory": "Max Memory (GB)",
+    "fullscreen": "Fullscreen",
+    "modpacksPath": "Modpacks Path"
+  },
+  "launcher": {
+    "play": "Play",
+    "install": "Install",
+    "update": "Update",
+    "version": "Version",
+    "availableVersions": "Available Versions",
+    "logs": "Logs"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "signIn": "Sign in with FreshCraft",
+    "signUp": "Sign Up",
+    "haveAccount": "Have an account?",
+    "noAccount": "Don't have an account?",
+    "goOffline": "Go offline",
+    "offlineLogin": "Offline Login"
+  }
+}
