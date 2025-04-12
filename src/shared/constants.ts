@@ -1,6 +1,6 @@
 export const platform = process.platform
 export const arch = process.arch
-export const launcherName = 'sky-launcher'
+export const launcherName = 'skylauncher' // Same as package.json name
 export const tempExtension = '.temp'
 export const defaultModpackIcon =
   'https://ipfs.io/ipfs/QmbpHKyw9Fyos1Jhk5CsEFwM2uN14bYJ9W1SRWUktXpQQa'

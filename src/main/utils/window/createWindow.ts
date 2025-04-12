@@ -2,23 +2,8 @@ import { is } from '@electron-toolkit/utils'
 import { BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 
-// import iconLinux from '../../../../resources/icon.png?asset'
-// import iconWin from '../../../../resources/icon.ico?asset'
-// import iconMac from '../../../../resources/icon.icns?asset'
-
-// function UpsertKeyValue(obj, keyToChange, value) {
-//   const keyToChangeLower = keyToChange.toLowerCase()
-//   for (const key of Object.keys(obj)) {
-//     if (key.toLowerCase() === keyToChangeLower) {
-//       // Reassign old key
-//       obj[key] = value
-//       // Done
-//       return
-//     }
-//   }
-//   // Insert at end instead
-//   obj[keyToChange] = value
-// }
+import appIconFrescraft from '../../../../resources/FreshCraft/icon.png?asset'
+import appIcon from '../../../../resources/SkyLauncher/icon.png?asset'
 
 export const createWindow = (): BrowserWindow => {
   // Create the browser window.
@@ -26,12 +11,12 @@ export const createWindow = (): BrowserWindow => {
     width: 900,
     height: 670,
     show: false,
-    // autoHideMenuBar: true,
-    // ...(process.platform === 'linux'
-    //   ? { icon: iconLinux }
-    //   : process.platform === 'win32'
-    //     ? { icon: iconWin }
-    //     : { icon: iconMac }),
+
+    autoHideMenuBar: true,
+
+    icon: import.meta.env['VITE_UI_TYPE'] === 'FreshCraft' ? appIconFrescraft : appIcon,
+    title: import.meta.env['VITE_UI_TYPE'] || 'SkyLauncher',
+
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       // sandbox: false,
@@ -51,8 +36,8 @@ export const createWindow = (): BrowserWindow => {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(import.meta.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }

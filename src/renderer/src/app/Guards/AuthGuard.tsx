@@ -10,7 +10,7 @@ import { RouteNames } from '../routes/routeNames'
 export const AuthGuard: FC<{
   children: ReactElement | ReactElement[]
   fallbackRoute?: RouteNames
-}> = ({ children, fallbackRoute }) => {
+}> = ({ children, fallbackRoute = RouteNames.Login }) => {
   const { data, isLoading, isLoaded } = useLoadableState<IUser, UserData>(IUser.$)
   const { t } = useTranslation()
 
@@ -27,7 +27,7 @@ export const AuthGuard: FC<{
   }
 
   if (isLoaded && !data) {
-    return <Navigate to={fallbackRoute || RouteNames.Login} />
+    return <Navigate to={fallbackRoute} />
   }
 
   return <div>{t('common.error')}</div>

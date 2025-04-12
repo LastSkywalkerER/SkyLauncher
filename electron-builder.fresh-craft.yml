@@ -1,7 +1,7 @@
 appId: com.electron.skylauncher
-productName: SkyLauncher
+productName: FreshCraft
 directories:
-  buildResources: build/SkyLauncher
+  buildResources: build/FreshCraft
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -14,6 +14,8 @@ asarUnpack:
 artifactName: ${productName}-${version}-${arch}-${platform}.${ext}
 win:
   icon: resources/icon.ico
+  target:
+    - nsis
 nsis:
   installerHeaderIcon: icon.ico
   installerIcon: icon.ico

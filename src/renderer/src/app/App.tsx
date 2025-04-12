@@ -16,7 +16,7 @@ export const App: FC = () => {
   return (
     <Provider container={inversifyContainer}>
       <PrimeReactProvider>
-        <RouterProvider router={environment.uiType === 'fresh-craft' ? routesFreshCraft : routes} />
+        <RouterProvider router={environment.uiType === 'FreshCraft' ? routesFreshCraft : routes} />
         {/* <RouterProvider router={routesFreshCraft} /> */}
       </PrimeReactProvider>
     </Provider>
