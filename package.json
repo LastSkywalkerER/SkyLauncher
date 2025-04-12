@@ -16,10 +16,12 @@
     "dev": "electron-vite dev",
     "build": "yarn typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:unpack": "yarn build && electron-builder --dir --config electron-builder.fresh-craft.yml",
-    "build:win": "yarn build && electron-builder --win --x64 --config electron-builder.fresh-craft.yml",
-    "build:mac": "yarn build && electron-builder --mac --arm64 --config electron-builder.fresh-craft.yml",
-    "build:linux": "yarn build && electron-builder --linux --x64 --config electron-builder.fresh-craft.yml"
+    "build:unpack": "yarn build && electron-builder --dir",
+    "build:win": "yarn build && electron-builder --win --x64",
+    "build:mac": "yarn build && electron-builder --mac --arm64",
+    "build:linux": "yarn build && electron-builder --linux --x64",
+    "build:mac:freshcraft": "yarn build && electron-builder --mac --arm64  --config electron-builder.fresh-craft.yml",
+    "build:win:freshcraft": "yarn build && electron-builder --win --x64 --config electron-builder.fresh-craft.yml"
   },
   "dependencies": {
     "@doubleshot/nest-electron": "^0.2.5",

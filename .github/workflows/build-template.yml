@@ -1,0 +1,185 @@
+name: Build Template
+
+on:
+  workflow_call:
+    inputs:
+      build_command_mac:
+        required: true
+        type: string
+      build_command_win:
+        required: true
+        type: string
+      custom_env:
+        required: false
+        type: string
+        default: '{}'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check current working directory and list files
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Files in the working directory:"
+          ls -la
+
+      - name: Check .env.example content
+        run: |
+          echo ".env.example content:"
+          cat .env.example
+
+      - name: Generate .env file from .env.example
+        env:
+          MAIN_VITE_MINIO_ENDPOINT: ${{ secrets.MAIN_VITE_MINIO_ENDPOINT }}
+          MAIN_VITE_MINIO_PORT: ${{ secrets.MAIN_VITE_MINIO_PORT }}
+          MAIN_VITE_MINIO_USESSL: ${{ secrets.MAIN_VITE_MINIO_USESSL }}
+          MAIN_VITE_MINIO_ACCESSKEY: ${{ secrets.MAIN_VITE_MINIO_ACCESSKEY }}
+          MAIN_VITE_MINIO_SECRETKEY: ${{ secrets.MAIN_VITE_MINIO_SECRETKEY }}
+          MAIN_VITE_CURSEFORGE_APIKEY: ${{ secrets.MAIN_VITE_CURSEFORGE_APIKEY }}
+          MAIN_VITE_JAVA_BASE_URL: ${{ secrets.MAIN_VITE_JAVA_BASE_URL }}
+          RENDERER_VITE_BASE_URL: ${{ secrets.RENDERER_VITE_BASE_URL }}
+          RENDERER_VITE_IP: ${{ secrets.RENDERER_VITE_IP }}
+          RENDERER_VITE_WEB_URL: ${{ secrets.RENDERER_VITE_WEB_URL }}
+          RENDERER_VITE_TERMS_URL: ${{ secrets.RENDERER_VITE_TERMS_URL }}
+          RENDERER_VITE_XBOX_URL: ${{ secrets.RENDERER_VITE_XBOX_URL }}
+          RENDERER_VITE_ICON_URL: ${{ secrets.RENDERER_VITE_ICON_URL }}
+          RENDERER_VITE_COVER_URL: ${{ secrets.RENDERER_VITE_COVER_URL }}
+          RENDERER_VITE_CURSEFORGE_APIKEY: ${{ secrets.RENDERER_VITE_CURSEFORGE_APIKEY }}
+          RENDERER_VITE_SUPABASE_URL: ${{ secrets.RENDERER_VITE_SUPABASE_URL }}
+          RENDERER_VITE_SUPABASE_ANON_KEY: ${{ secrets.RENDERER_VITE_SUPABASE_ANON_KEY }}
+          VITE_UI_TYPE: ${{ fromJson(inputs.custom_env).VITE_UI_TYPE }}
+        run: envsubst < .env.example > .env
+
+      - name: Use Node.js version from .nvmrc
+        run: echo "NODE_VERSION=$(cat .nvmrc | sed 's/^v//')" >> $GITHUB_ENV
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install Wine on macOS
+        run: brew install --cask wine-stable
+
+      - name: Build the app for macOS
+        run: ${{ inputs.build_command_mac }}
+
+      - name: List files in dist after macOS build
+        run: |
+          echo "Files in dist after macOS build:"
+          ls -la dist
+
+      - name: Build the app for Windows
+        run: ${{ inputs.build_command_win }}
+
+      - name: List files in dist after Windows build
+        run: |
+          echo "Files in dist after Windows build:"
+          ls -la dist
+
+      - name: Upload macOS build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-dist
+          path: dist/*.dmg
+
+      - name: Upload Windows build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-dist
+          path: dist/*.exe
+
+  release:
+    needs: build
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Download macOS build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-dist
+          path: dist/macos
+
+      - name: Download Windows build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-dist
+          path: dist/windows
+
+      - name: Get commit messages since last tag
+        id: commit_logs
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1))
+          echo "Last tag: $LAST_TAG"
+          echo "Commits since last tag:"
+
+          if [ "$LAST_TAG" != "" ]; then
+            git log "$LAST_TAG"..HEAD --pretty=format:"- %s" > commit_messages.txt
+          else
+            git log --pretty=format:"- %s" > commit_messages.txt
+          fi
+
+          echo "commit_body<<EOF" >> $GITHUB_ENV
+          cat commit_messages.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: ${{ env.commit_body }}
+          draft: false
+          prerelease: false
+
+      - name: Find macOS build artifact
+        id: macos_artifact
+        run: |
+          macos_file=$(find . -name "*.dmg" | xargs -n 1 basename)
+          if [ -z "$macos_file" ]; then
+            echo "No macOS build artifact found."
+            exit 1
+          fi
+          echo "macos_file=${macos_file}" >> $GITHUB_ENV
+
+      - name: Find Windows build artifact
+        id: windows_artifact
+        run: |
+          windows_file=$(find . -name "*.exe" | xargs -n 1 basename)
+          if [ -z "$windows_file" ]; then
+            echo "No Windows build artifact found."
+            exit 1
+          fi
+          echo "windows_file=${windows_file}" >> $GITHUB_ENV
+
+      - name: Upload macOS build artifact using GitHub CLI
+        run: |
+          gh release upload "${{ github.ref_name }}" "dist/macos/${{ env.macos_file }}" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+      - name: Upload Windows build artifact using GitHub CLI
+        run: |
+          gh release upload "${{ github.ref_name }}" "dist/windows/${{ env.windows_file }}" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 

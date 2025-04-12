@@ -1,0 +1,20 @@
+name: Build and Release Electron App (Freshcraft)
+
+on:
+  push:
+    branches:
+      - freshcraft
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  build-and-release:
+    uses: ./.github/workflows/build-template.yml
+    with:
+      build_command_mac: yarn build:mac:freshcraft
+      build_command_win: yarn build:win:freshcraft
+      custom_env: |
+        {
+            "VITE_UI_TYPE": "FreshCraft"
+        }   
+    secrets: inherit 
