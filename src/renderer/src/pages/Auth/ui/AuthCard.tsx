@@ -12,10 +12,7 @@ export const AuthCard: FC<CardProps> = ({ className, ...props }) => {
         content: { className: 'w-full flex flex-col gap-4 items-center justify-center' }
       }}
       title={<SimpleTitle />}
-      className={cx(
-        'bg-[var(--surface-a)] pt-20 px-14 pb-5 shadow-md relative min-w-[500px]',
-        className
-      )}
+      className={cx('bg-common-base pt-20 px-14 pb-5 shadow-md relative min-w-[500px]', className)}
       {...props}
     />
   )

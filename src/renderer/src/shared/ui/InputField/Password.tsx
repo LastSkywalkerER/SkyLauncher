@@ -35,7 +35,7 @@ export const PasswordFieldComponent: FC<InputFieldProps> = ({
 }
 
 export const PasswordFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, InputFieldProps> = (
-  { label, error, className, ...props },
+  { label, error, className, value = '', ...props },
   ref
 ) => {
   return (
@@ -49,6 +49,7 @@ export const PasswordFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, I
           id={label}
           inputRef={ref}
           feedback={false}
+          value={value}
           {...props}
           invalid={!!error}
         />

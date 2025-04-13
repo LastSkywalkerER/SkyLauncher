@@ -30,13 +30,20 @@ export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, classNa
 }
 
 export const InputFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, InputFieldProps> = (
-  { label, error, className, ...props },
+  { label, error, className, value = '', ...props },
   ref
 ) => {
   return (
     <div className={cx('flex flex-col', className)}>
       <FloatLabel className={'w-full h-full'}>
-        <InputText className={'w-full h-full'} id={label} ref={ref} {...props} invalid={!!error} />
+        <InputText
+          className={'w-full h-full'}
+          id={label}
+          ref={ref}
+          value={value}
+          {...props}
+          invalid={!!error}
+        />
         <label htmlFor={label}>{label}</label>
       </FloatLabel>
       <span className={'text-red-600'}>{error}</span>

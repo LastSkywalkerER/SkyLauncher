@@ -1,6 +1,8 @@
 import { AuthLayout } from '@renderer/pages/Auth/Layout/ui/AuthLayout'
 import { HomeLayout } from '@renderer/pages/Home/Layout/HomeLayout'
 import { ErrorWidget } from '@renderer/widgets/Error'
+import { MCSidebar } from '@renderer/widgets/Sidebar/ui/MCSidebar'
+import { MCTopbar } from '@renderer/widgets/Topbar/ui/MCTopbar'
 import { lazy } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
@@ -19,7 +21,7 @@ export const routesFreshCraft = createBrowserRouter([
     errorElement: <ErrorWidget />,
     element: (
       <AuthGuard fallbackRoute={RouteNames.Auth}>
-        <HomeLayout />
+        <HomeLayout Sidebar={MCSidebar} Topbar={MCTopbar} />
       </AuthGuard>
     ),
     children: [

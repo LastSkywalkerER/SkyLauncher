@@ -7,6 +7,11 @@ export default {
         minecraft: ['Minecraft Ten', 'sans-serif']
       },
       colors: {
+        common: {
+          lighter: '#303030',
+          light: '#282828',
+          base: '#1e1e1e'
+        },
         primary: {
           lighter: '#c084fc', // purple-400
           light: '#a855f7', // purple-500

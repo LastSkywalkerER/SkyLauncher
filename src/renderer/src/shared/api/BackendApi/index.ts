@@ -47,26 +47,41 @@ export class BackendApi implements IBackendApi {
   }
 
   public async getProfile(): Promise<ProfileResponse> {
-    const { body } = await this._httpClient.request<ProfileResponse>({
-      url: 'v1/profile'
-    })
+    try {
+      const { body } = await this._httpClient.request<ProfileResponse>({
+        url: 'v1/profile'
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message,
+        { cause: error }
+      )
+    }
   }
 
   public async login({ email, password }: LoginData): Promise<LoginResponse> {
-    const { body } = await this._httpClient.request<LoginResponse>({
-      url: 'v1/auth/login',
-      method: 'POST',
-      body: { email, password }
-    })
+    try {
+      const { body } = await this._httpClient.request<LoginResponse>({
+        url: 'v1/auth/login',
+        method: 'POST',
+        body: { email, password }
+      })
 
-    this._httpClient.setAuth({
-      token: body.access_token,
-      type: capitalizeFirstLetter(body.token_type)
-    })
+      this._httpClient.setAuth({
+        token: body.access_token,
+        type: capitalizeFirstLetter(body.token_type)
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async logout(): Promise<unknown> {
@@ -77,20 +92,30 @@ export class BackendApi implements IBackendApi {
       })
 
       return body
-    } catch (e) {
-      throw e
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
     } finally {
       this._httpClient.removeAuth()
     }
   }
 
   public async refresh(): Promise<unknown> {
-    const { body } = await this._httpClient.request<unknown>({
-      url: 'v1/auth/refresh',
-      method: 'POST'
-    })
+    try {
+      const { body } = await this._httpClient.request<unknown>({
+        url: 'v1/auth/refresh',
+        method: 'POST'
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async register({
@@ -99,18 +124,25 @@ export class BackendApi implements IBackendApi {
     confirmPassword,
     terms
   }: RegisterData): Promise<LoginResponse> {
-    const { body } = await this._httpClient.request<LoginResponse>({
-      url: 'v1/auth/register',
-      method: 'POST',
-      body: { email, password, confirmPassword, terms }
-    })
+    try {
+      const { body } = await this._httpClient.request<LoginResponse>({
+        url: 'v1/auth/register',
+        method: 'POST',
+        body: { email, password, confirmPassword, terms }
+      })
 
-    this._httpClient.setAuth({
-      token: body.access_token,
-      type: capitalizeFirstLetter(body.token_type)
-    })
+      this._httpClient.setAuth({
+        token: body.access_token,
+        type: capitalizeFirstLetter(body.token_type)
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async getCustomMCVersions(): Promise<IMCGameVersion[]> {

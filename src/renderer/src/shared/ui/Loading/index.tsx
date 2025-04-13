@@ -7,7 +7,15 @@ export const Loading: FC<ProgressSpinnerProps> = (props) => {
 
 export const PageLoading: FC = () => {
   return (
-    <div className={'w-full h-full flex items-center justify-center'}>
+    <div className={'w-full h-агдд flex items-center justify-center'}>
+      <Loading />
+    </div>
+  )
+}
+
+export const LoadingOverlay: FC = () => {
+  return (
+    <div className="absolute z-100 top-0 left-0 right-0 bottom-0 w-full h-screen flex items-center justify-center bg-gray-800 bg-opacity-90">
       <Loading />
     </div>
   )

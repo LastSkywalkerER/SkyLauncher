@@ -1,8 +1,11 @@
+import { ErrorResponse } from '@renderer/shared/api/BackendApi/interfaces'
 import { inject, injectable } from 'inversify'
 import {
   catchError,
   finalize,
   from,
+  map,
+  merge,
   Observable,
   of,
   switchMap,
@@ -45,16 +48,50 @@ export class User extends LoadableState<UserData> implements IUser {
     this.getProfile = this.getProfile.bind(this)
     this.init = this.init.bind(this)
 
-    this.isLoaded$.next(true)
-    this.isLoading$.next(false)
-
     this.init().subscribe()
   }
 
-  public init(): Observable<[LauncherSettings | null, UserData | null]> {
+  public init(): Observable<[LauncherSettings | null, UserData | null, ProfileResponse | null]> {
+    this.isLoaded$.next(false)
+    this.isLoading$.next(true)
+
     return this._settings.getSettings().pipe(
       withLatestFrom(this.data$),
-      tap(([newValue, prevValue]) => {
+      switchMap(([newValue, prevValue]) =>
+        from(this._backendApi.getProfile()).pipe(
+          map(
+            (profile) =>
+              [newValue, prevValue, profile] as [
+                LauncherSettings | null,
+                UserData | null,
+                ProfileResponse | null
+              ]
+          ),
+          catchError((error) => {
+            if (error instanceof Error && (error.cause as ErrorResponse).status === 401) {
+              this.logout().subscribe()
+            }
+
+            return of([newValue, prevValue, null] as [
+              LauncherSettings | null,
+              UserData | null,
+              null
+            ])
+          })
+        )
+      ),
+      tap(([newValue, prevValue, profile]) => {
+        if (profile?.email?.value) {
+          this.data$.next({
+            ...prevValue,
+            email: profile.email.value,
+            userName: profile.minecraftProfile?.username,
+            role: profile.role
+          })
+
+          return
+        }
+
         if (newValue?.email) {
           this.data$.next({ ...prevValue, email: newValue?.email })
         }
@@ -62,6 +99,10 @@ export class User extends LoadableState<UserData> implements IUser {
         if (newValue?.userName && !newValue?.accessToken) {
           this.offlineLogin({ userName: newValue?.userName }).subscribe()
         }
+      }),
+      finalize(() => {
+        this.isLoaded$.next(true)
+        this.isLoading$.next(false)
       })
     )
   }
@@ -81,7 +122,18 @@ export class User extends LoadableState<UserData> implements IUser {
           tap(() => {
             this.data$.next({ email: data.email, icon: defaultIcon })
           }),
-          switchMap(() => of(response))
+          switchMap(() => from(this._backendApi.getProfile())),
+          tap((profile) => {
+            if (profile?.email?.value) {
+              this.data$.next({
+                ...this.data$.getValue(),
+                email: profile.email.value,
+                userName: profile.minecraftProfile?.username,
+                role: profile.role
+              })
+            }
+          }),
+          map(() => response)
         )
       ),
 
@@ -98,9 +150,35 @@ export class User extends LoadableState<UserData> implements IUser {
   }
 
   public logout(): Observable<unknown> {
-    this.data$.next(null)
+    this.isLoaded$.next(false)
+    this.isLoading$.next(true)
 
-    return from(this._settings.setDefaults()).pipe(switchMap(() => from(this._backendApi.logout())))
+    return merge(
+      of(null).pipe(
+        tap(() => this.data$.next(null)),
+        catchError((error) => {
+          this.error$.next(error as Error)
+          return of(null)
+        })
+      ),
+      from(this._settings.setDefaults()).pipe(
+        catchError((error) => {
+          this.error$.next(error as Error)
+          return of(null)
+        })
+      ),
+      from(this._backendApi.logout()).pipe(
+        catchError((error) => {
+          this.error$.next(error as Error)
+          return of(null)
+        })
+      )
+    ).pipe(
+      finalize(() => {
+        this.isLoaded$.next(true)
+        this.isLoading$.next(false)
+      })
+    )
   }
 
   public register(data: RegisterData): Observable<LoginResponse> {

@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios'
 import { interfaces } from 'inversify'
 
 import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.interface'
@@ -18,21 +19,25 @@ export interface RegisterData extends LoginData {
   terms: unknown
 }
 
-export interface ProfileResponse {
-  email: {
-    value: string
-    isConfirmed: boolean
-  }
-  role: {
-    name: string
-  }
-}
-
 export interface MinecraftProfileResponse {
   username: string
   uuid: string
   minecraft_access_token: string
   minecraft_access_expires_in: string
+}
+
+export interface ProfileResponse {
+  createdAt: string
+  email: {
+    value: string
+    isConfirmed: boolean
+  }
+  minecraftProfile?: {
+    createdAt: string
+    username: MinecraftProfileResponse['username']
+    uuid: MinecraftProfileResponse['uuid']
+  }
+  role: string
 }
 
 export interface IBackendApi {
@@ -45,14 +50,11 @@ export interface IBackendApi {
   getCustomMCVersions: () => Promise<IMCGameVersion[]>
 }
 
-export interface ErrorResponse {
-  response?: {
-    data?: {
-      error?: string
-      message?: string
-    }
-  }
-}
+export interface ErrorResponse
+  extends AxiosError<{
+    error?: string
+    message?: string
+  }> {}
 
 export namespace IBackendApi {
   export const $: interfaces.ServiceIdentifier<IBackendApi> = Symbol('IBackendApi')

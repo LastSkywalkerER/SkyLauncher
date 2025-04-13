@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import background from '../../../../../resources/images/splash_screen.png'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { PageLoading } from '../../shared/ui/Loading'
+import { LoadingOverlay } from '../../shared/ui/Loading'
 
 export const Background: FC<{ image?: string; children?: ReactElement | ReactElement[] }> = ({
   image,
@@ -23,7 +23,7 @@ export const Background: FC<{ image?: string; children?: ReactElement | ReactEle
       />
 
       <div className="relative h-full">
-        <Suspense fallback={<PageLoading />}>{children || <Outlet />}</Suspense>
+        <Suspense fallback={<LoadingOverlay />}>{children || <Outlet />}</Suspense>
       </div>
     </div>
   )
