@@ -29,6 +29,10 @@ export const createWindow = (): BrowserWindow => {
     mainWindow.show()
   })
 
+  mainWindow.on('page-title-updated', (event) => {
+    event.preventDefault()
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
