@@ -38,6 +38,13 @@ export const createWindow = (): BrowserWindow => {
     return { action: 'deny' }
   })
 
+  is.dev &&
+    mainWindow.webContents.openDevTools({
+      mode: 'detach',
+      activate: true,
+      title: 'DevTools'
+    })
+
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {

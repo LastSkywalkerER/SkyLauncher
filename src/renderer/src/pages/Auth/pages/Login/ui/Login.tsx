@@ -39,11 +39,11 @@ const Login: FC = () => {
   const onSubmit: SubmitHandler<LoginData> = (data) => executeLogin(data)
 
   if (isLoaded && !error) {
-    return <Navigate to={RouteNames.CheckMinecraftProfile} />
+    return <Navigate to={RouteNames.Home} />
   }
 
   if (isUserLoaded && userData?.userName) {
-    return <Navigate to={RouteNames.CheckMinecraftProfile} />
+    return <Navigate to={RouteNames.Home} />
   }
 
   return (
