@@ -22,5 +22,5 @@ const topMenuItems: MenuItem[] = [
 ]
 
 export const MCTopbar: FC = () => {
-  return <TabMenu model={topMenuItems} className="w-full h-20 bg-common-light" />
+  return <TabMenu model={topMenuItems} className="w-full h-20 bg-common-base" />
 }

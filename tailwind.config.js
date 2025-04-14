@@ -10,7 +10,9 @@ export default {
         common: {
           lighter: '#303030',
           light: '#282828',
-          base: '#1e1e1e'
+          base: '#1e1e1e',
+          dark: '#141414',
+          darker: '#0a0a0a'
         },
         primary: {
           lighter: '#c084fc', // purple-400
@@ -25,7 +27,8 @@ export default {
       },
       textColor: {
         DEFAULT: '#FFFFFF',
-        main: '#FFFFFF'
+        main: '#FFFFFF',
+        muted: '#9ca3af'
       },
       textShadow: {
         down: '0 2px 0 rgba(0, 0, 0, 0.5)'

@@ -16,7 +16,8 @@
     "success": "Успешно",
     "signIn": "Войти с FreshCraft",
     "signUp": "Регистрация",
-    "goBack": "Назад"
+    "goBack": "Назад",
+    "manageProfile": "Управление профилем"
   },
   "settings": {
     "javaPath": "Путь к Java",
