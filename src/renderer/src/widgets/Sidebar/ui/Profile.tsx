@@ -2,6 +2,7 @@ import { environment } from '@renderer/app/config/environments'
 import { UserData } from '@renderer/entities/User/interfaces'
 import { IUser } from '@renderer/entities/User/interfaces'
 import { useLoadableState } from '@renderer/shared/hooks/useLoadableState'
+import { useObservableRequest } from '@renderer/shared/hooks/useObservableRequest'
 import { ExternalLink } from '@renderer/shared/ui/ExternalLink'
 import { LoadingOverlay } from '@renderer/shared/ui/Loading'
 import { Avatar } from 'primereact/avatar'
@@ -12,7 +13,13 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const Profile: FC = () => {
-  const { data, isLoading, isLoaded } = useLoadableState<IUser, UserData>(IUser.$)
+  const {
+    data,
+    isLoading,
+    isLoaded,
+    instance: { logout }
+  } = useLoadableState<IUser, UserData>(IUser.$)
+  const { execute: executeLogout } = useObservableRequest(logout)
   const menu = useRef<Menu>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -22,15 +29,26 @@ export const Profile: FC = () => {
     {
       label: t('common.manageProfile'),
       template: (item) => (
-        <ExternalLink withoutEffects to={`${environment.websiteLink}/profile`} className="px-3">
+        <ExternalLink
+          withoutEffects
+          to={`${environment.websiteLink}/profile`}
+          className="px-3 text-muted hover:text-primary-light"
+        >
           {item.label}
         </ExternalLink>
       )
     },
     {
+      separator: true,
+      className: 'mx-2 border-t-2 border-common-lighter mx-auto'
+    },
+    {
       label: t('common.logout'),
       template: (item) => (
-        <div className="cursor-pointer flex items-center gap-2 text-main transition-colors duration-200 hover:bg-white/20 px-3 py-1">
+        <div
+          onClick={executeLogout}
+          className="cursor-pointer flex items-center gap-2transition-colors duration-200 hover:bg-white/10 hover:text-primary-base px-3 py-1"
+        >
           {item.label}
         </div>
       )
@@ -81,10 +99,15 @@ export const Profile: FC = () => {
   return (
     <div
       ref={containerRef}
-      className="flex items-center gap-3 p-3 cursor-pointer hover:bg-common-light transition-colors relative group border-t-2 border-r-4 border-b-2 border-l border-t-common-lighter border-r-common-darker border-b-common-darker border-l-common-lighter"
+      className="flex items-center gap-3 p-3 cursor-pointer hover:bg-common-light transition-colors relative group cube-border"
       onClick={handleClick}
     >
-      <Menu model={items} popup ref={menu} />
+      <Menu
+        model={items}
+        popup
+        ref={menu}
+        className="border-2 border-white border-solid rounded-none font-bold text-muted"
+      />
       <Avatar
         // image="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
         label={data?.email?.slice(0, 1)}
@@ -92,11 +115,11 @@ export const Profile: FC = () => {
         shape="circle"
       />
       <div className="flex-1">
-        <div className="font-semibold text-white">{data?.email}</div>
+        <div className="font-semibold text-main">{data?.email}</div>
         <div className="text-sm text-muted">{data?.role}</div>
       </div>
       <i
-        className={`pi ${isMenuOpen ? 'pi-chevron-up' : 'pi-chevron-down'} text-muted absolute right-2 top-2 -translate-y-1/2 transition-transform duration-200 group-hover:translate-y-[calc(50%-12px)]`}
+        className={`pi ${isMenuOpen ? 'pi-chevron-up' : 'pi-chevron-down'} text-muted absolute right-1 top-3 -translate-y-1/2 transition-transform duration-200 group-hover:translate-y-[calc(50%-12px)]`}
       />
     </div>
   )

@@ -18,6 +18,7 @@ export const createWindow = (): BrowserWindow => {
     title: import.meta.env['VITE_UI_TYPE'] || 'SkyLauncher',
 
     webPreferences: {
+      webviewTag: true,
       preload: join(__dirname, '../preload/index.js'),
       // sandbox: false,
       nodeIntegration: true,

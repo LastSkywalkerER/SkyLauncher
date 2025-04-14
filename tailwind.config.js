@@ -8,7 +8,7 @@ export default {
       },
       colors: {
         common: {
-          lighter: '#303030',
+          lighter: '#414141',
           light: '#282828',
           base: '#1e1e1e',
           dark: '#141414',
@@ -28,7 +28,7 @@ export default {
       textColor: {
         DEFAULT: '#FFFFFF',
         main: '#FFFFFF',
-        muted: '#9ca3af'
+        muted: '#bababa'
       },
       textShadow: {
         down: '0 2px 0 rgba(0, 0, 0, 0.5)'
@@ -38,5 +38,31 @@ export default {
       }
     }
   },
-  plugins: [require('tailwindcss-textshadow')]
+  plugins: [
+    require('tailwindcss-textshadow'),
+    function ({ addComponents }) {
+      addComponents({
+        '.cube-border': {
+          borderTopWidth: '2px',
+          borderRightWidth: '4px',
+          borderBottomWidth: '2px',
+          borderLeftWidth: '1px',
+          borderTopColor: '#303030', // common-lighter
+          borderRightColor: '#0a0a0a', // common-darker
+          borderBottomColor: '#0a0a0a', // common-darker
+          borderLeftColor: '#303030' // common-lighter
+        },
+        '.active-cube-border': {
+          borderTopWidth: '2px',
+          borderRightWidth: '4px',
+          borderBottomWidth: '2px',
+          borderLeftWidth: '1px',
+          borderTopColor: '#0a0a0a', // common-darker
+          borderRightColor: '#303030', // common-lighter
+          borderBottomColor: '#303030', // common-lighter
+          borderLeftColor: '#0a0a0a' // common-darker
+        }
+      })
+    }
+  ]
 }

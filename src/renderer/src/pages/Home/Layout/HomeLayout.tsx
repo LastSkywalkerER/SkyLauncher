@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 export const HomeLayout: FC<{ Sidebar: FC; Topbar: FC }> = ({ Sidebar, Topbar }) => {
   return (
     <div className="flex h-screen">
-      <div className="w-64 h-full">
+      <div className="w-64 h-full overflow-y-auto">
         <Sidebar />
       </div>
 
