@@ -44,8 +44,8 @@ export default {
       addComponents({
         '.cube-border': {
           borderTopWidth: '2px',
-          borderRightWidth: '4px',
-          borderBottomWidth: '2px',
+          borderRightWidth: '2px',
+          borderBottomWidth: '1px',
           borderLeftWidth: '1px',
           borderTopColor: '#303030', // common-lighter
           borderRightColor: '#0a0a0a', // common-darker
@@ -54,8 +54,8 @@ export default {
         },
         '.active-cube-border': {
           borderTopWidth: '2px',
-          borderRightWidth: '4px',
-          borderBottomWidth: '2px',
+          borderRightWidth: '2px',
+          borderBottomWidth: '1px',
           borderLeftWidth: '1px',
           borderTopColor: '#0a0a0a', // common-darker
           borderRightColor: '#303030', // common-lighter

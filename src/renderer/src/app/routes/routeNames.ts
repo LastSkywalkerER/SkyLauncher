@@ -7,5 +7,6 @@ export enum RouteNames {
   Settings = '/settings',
   Logs = '/logs',
   AvailableVersions = '/available-versions',
-  Auth = '/auth'
+  Auth = '/auth',
+  Modpack = '/modpack'
 }
