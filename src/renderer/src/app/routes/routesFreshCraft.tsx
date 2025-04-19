@@ -1,5 +1,6 @@
 import { AuthLayout } from '@renderer/pages/Auth/Layout/ui/AuthLayout'
 import { HomeLayout } from '@renderer/pages/Home/Layout/HomeLayout'
+import { ModpackLayout } from '@renderer/pages/Modpack/layout/modpack.layout'
 import { ErrorWidget } from '@renderer/widgets/Error'
 import { MCSidebar } from '@renderer/widgets/Sidebar/ui/MCSidebar'
 import { MCTopbar } from '@renderer/widgets/Topbar/ui/MCTopbar'
@@ -21,7 +22,7 @@ export const routesFreshCraft = createBrowserRouter([
     errorElement: <ErrorWidget />,
     element: (
       <AuthGuard fallbackRoute={RouteNames.Auth}>
-        <HomeLayout Sidebar={MCSidebar} Topbar={MCTopbar} />
+        <HomeLayout Sidebar={MCSidebar} />
       </AuthGuard>
     ),
     children: [
@@ -29,6 +30,20 @@ export const routesFreshCraft = createBrowserRouter([
         index: true,
         path: RouteNames.Home,
         element: <HomePage />
+      },
+      {
+        path: RouteNames.Modpack,
+        element: <ModpackLayout Topbar={MCTopbar} />,
+        children: [
+          {
+            path: RouteNames.Modpack + '/:modpackId',
+            element: <div>Modpack</div>
+          }
+        ]
+      },
+      {
+        path: RouteNames.Settings,
+        element: <div>Settings</div>
       }
     ]
   },

@@ -1,7 +1,7 @@
 import { Menu } from 'primereact/menu'
 import { FC } from 'react'
 
-import { useMenuItems } from '../hooks/menu-tems.hook'
+import { useMenuItems } from '../hooks/menu-items.hook'
 
 export const MCSidebar: FC = () => {
   const { topMenuItems, scrollableMenuItems, bottomMenuItems } = useMenuItems()

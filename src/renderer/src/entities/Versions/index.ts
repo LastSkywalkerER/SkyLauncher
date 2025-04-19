@@ -43,40 +43,43 @@ export class Versions implements IVersions {
     this.checkLocalMCVersions()
   }
 
-  public async getCurseForgeModpacks(
+  public getCurseForgeModpacks(
     searchOptions: SearchOptions = {
       searchFilter: 'freshcraft',
       classId: 4471,
-      pageSize: 2
-      // modLoaderType: FileModLoaderType.Forge
-      // modLoaderTypes: ['forge', 'fabric']
+      pageSize: 3,
+      sortField: 5
     }
-  ): Promise<IMCGameVersion[]> {
+  ): Observable<IMCGameVersion[]> {
     const api = new CurseforgeV1Client(environment.curseForgeApiKey)
-    const result = await api.searchMods(searchOptions)
+    return from(api.searchMods(searchOptions)).pipe(
+      map((result) => {
+        return result.data.map((data) => {
+          const mainFile = data.latestFiles.find((file) => file.id === data.mainFileId)
+          const mainVersion = mainFile?.gameVersions.find(
+            (string) => string.split('.').length === 3
+          )
+          const mainModloader = mainFile?.gameVersions
+            .find((string) => modloaderList.includes(string.toLowerCase() as Modloader))
+            ?.toLowerCase() as Modloader
 
-    return result.data.map((data) => {
-      const mainFile = data.latestFiles.find((file) => file.id === data.mainFileId)
-      const mainVersion = mainFile?.gameVersions.find((string) => string.split('.').length === 3)
-      const mainModloader = mainFile?.gameVersions
-        .find((string) => modloaderList.includes(string.toLowerCase() as Modloader))
-        ?.toLowerCase() as Modloader
-
-      return new MCGameVersion({
-        name: mainFile?.fileName.replace('.zip', ''),
-        icon: data.logo.url,
-        coverImage: data.screenshots[0]?.url,
-        downloadUrl:
-          mainFile?.downloadUrl || (mainFile?.fileName && mainFile?.id)
-            ? getCurseForgeLinks({ fileID: mainFile.id!, fileName: mainFile.fileName! })[0]
-            : '',
-        version: mainVersion!,
-        modloader: mainModloader,
-        description: data.summary,
-        title: data.name,
-        modpackProvider: ModpackProvider.CurseFroge
-      }).getData()
-    })
+          return new MCGameVersion({
+            name: mainFile?.fileName.replace('.zip', ''),
+            icon: data.logo.url,
+            coverImage: data.screenshots[0]?.url,
+            downloadUrl:
+              mainFile?.downloadUrl || (mainFile?.fileName && mainFile?.id)
+                ? getCurseForgeLinks({ fileID: mainFile.id!, fileName: mainFile.fileName! })[0]
+                : '',
+            version: mainVersion!,
+            modloader: mainModloader,
+            description: data.summary,
+            title: data.name,
+            modpackProvider: ModpackProvider.CurseFroge
+          }).getData()
+        })
+      })
+    )
   }
 
   public getCustomMCVersions(): Observable<IMCLocalGameVersion[]> {

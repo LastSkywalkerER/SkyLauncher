@@ -13,6 +13,7 @@ export interface IVersions {
   getLocalMCVersions(): Observable<IMCGameVersion[]>
   getCurrentMCVersion(): Observable<IMCGameVersion | null>
   setCurrentMCVersion(version: IMCGameVersion): void
+  getCurseForgeModpacks(): Observable<IMCGameVersion[]>
 
   installGame(version: IMCGameVersion): Observable<IMCGameVersion>
   updateGame(version: IMCGameVersion): Observable<IMCGameVersion>

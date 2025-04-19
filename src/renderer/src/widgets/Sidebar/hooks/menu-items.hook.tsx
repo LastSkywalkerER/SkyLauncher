@@ -1,9 +1,14 @@
+import { environment } from '@renderer/app/config/environments'
+import { useInjection } from 'inversify-react'
+import { Avatar } from 'primereact/avatar'
 import { MenuItem } from 'primereact/menuitem'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { RouteNames } from '../../../app/routes/routeNames'
-import { MenuItemTemplate } from './ui/MenuItemTemplate'
+import { IVersions } from '../../../entities/Versions/interfaces'
+import { useObservable } from '../../../shared/hooks/useObservable'
+import { createMenuItem } from './create-munu-items'
 import { Profile } from './ui/Profile'
 
 interface MenuItemsReturn {
@@ -13,40 +18,10 @@ interface MenuItemsReturn {
   activeItemId: string
 }
 
-interface ServerItem {
-  id: string
-  icon: string
-  title: string
-  subtitle: string
-}
-
-const createMenuItem = (
-  item: ServerItem,
-  activeItemId: string,
-  handleItemClick: (id: string) => void
-): MenuItem => ({
-  id: item.id,
-  icon: item.icon,
-  data: {
-    title: item.title,
-    subtitle: item.subtitle,
-    active: activeItemId === item.id
-  },
-  command: () => handleItemClick(item.id),
-  template: (item, options) => (
-    <MenuItemTemplate
-      icon={item.icon}
-      label={item.label}
-      title={item.data?.title}
-      subtitle={item.data?.subtitle}
-      className={item.className}
-      active={item.data?.active}
-      onClick={options.onClick}
-    />
-  )
-})
-
 export const useMenuItems = (): MenuItemsReturn => {
+  const { getCustomMCVersions, getCurseForgeModpacks } = useInjection(IVersions.$)
+  const versions = useObservable(getCustomMCVersions(), [])
+  const curseForgeModpacks = useObservable(getCurseForgeModpacks(), [])
   const [activeItemId, setActiveItemId] = useState<string>('home')
   const navigate = useNavigate()
 
@@ -79,43 +54,21 @@ export const useMenuItems = (): MenuItemsReturn => {
     )
   ]
 
-  const premiumModpacks = [
-    {
-      type: 'vanilla',
-      icon: 'pi pi-fw pi-box',
-      title: 'FreshCraft'
-    },
-    {
-      type: 'fantasy',
-      icon: 'pi pi-fw pi-bolt',
-      title: 'FreshCraft'
-    },
-    {
-      type: 'industrial',
-      icon: 'pi pi-fw pi-sitemap',
-      title: 'FreshCraft'
-    }
-  ]
+  const premiumModpacks = versions
+    .filter((version) => version.modpackProvider === environment.uiType)
+    .map((version) => ({
+      type: version.name,
+      icon: <Avatar image={version.icon} shape="square" size="normal" />,
+      title: version.title || version.fullVersion
+    }))
 
-  const freeModpacks = [
-    {
-      type: 'vanilla',
-      icon: 'pi pi-fw pi-th-large',
-      title: 'FreshCraft'
-    },
-    {
-      type: 'fantasy',
-      icon: 'pi pi-fw pi-palette',
-      title: 'FreshCraft'
-    },
-    {
-      type: 'industrial',
-      icon: 'pi pi-fw pi-sliders-h',
-      title: 'FreshCraft'
-    }
-  ]
+  const freeModpacks = curseForgeModpacks.map((version) => ({
+    type: version.name,
+    icon: <Avatar image={version.icon} shape="square" size="normal" />,
+    title: version.title || version.fullVersion
+  }))
 
-  const serverCategories = [
+  const modpackCategories = [
     {
       label: 'Premium',
       className: 'text-yellow-500 cube-border',
@@ -131,7 +84,7 @@ export const useMenuItems = (): MenuItemsReturn => {
   ]
 
   // Scrollable items
-  const scrollableMenuItems: MenuItem[] = serverCategories.map((category) => ({
+  const scrollableMenuItems: MenuItem[] = modpackCategories.map((category) => ({
     label: category.label,
     className: category.className,
     items: category.modpacks.map((modpack) =>
