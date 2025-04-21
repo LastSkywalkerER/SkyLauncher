@@ -8,5 +8,9 @@ export enum RouteNames {
   Logs = '/logs',
   AvailableVersions = '/available-versions',
   Auth = '/auth',
-  Modpack = '/modpack'
+  Modpack = '/modpack',
+  ModpackPlay = '/modpack/:modpackId/play',
+  ModpackSettings = '/modpack/:modpackId/settings',
+  ModpackSkins = '/modpack/:modpackId/skins',
+  ModpackServers = '/modpack/:modpackId/servers'
 }

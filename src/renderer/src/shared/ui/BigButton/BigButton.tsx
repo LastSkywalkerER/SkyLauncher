@@ -8,7 +8,7 @@ export const BigButton: FC<ButtonProps> = ({ className, loading, disabled, ...pr
   return (
     <Button
       {...props}
-      className={cx('bg-transparent p-[5px] pb-2 relative group', className)}
+      className={cx('bg-transparent p-[5px] pb-2 relative group w-min h-min', className)}
       text
       disabled={loading || disabled}
     >

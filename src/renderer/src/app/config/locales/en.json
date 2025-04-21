@@ -16,6 +16,11 @@
     "goBack": "Back",
     "manageProfile": "Manage Profile"
   },
+  "menu": {
+    "home": "Home",
+    "premium": "Premium",
+    "free": "Free"
+  },
   "errors": {
     "error": "Error",
     "required": "Field is required"
@@ -34,7 +39,8 @@
     "update": "Update",
     "version": "Version",
     "availableVersions": "Available Versions",
-    "logs": "Logs"
+    "logs": "Logs",
+    "buy": "Buy"
   },
   "auth": {
     "login": "Login",
@@ -46,5 +52,11 @@
     "noAccount": "Don't have an account?",
     "goOffline": "Go offline",
     "offlineLogin": "Offline Login"
+  },
+  "topbar": {
+    "play": "Play",
+    "settings": "Settings",
+    "skins": "Skins",
+    "servers": "Servers"
   }
 }

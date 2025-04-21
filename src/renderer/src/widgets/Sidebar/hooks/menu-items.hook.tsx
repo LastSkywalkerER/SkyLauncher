@@ -2,8 +2,9 @@ import { environment } from '@renderer/app/config/environments'
 import { useInjection } from 'inversify-react'
 import { Avatar } from 'primereact/avatar'
 import { MenuItem } from 'primereact/menuitem'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { startTransition } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { RouteNames } from '../../../app/routes/routeNames'
 import { IVersions } from '../../../entities/Versions/interfaces'
@@ -19,23 +20,58 @@ interface MenuItemsReturn {
 }
 
 export const useMenuItems = (): MenuItemsReturn => {
-  const { getCustomMCVersions, getCurseForgeModpacks } = useInjection(IVersions.$)
+  const { getCustomMCVersions, getCurseForgeModpacks, setCurrentMCVersion } = useInjection(
+    IVersions.$
+  )
+  const { t } = useTranslation()
   const versions = useObservable(getCustomMCVersions(), [])
   const curseForgeModpacks = useObservable(getCurseForgeModpacks(), [])
-  const [activeItemId, setActiveItemId] = useState<string>('home')
+  const location = useLocation()
   const navigate = useNavigate()
+  const { modpackId } = useParams()
+
+  const getActiveItemId = (): string => {
+    const path = location.pathname
+    if (path === RouteNames.Home) return 'home'
+    if (path === RouteNames.Settings) return 'settings'
+    if (modpackId) return modpackId
+
+    return 'home'
+  }
 
   const handleItemClick = (itemId: string): void => {
-    setActiveItemId(itemId)
-
     if (itemId === 'home') {
-      navigate(RouteNames.Home)
+      startTransition(() => {
+        navigate(RouteNames.Home)
+      })
     } else if (itemId === 'settings') {
-      navigate(RouteNames.Settings)
+      startTransition(() => {
+        navigate(RouteNames.Settings)
+      })
     } else {
-      navigate(`${RouteNames.Modpack}/${itemId}`)
+      // Extract modpackProvider and index from itemId (format: "modpackProvider-index")
+      const [modpackProvider, indexStr] = itemId.split('-')
+      const index = parseInt(indexStr, 10)
+
+      // Find the version in either premium or free modpacks based on the index
+      const version =
+        modpackProvider === environment.uiType ? versions[index] : curseForgeModpacks[index]
+
+      if (version) {
+        setCurrentMCVersion(version)
+      }
+
+      startTransition(() => {
+        navigate(RouteNames.ModpackPlay.replace(':modpackId', itemId || ''))
+      })
     }
   }
+
+  const activeItemId = getActiveItemId()
+
+  console.log({
+    activeItemId
+  })
 
   // Top fixed items
   const topMenuItems: MenuItem[] = [
@@ -46,7 +82,7 @@ export const useMenuItems = (): MenuItemsReturn => {
       {
         id: 'home',
         icon: 'pi pi-fw pi-home text-2xl',
-        title: 'Home',
+        title: t('menu.home'),
         subtitle: ''
       },
       activeItemId,
@@ -56,27 +92,29 @@ export const useMenuItems = (): MenuItemsReturn => {
 
   const premiumModpacks = versions
     .filter((version) => version.modpackProvider === environment.uiType)
-    .map((version) => ({
+    .map((version, index) => ({
       type: version.name,
       icon: <Avatar image={version.icon} shape="square" size="normal" />,
-      title: version.title || version.fullVersion
+      title: version.title || version.fullVersion,
+      id: `${version.modpackProvider}-${index}`
     }))
 
-  const freeModpacks = curseForgeModpacks.map((version) => ({
+  const freeModpacks = curseForgeModpacks.map((version, index) => ({
     type: version.name,
     icon: <Avatar image={version.icon} shape="square" size="normal" />,
-    title: version.title || version.fullVersion
+    title: version.title || version.fullVersion,
+    id: `${version.modpackProvider}-${index}`
   }))
 
   const modpackCategories = [
     {
-      label: 'Premium',
+      label: t('menu.premium'),
       className: 'text-yellow-500 cube-border',
       icon: 'pi pi-fw pi-home',
       modpacks: premiumModpacks
     },
     {
-      label: 'Free',
+      label: t('menu.free'),
       className: 'text-blue-400 cube-border',
       icon: 'pi pi-fw pi-list',
       modpacks: freeModpacks
@@ -90,7 +128,7 @@ export const useMenuItems = (): MenuItemsReturn => {
     items: category.modpacks.map((modpack) =>
       createMenuItem(
         {
-          id: `${category.label.toLowerCase()}-${modpack.type}`,
+          id: modpack.id,
           icon: modpack.icon,
           title: modpack.title,
           subtitle: modpack.type.charAt(0).toUpperCase() + modpack.type.slice(1)
@@ -106,8 +144,8 @@ export const useMenuItems = (): MenuItemsReturn => {
     createMenuItem(
       {
         id: 'settings',
-        icon: 'pi pi-fw pi-cog text-2xl',
-        title: 'Settings',
+        icon: 'pi pi-fw pi-sliders-h text-2xl',
+        title: t('common.settings'),
         subtitle: ''
       },
       activeItemId,

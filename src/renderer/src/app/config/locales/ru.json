@@ -19,6 +19,11 @@
     "goBack": "Назад",
     "manageProfile": "Управление профилем"
   },
+  "menu": {
+    "home": "Главная",
+    "premium": "Премиум",
+    "free": "Бесплатные"
+  },
   "settings": {
     "javaPath": "Путь к Java",
     "javaVersion": "Версия Java",
@@ -33,6 +38,13 @@
     "update": "Обновить",
     "version": "Версия",
     "availableVersions": "Доступные версии",
-    "logs": "Логи"
+    "logs": "Логи",
+    "buy": "Купить"
+  },
+  "topbar": {
+    "play": "Играть",
+    "settings": "Настройки",
+    "skins": "Скины",
+    "servers": "Серверы"
   }
 } 
