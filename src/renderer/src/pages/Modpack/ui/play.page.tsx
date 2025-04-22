@@ -1,8 +1,10 @@
 import { IUser, UserData } from '@renderer/entities/User/interfaces'
 import { IVersions } from '@renderer/entities/Versions/interfaces'
+import { OpenButton } from '@renderer/features/OpenFolder/ui'
+import { RemoveButton } from '@renderer/features/RemoveFolder/ui'
 import { useLoadableState } from '@renderer/shared/hooks/useLoadableState'
 import { useObservable } from '@renderer/shared/hooks/useObservable'
-import { ModpackControls } from '@renderer/widgets/ModpackControls/ui/modpack-controls.ui'
+import { ControlsSwitcher } from '@renderer/widgets/LaucnherControls/ui/control-switcher.ui'
 import { useInjection } from 'inversify-react'
 import { Avatar } from 'primereact/avatar'
 import { FC } from 'react'
@@ -27,6 +29,10 @@ const PlayPage: FC = () => {
           alt={currentVersion?.name}
           className="w-full h-full object-cover"
         />
+        <div className="absolute top-0 right-0">
+          {currentVersion?.folder && <OpenButton path={currentVersion?.folder} />}
+          {currentVersion?.folder && <RemoveButton path={currentVersion?.folder} />}
+        </div>
       </div>
       <div className="flex justify-between items-center h-20 px-4 bg-common-base">
         <div className="flex items-center gap-4">
@@ -37,7 +43,7 @@ const PlayPage: FC = () => {
           </div>
         </div>
 
-        <ModpackControls className="text-sm relative -top-1/3" />
+        <ControlsSwitcher className="text-sm relative -top-1/3" />
 
         <div>{userData?.userName}</div>
       </div>

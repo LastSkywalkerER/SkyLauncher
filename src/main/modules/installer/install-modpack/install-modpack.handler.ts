@@ -1,6 +1,6 @@
-import { existsSync } from 'node:fs'
+import { existsSync, rm } from 'node:fs'
 
-import { Inject } from '@nestjs/common'
+import { Inject, Logger } from '@nestjs/common'
 import { CommandHandler } from '@nestjs/cqrs'
 import { join } from 'path'
 
@@ -20,6 +20,8 @@ import { InstallModpackCommand } from './install-modpack.command'
 
 @CommandHandler(InstallModpackCommand)
 export class InstallModpackHandler extends InstallHandlerBase {
+  private readonly logger = new Logger(InstallModpackHandler.name)
+
   constructor(
     @Inject(UserConfigService) private readonly userConfigService: UserConfigService,
     @Inject(IDownloaderServiceToken) private readonly downloaderService: IDownloaderService,
@@ -47,54 +49,68 @@ export class InstallModpackHandler extends InstallHandlerBase {
     //   localTarget.update({ folder: installPath })
     // }
 
-    if (!(await this.javaService.isJavaExecutableExists(localTarget.java))) {
-      await this.javaService.install(localTarget.java)
+    try {
+      if (!(await this.javaService.isJavaExecutableExists(localTarget.java))) {
+        await this.javaService.install(localTarget.java)
+      }
+
+      if (!existsSync(installPath)) {
+        const downloadResponse = await this.downloaderService.download({
+          fileName: `${localTarget.name}.zip`,
+          outputDirectory: installPath,
+          fileUrl: localTarget.downloadUrl
+        })
+
+        this.logger.log({ downloadResponse })
+
+        const unzipResponse = await this.unzipService.execute({
+          inputPath: downloadResponse.filePath,
+          outputPath: installPath
+        })
+
+        this.logger.log({ unzipResponse })
+
+        // Extract .minecraft, if exists
+        const folderWithoutDotMinecraft = await removeNestedDirectories(
+          unzipResponse.filePath,
+          MCGameVersion.defaultMinecraftPath
+        )
+        this.logger.log({ folderWithoutDotMinecraft })
+        // Extract duplicated nested folder, if exists
+        const folderWithoutNest = await removeNestedDirectories(
+          folderWithoutDotMinecraft,
+          localTarget.name
+        )
+
+        this.logger.log({ folderWithoutNest })
+
+        localTarget.update({ folder: folderWithoutNest })
+      } else {
+        localTarget.update({ folder: installPath })
+      }
+
+      if (!localTarget.folder) {
+        throw Error(`Problem with file path for ${localTarget.name}`)
+      }
+
+      localTarget.update(await this.installerService.install(localTarget))
+      localTarget.update(await this.installerService.installModloader(localTarget))
+
+      await this.metadataService.safe(localTarget)
+
+      return localTarget
+    } catch (error) {
+      this.logger.error(error)
+
+      if (existsSync(installPath)) {
+        rm(installPath, { recursive: true, force: true }, (err) => {
+          if (err) {
+            this.logger.error(`Failed to delete ${installPath}: ${err}`)
+          }
+        })
+      }
+
+      throw error
     }
-
-    if (!existsSync(installPath)) {
-      const downloadResponse = await this.downloaderService.download({
-        fileName: `${localTarget.name}.zip`,
-        outputDirectory: installPath,
-        fileUrl: localTarget.downloadUrl
-      })
-
-      console.log({ downloadResponse })
-
-      const unzipResponse = await this.unzipService.execute({
-        inputPath: downloadResponse.filePath,
-        outputPath: installPath
-      })
-
-      console.log({ unzipResponse })
-
-      // Extract .minecraft, if exists
-      const folderWithoutDotMinecraft = await removeNestedDirectories(
-        unzipResponse.filePath,
-        MCGameVersion.defaultMinecraftPath
-      )
-      console.log({ folderWithoutDotMinecraft })
-      // Extract duplicated nested folder, if exists
-      const folderWithoutNest = await removeNestedDirectories(
-        folderWithoutDotMinecraft,
-        localTarget.name
-      )
-
-      console.log({ folderWithoutNest })
-
-      localTarget.update({ folder: folderWithoutNest })
-    } else {
-      localTarget.update({ folder: installPath })
-    }
-
-    if (!localTarget.folder) {
-      throw Error(`Problem with file path for ${localTarget.name}`)
-    }
-
-    localTarget.update(await this.installerService.install(localTarget))
-    localTarget.update(await this.installerService.installModloader(localTarget))
-
-    await this.metadataService.safe(localTarget)
-
-    return localTarget
   }
 }

@@ -22,6 +22,14 @@ export const ProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ className, ..
           detail: `${notFinishedProcessed.processName} ${notFinishedProcessed?.status}`
         })
       }
+
+      if (notFinishedProcessed?.status === 'failed') {
+        toast.current?.show({
+          severity: 'error',
+          summary: notFinishedProcessed?.status,
+          detail: `${notFinishedProcessed.processName} ${notFinishedProcessed?.status}`
+        })
+      }
     })
 
     return (): void => {
@@ -31,11 +39,12 @@ export const ProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ className, ..
 
   const progressData = Object.values(progress).map(
     ({ currentValue, minValue, maxValue, processName }) => (
-      <div key={processName}>
+      <div key={processName} className="h-full flex flex-col">
         <p className={'text-base'}>{processName}</p>
         <PrimeProgressBar
           {...props}
           value={Math.round((currentValue / (maxValue - minValue)) * 100)}
+          className="h-full"
         />
       </div>
     )

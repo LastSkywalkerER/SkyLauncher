@@ -121,7 +121,7 @@ export class UndiciDownloaderService implements IDownloaderService {
         `${(error as Error).message} - ${JSON.stringify(downloadingProgress.get())}`,
         (error as Error).stack
       )
-      downloadingProgress.set({ status: 'finished' })
+      downloadingProgress.set({ status: 'failed' })
       throw error
     }
   }

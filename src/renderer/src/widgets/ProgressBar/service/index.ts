@@ -26,12 +26,12 @@ export class ProcessProgress implements IProcessProgress {
       const prevValue = this._processes.getValue()
 
       const filteredPrevValues = Object.values(prevValue)
-        .filter(({ status }) => status !== 'finished')
+        .filter(({ status }) => status !== 'finished' && status !== 'failed')
         .reduce((acc, data) => ({ ...acc, [data.processName]: data }), {})
 
       this._processes.next({ ...filteredPrevValues, [data.processName]: data })
 
-      if (data?.status === 'finished') {
+      if (data?.status === 'finished' || data?.status === 'failed') {
         await new Promise((resolve) =>
           setTimeout(() => resolve(this.filterFinishedProcesses()), 100)
         )
@@ -43,7 +43,7 @@ export class ProcessProgress implements IProcessProgress {
     const values = this._processes.getValue()
 
     const filteredValues = Object.values(values)
-      .filter(({ status }) => status !== 'finished')
+      .filter(({ status }) => status !== 'finished' && status !== 'failed')
       .reduce((acc, data) => ({ ...acc, [data.processName]: data }), {})
 
     this._processes.next(filteredValues)

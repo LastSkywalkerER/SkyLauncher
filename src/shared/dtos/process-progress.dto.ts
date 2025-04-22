@@ -1,4 +1,4 @@
-export type ProcessStatus = 'started' | 'inProgress' | 'finished' | 'inited'
+export type ProcessStatus = 'started' | 'inProgress' | 'finished' | 'inited' | 'failed'
 
 export interface ProcessProgressData {
   id: string

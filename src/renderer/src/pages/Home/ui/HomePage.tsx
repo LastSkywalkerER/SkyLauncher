@@ -6,7 +6,7 @@ const HomePage: FC = () => {
     <webview
       id="foo"
       src={environment.websiteLink}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', background: 'white' }}
     ></webview>
   )
 }

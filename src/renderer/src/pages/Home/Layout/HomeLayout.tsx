@@ -13,7 +13,7 @@ export const HomeLayout: FC<{ Sidebar: FC }> = ({ Sidebar }) => {
         <Outlet />
       </div>
 
-      <ProgressBar className={'absolute bottom-0 w-full'} />
+      <ProgressBar className={'absolute bottom-0 left-0 w-full h-10'} />
     </div>
   )
 }
