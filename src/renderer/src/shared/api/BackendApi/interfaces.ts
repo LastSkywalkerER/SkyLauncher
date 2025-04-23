@@ -40,6 +40,34 @@ export interface ProfileResponse {
   role: string
 }
 
+export interface ModpackVersion {
+  id: string
+  name: string
+  title: string
+  modpack_name: string
+  modpack_version: string
+  minecraft_version: string
+  modloader: string
+  modloader_version: string
+  icon: string
+  cover_image: string
+  title_image: string
+  description: string
+  download_url: string
+}
+
+export interface Modpack {
+  id: string
+  name: string
+  versions: ModpackVersion[]
+}
+
+export interface MCModpack {
+  id: string
+  name: string
+  versions: IMCGameVersion[]
+}
+
 export interface IBackendApi {
   login: (data: LoginData) => Promise<LoginResponse>
   register: (data: RegisterData) => Promise<LoginResponse>

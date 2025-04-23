@@ -46,6 +46,10 @@ export class MCGameVersion implements IMCGameVersion {
   modloader?: Modloader
   modloaderVersion?: string
 
+  id?: string
+  modpackName?: string
+  modpackVersion?: string
+
   constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'fullVersion'>) {
     const { fullVersion, version, modloaderVersion, modloader } =
       MCGameVersion.getParsedNewVersion(data)
@@ -77,6 +81,10 @@ export class MCGameVersion implements IMCGameVersion {
     this.title = data.title
     this.description = data.description
     this.modpackProvider = data.modpackProvider
+
+    this.id = data.id
+    this.modpackName = data.modpackName
+    this.modpackVersion = data.modpackVersion
   }
 
   public getData(): IMCGameVersion {

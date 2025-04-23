@@ -69,10 +69,6 @@ export const useMenuItems = (): MenuItemsReturn => {
 
   const activeItemId = getActiveItemId()
 
-  console.log({
-    activeItemId
-  })
-
   // Top fixed items
   const topMenuItems: MenuItem[] = [
     {

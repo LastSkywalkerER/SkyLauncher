@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 
-import { ModpackProvider, supabaseFunctionsRoute } from '../../../../../shared/constants'
+import { Modloader, ModpackProvider, supabaseFunctionsRoute } from '../../../../../shared/constants'
 import { MCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { environment } from '../../../app/config/environments'
@@ -11,7 +11,9 @@ import {
   IBackendApi,
   LoginData,
   LoginResponse,
+  MCModpack,
   MinecraftProfileResponse,
+  Modpack,
   ProfileResponse,
   RegisterData
 } from './interfaces'
@@ -160,6 +162,56 @@ export class BackendApi implements IBackendApi {
 
         modpackProvider: ModpackProvider.FreshCraft
       }).getData()
+    })
+  }
+
+  public async getCustomMCModpacks(): Promise<MCModpack[]> {
+    const { body: modpacks } = await this._httpClient.request<Modpack[]>({
+      url: `${environment.supabaseBaseUrl}${supabaseFunctionsRoute}/get-modpacks`,
+      // method: 'POST',
+      headers: {
+        Authorization: `Bearer ${environment.supabaseAnonKey}`
+      }
+    })
+
+    return modpacks.map(({ id, name, versions }) => {
+      return {
+        id,
+        name,
+        versions: versions.map(
+          ({
+            cover_image,
+            description,
+            download_url,
+            icon,
+            id,
+            minecraft_version,
+            modloader,
+            modloader_version,
+            modpack_name,
+            modpack_version,
+            name,
+            title,
+            title_image
+          }) =>
+            new MCGameVersion({
+              id,
+              modpackName: modpack_name,
+              modpackProvider: ModpackProvider.FreshCraft,
+              version: minecraft_version,
+              coverImage: cover_image,
+              description,
+              downloadUrl: download_url,
+              icon,
+              modloader: modloader as Modloader,
+              modloaderVersion: modloader_version,
+              name,
+              title,
+              titleImage: title_image,
+              modpackVersion: modpack_version
+            })
+        )
+      }
     })
   }
 }
