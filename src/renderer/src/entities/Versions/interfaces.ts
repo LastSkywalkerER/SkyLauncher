@@ -17,6 +17,8 @@ export interface IVersions {
 
   installGame(version: IMCGameVersion): Observable<IMCGameVersion>
   updateGame(version: IMCGameVersion): Observable<IMCGameVersion>
+
+  getModpackVersions(modpackName: string): Observable<IMCGameVersion[]>
 }
 
 export namespace IVersions {

@@ -38,8 +38,8 @@ const PlayPage: FC = () => {
         <div className="flex items-center gap-4">
           <Avatar image={currentVersion?.icon} shape="square" size="normal" />
           <div className="flex flex-col text-sm">
-            <span>{currentVersion?.fullVersion}</span>
-            <span className="text-xs text-muted">{currentVersion?.modloader}</span>
+            <span>{currentVersion?.modpackVersion}</span>
+            <span className="text-xs text-muted">{currentVersion?.fullVersion}</span>
           </div>
         </div>
 

@@ -76,6 +76,7 @@ export interface IBackendApi {
   getProfile: () => Promise<ProfileResponse>
   getMinecraftProfile: () => Promise<MinecraftProfileResponse>
   getCustomMCVersions: () => Promise<IMCGameVersion[]>
+  getCustomMCModpacks: () => Promise<MCModpack[]>
 }
 
 export interface ErrorResponse

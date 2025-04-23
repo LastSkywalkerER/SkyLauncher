@@ -105,7 +105,10 @@ export class MCGameVersion implements IMCGameVersion {
       titleImage: this.titleImage,
       modpackProvider: this.modpackProvider,
       modloaderVersion: this.modloaderVersion,
-      modloader: this.modloader
+      modloader: this.modloader,
+      modpackVersion: this.modpackVersion,
+      id: this.id,
+      modpackName: this.modpackName
     }
   }
 

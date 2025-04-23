@@ -89,16 +89,16 @@ export const useMenuItems = (): MenuItemsReturn => {
   const premiumModpacks = versions
     .filter((version) => version.modpackProvider === environment.uiType)
     .map((version, index) => ({
-      type: version.name,
+      type: version.modpackName!,
       icon: <Avatar image={version.icon} shape="square" size="normal" />,
-      title: version.title || version.fullVersion,
+      title: version.title || version.modpackProvider,
       id: `${version.modpackProvider}-${index}`
     }))
 
   const freeModpacks = curseForgeModpacks.map((version, index) => ({
-    type: version.name,
+    type: version.title,
     icon: <Avatar image={version.icon} shape="square" size="normal" />,
-    title: version.title || version.fullVersion,
+    title: version.modpackProvider,
     id: `${version.modpackProvider}-${index}`
   }))
 
@@ -124,7 +124,7 @@ export const useMenuItems = (): MenuItemsReturn => {
     items: category.modpacks.map((modpack) =>
       createMenuItem(
         {
-          id: modpack.id,
+          id: modpack.id!,
           icon: modpack.icon,
           title: modpack.title,
           subtitle: modpack.type.charAt(0).toUpperCase() + modpack.type.slice(1)
