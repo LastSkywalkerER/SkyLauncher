@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, RawAxiosRequestHeaders } from 'axios'
 import { injectable } from 'inversify'
 
-import { IHttpClient, RequestData, ResponseData } from './interfaces'
+import { AuthData, IHttpClient, RequestData, ResponseData } from './interfaces'
 
 @injectable()
 export class AxiosClient implements IHttpClient {
@@ -33,6 +33,9 @@ export class AxiosClient implements IHttpClient {
     })
 
     this.request = this.request.bind(this)
+    this.setAuth = this.setAuth.bind(this)
+    this.getAuth = this.getAuth.bind(this)
+    this.removeAuth = this.removeAuth.bind(this)
   }
 
   public async request<T>({ url, method, headers, body }: RequestData): Promise<ResponseData<T>> {
@@ -49,6 +52,17 @@ export class AxiosClient implements IHttpClient {
   public setAuth({ token, type = 'Bearer' }: { token: string; type?: string }): void {
     this._client.defaults.headers.common['Authorization'] = `${type} ${token}`
     localStorage.setItem(this._accessStorageKey, token)
+  }
+
+  public getAuth(): AuthData | null {
+    const authHeader = this._client.defaults.headers.common['Authorization']?.toString()
+
+    if (authHeader) {
+      const [type, token] = authHeader.split(' ')
+      return { type, token }
+    }
+
+    return null
   }
 
   public removeAuth(): void {

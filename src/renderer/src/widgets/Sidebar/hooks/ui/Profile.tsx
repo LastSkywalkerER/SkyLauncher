@@ -1,9 +1,7 @@
-import { environment } from '@renderer/app/config/environments'
 import { UserData } from '@renderer/entities/User/interfaces'
 import { IUser } from '@renderer/entities/User/interfaces'
 import { useLoadableState } from '@renderer/shared/hooks/useLoadableState'
 import { useObservableRequest } from '@renderer/shared/hooks/useObservableRequest'
-import { ExternalLink } from '@renderer/shared/ui/ExternalLink'
 import { LoadingOverlay } from '@renderer/shared/ui/Loading'
 import { Avatar } from 'primereact/avatar'
 import { Menu } from 'primereact/menu'
@@ -11,6 +9,7 @@ import { MenuItem } from 'primereact/menuitem'
 import { useEffect, useRef, useState } from 'react'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 export const Profile: FC = () => {
   const {
@@ -29,13 +28,9 @@ export const Profile: FC = () => {
     {
       label: t('common.manageProfile'),
       template: (item) => (
-        <ExternalLink
-          withoutEffects
-          to={`${environment.websiteLink}/profile`}
-          className="px-3 text-muted hover:text-primary-light"
-        >
+        <Link to={`/?route=/profile`} className="px-3 text-muted hover:text-primary-light">
           {item.label}
-        </ExternalLink>
+        </Link>
       )
     },
     {
