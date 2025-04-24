@@ -2,7 +2,7 @@ import { environment } from '@renderer/app/config/environments'
 import { IHttpClient } from '@renderer/shared/api/HttpClient/interfaces'
 import { WebviewTag } from 'electron'
 import { useInjection } from 'inversify-react'
-import { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 const HomePage: FC = () => {
@@ -10,35 +10,52 @@ const HomePage: FC = () => {
   const { getAuth } = useInjection(IHttpClient.$)
   const [searchParams] = useSearchParams()
   const route = searchParams.get('route')
+  const [isDomReady, setIsDomReady] = useState(false)
+
+  const checkAndNavigate = (webview: WebviewTag): void => {
+    if (!route) return
+
+    const baseUrl = environment.websiteLink
+    const fullUrl = `${baseUrl}${route}`
+    const currentUrl = webview.getURL()
+
+    if (currentUrl !== fullUrl) {
+      console.log('fullUrl', fullUrl)
+      webview.loadURL(fullUrl)
+    }
+  }
 
   useEffect(() => {
     const webview = webRef.current
     if (!webview) return
 
-    // Обработчик события загрузки страницы
-    webview.addEventListener('dom-ready', () => {
-      // Открываем DevTools для отладки (опционально)
-      environment.dev && webview.openDevTools()
-
+    // Обработчик события начала навигации
+    webview.addEventListener('will-navigate', () => {
       const authData = getAuth()
       if (!authData) return
       const { token, type } = authData
 
-      // Выполняем скрипт в контексте страницы
+      // Выполняем скрипт в контексте страницы до загрузки основного JS
       webview.executeJavaScript(`
         window.localStorage.setItem('access_token', '${token}')
         window.localStorage.setItem('access_token_type', '${type}')
       `)
     })
 
-    // Если есть параметр route, переходим на указанную страницу
-    if (route) {
-      const baseUrl = environment.websiteLink
-      const fullUrl = `${baseUrl}${route}`
+    // Обработчик события загрузки страницы
+    webview.addEventListener('dom-ready', () => {
+      // Открываем DevTools для отладки (опционально)
+      environment.dev && webview.openDevTools()
 
-      webview.loadURL(fullUrl)
+      setIsDomReady(true)
+      checkAndNavigate(webview)
+    })
+
+    // Проверяем URL каждые 500мс после dom-ready
+    if (isDomReady && webview) {
+      checkAndNavigate(webview)
     }
-  }, [route])
+  }, [route, isDomReady])
 
   return (
     <webview
