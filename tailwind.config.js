@@ -21,6 +21,9 @@ export default {
           dark: '#7e22ce', // purple-700
           darker: '#6b21a8' // purple-800
         },
+        contrast: {
+          base: '#bababa'
+        },
         secondary: {
           contrast: '#FFFFFF'
         }

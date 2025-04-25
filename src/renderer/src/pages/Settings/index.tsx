@@ -1,4 +1,11 @@
 import { ISettings } from '@renderer/entities/Settings/interfaces'
+import {
+  CheckboxFieldControlled,
+  DropdownFieldControlled,
+  InputFieldControlled,
+  PageLoading,
+  SliderInputFieldControlled
+} from '@renderer/shared/ui'
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { FC, ReactElement, useEffect } from 'react'
@@ -8,12 +15,6 @@ import { SettingField, settingsList } from '../../app/config/settings.config'
 import { LauncherSettings } from '../../entities/Settings/interfaces'
 import { OpenButton } from '../../features/index'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { InputFieldControlled, PageLoading } from '../../shared/ui'
-import {
-  CheckboxFieldControlled,
-  DropdownFieldControlled,
-  SliderInputFieldControlled
-} from '../../shared/ui'
 
 const Settings: FC = () => {
   const { setSettings, getSettings } = useInjection(ISettings.$)

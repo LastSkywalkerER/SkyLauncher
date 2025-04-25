@@ -13,8 +13,15 @@ export const GoBack: FC<GoBackProps> = ({ className, ...props }) => {
   const { t } = useTranslation()
 
   return (
-    <Link to=".." className={cx('text-main', className)}>
-      <Button type="button" icon="pi pi-arrow-left" label={t('common.goBack')} text {...props} />
+    <Link to="..">
+      <Button
+        type="button"
+        icon="pi pi-arrow-left"
+        label={t('common.goBack')}
+        text
+        className={cx('text-main', className)}
+        {...props}
+      />
     </Link>
   )
 }

@@ -10,7 +10,7 @@ import { LoginData, LoginResponse } from '../../shared/api/BackendApi/interfaces
 import { useObservable } from '../../shared/hooks/useObservable'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
 import { InputFieldControlled } from '../../shared/ui/InputField'
-import { PasswordFieldControlled } from '../../shared/ui/InputField/Password'
+import { PasswordFieldControlled } from '../../shared/ui/InputField/ui/password-field.ui'
 import { Loading } from '../../shared/ui/Loading'
 
 const LoginForm: FC = () => {
