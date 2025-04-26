@@ -29,21 +29,20 @@ const HomePage: FC = () => {
     const webview = webRef.current
     if (!webview) return
 
-    // Обработчик события начала навигации
-    webview.addEventListener('will-navigate', () => {
+    // Обработчик события загрузки страницы
+    webview.addEventListener('dom-ready', () => {
       const authData = getAuth()
       if (!authData) return
       const { token, type } = authData
+
+      console.log('authData', authData)
 
       // Выполняем скрипт в контексте страницы до загрузки основного JS
       webview.executeJavaScript(`
         window.localStorage.setItem('access_token', '${token}')
         window.localStorage.setItem('access_token_type', '${type}')
       `)
-    })
 
-    // Обработчик события загрузки страницы
-    webview.addEventListener('dom-ready', () => {
       // Открываем DevTools для отладки (опционально)
       environment.dev && webview.openDevTools()
 
