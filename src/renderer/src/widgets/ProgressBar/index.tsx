@@ -53,7 +53,7 @@ export const ProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ className, ..
   return (
     <div className="card">
       <Toast ref={toast}></Toast>
-      <div className={className}>{progressData}</div>
+      {progressData.length > 0 && <div className={className}>{progressData}</div>}
     </div>
   )
 }

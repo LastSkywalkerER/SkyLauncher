@@ -16,7 +16,7 @@ const PlayPage: FC = () => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex flex-col gap-4 w-full h-full relative">
+      <div className="flex flex-col gap-4 w-full h-[calc(100%-60px)] relative">
         {currentVersion?.titleImage && (
           <img
             src={currentVersion?.titleImage}

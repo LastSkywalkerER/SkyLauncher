@@ -8,6 +8,8 @@ import appIcon from '../../../../resources/SkyLauncher/icon.png?asset'
 export const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    minWidth: 720,
+    minHeight: 480,
     width: 1280,
     height: 720,
     show: false,

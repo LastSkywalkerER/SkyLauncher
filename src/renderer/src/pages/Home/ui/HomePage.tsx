@@ -20,7 +20,6 @@ const HomePage: FC = () => {
     const currentUrl = webview.getURL()
 
     if (currentUrl !== fullUrl) {
-      console.log('fullUrl', fullUrl)
       webview.loadURL(fullUrl)
     }
   }
@@ -34,8 +33,6 @@ const HomePage: FC = () => {
       const authData = getAuth()
       if (!authData) return
       const { token, type } = authData
-
-      console.log('authData', authData)
 
       // Выполняем скрипт в контексте страницы до загрузки основного JS
       webview.executeJavaScript(`
