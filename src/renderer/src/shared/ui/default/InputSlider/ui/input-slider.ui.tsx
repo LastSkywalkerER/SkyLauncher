@@ -1,23 +1,12 @@
 import cx from 'classnames'
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputText } from 'primereact/inputtext'
-import { Slider, SliderProps } from 'primereact/slider'
-import { forwardRef, ForwardRefRenderFunction, PropsWithoutRef, ReactNode } from 'react'
+import { Slider } from 'primereact/slider'
+import { forwardRef, ForwardRefRenderFunction, ReactNode } from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
-
-export interface SliderInputFieldProps
-  extends PropsWithoutRef<Omit<SliderProps, 'onChange' | 'value'>> {
-  label?: string
-  error?: string
-  value?: number
-  onChange?: (value: number) => void
-  showInput?: boolean
-  inputStep?: number
-  min?: number
-  max?: number
-}
+import { capitalizeFirstLetter } from '../../../../utils/capitalizeFirstLetter'
+import { SliderInputFieldProps } from '../interface'
 
 // ✅ Component
 export const SliderInputFieldComponent: ForwardRefRenderFunction<Slider, SliderInputFieldProps> = (

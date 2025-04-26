@@ -8,7 +8,7 @@ export default {
       },
       colors: {
         common: {
-          lighter: '#414141',
+          lighter: '#323334',
           light: '#282828',
           base: '#1e1e1e',
           dark: '#141414',

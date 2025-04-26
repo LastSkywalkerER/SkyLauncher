@@ -1,12 +1,10 @@
-import { environment } from '@renderer/app/config/environments'
 import cx from 'classnames'
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputText } from 'primereact/inputtext'
 import { FC, forwardRef, ForwardRefRenderFunction, ReactNode } from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
-import { ModpackProvider } from '../../../../../../shared/constants'
-import { capitalizeFirstLetter } from '../../../utils/capitalizeFirstLetter'
+import { capitalizeFirstLetter } from '../../../../utils/capitalizeFirstLetter'
 import { InputFieldProps } from '../interfaces'
 
 export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, className, ...props }) => {
@@ -22,40 +20,29 @@ export const InputFieldComponent: FC<InputFieldProps> = ({ label, error, classNa
 export const InputFieldRenderer: ForwardRefRenderFunction<HTMLInputElement, InputFieldProps> = (
   {
     label,
-    isLabelFloat = environment.uiType !== ModpackProvider.FreshCraft,
     error,
     className,
     inputClassName,
-    uiType = environment.uiType || 'default',
+    withLabel = true,
     value = '',
+    afterInputComponent,
     ...props
   },
   ref
 ) => {
   return (
     <div className={cx('flex flex-col', className)}>
-      {!isLabelFloat && (
-        <label htmlFor={label} className="w-min text-xs uppercase font-bold mb-1">
-          {label}
-        </label>
-      )}
-      <FloatLabel className={'w-full h-full'}>
+      <FloatLabel className={'w-full h-full flex items-center'}>
         <InputText
-          className={cx(
-            'w-full h-full',
-            {
-              'border-primary-base border-2 py-2 text-xs bg-common-darker !placeholder-contrast-base focus:border-white':
-                uiType === ModpackProvider.FreshCraft
-            },
-            inputClassName
-          )}
+          className={cx('w-full h-full', inputClassName)}
           id={label}
           ref={ref}
           value={value}
           {...props}
           invalid={!!error}
         />
-        {isLabelFloat && <label htmlFor={label}>{label}</label>}
+        {afterInputComponent}
+        {withLabel && <label htmlFor={label}>{label}</label>}
       </FloatLabel>
       <span className={'text-red-600'}>{error}</span>
     </div>

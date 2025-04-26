@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import { FC, ImgHTMLAttributes } from 'react'
 
-import simpleTitle from '../../../../../../resources/images/modpacks/minimalism logo.png'
+import simpleTitle from '../../../../../../../resources/images/modpacks/minimalism logo.png'
 
 export const SimpleTitle: FC<ImgHTMLAttributes<HTMLImageElement>> = (props) => {
   return (

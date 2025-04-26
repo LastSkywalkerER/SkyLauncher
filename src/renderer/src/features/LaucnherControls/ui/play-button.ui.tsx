@@ -1,4 +1,4 @@
-import { BigButton } from '@renderer/shared/ui/BigButton'
+import { BigButton } from '@renderer/shared/ui/default/BigButton'
 import { useInjection } from 'inversify-react'
 import { ButtonProps } from 'primereact/button'
 import { FC } from 'react'

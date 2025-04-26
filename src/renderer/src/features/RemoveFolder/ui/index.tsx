@@ -6,7 +6,7 @@ import { useTransientInjection } from '../../../shared/hooks/useTransientInjecti
 import { IFeatureService } from '../../service/index'
 import { RemoveFolderProps } from './interface'
 
-export const RemoveButton: FC<RemoveFolderProps> = ({ path, ...props }) => {
+export const RemoveButton: FC<RemoveFolderProps> = ({ path, CutomButton = Button, ...props }) => {
   const { removeFolder } = useTransientInjection(IFeatureService.$)
   const { execute: executeRemoveFolder } = useObservableRequest(removeFolder, [{ path }])
 
@@ -17,7 +17,7 @@ export const RemoveButton: FC<RemoveFolderProps> = ({ path, ...props }) => {
   }
 
   return (
-    <Button
+    <CutomButton
       icon="pi pi-trash"
       rounded
       severity="danger"

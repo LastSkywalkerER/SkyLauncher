@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import background from '../../../../../resources/images/splash_screen.png'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { LoadingOverlay } from '../../shared/ui/Loading'
+import { LoadingOverlay } from '../../shared/ui/default/Loading'
 
 export const Background: FC<{ image?: string; children?: ReactElement | ReactElement[] }> = ({
   image,

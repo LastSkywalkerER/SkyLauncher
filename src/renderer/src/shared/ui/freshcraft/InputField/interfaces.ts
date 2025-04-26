@@ -3,20 +3,14 @@ import { PasswordProps } from 'primereact/password'
 import { RefAttributes } from 'react'
 import { PropsWithoutRef } from 'react'
 
-import { UiType } from '../types'
+import { BaseFieldProps } from '../../default/InputField/interfaces'
 
-export interface BaseFieldProps {
-  label?: string
-  error?: string
-  inputClassName?: string
-  isLabelFloat?: boolean
-  uiType?: UiType
-}
+export interface FCBaseFieldProps extends BaseFieldProps {}
 
-export interface InputFieldProps
+export interface FCInputFieldProps
   extends PropsWithoutRef<InputTextProps & RefAttributes<HTMLInputElement>>,
-    BaseFieldProps {}
+    FCBaseFieldProps {}
 
-export interface PasswordFieldProps
+export interface FCPasswordFieldProps
   extends PropsWithoutRef<PasswordProps & RefAttributes<HTMLInputElement>>,
-    BaseFieldProps {}
+    FCBaseFieldProps {}

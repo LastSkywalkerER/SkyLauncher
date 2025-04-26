@@ -5,7 +5,7 @@ export const ModpackLayout: FC<{ Topbar: FC }> = ({ Topbar }) => {
   return (
     <>
       <Topbar />
-      <main className="bg-common-lighter w-full h-[calc(100%-81px)]">
+      <main className="bg-common-lighter w-full h-[calc(100%-81px)] overflow-x-auto">
         <Outlet />
       </main>
     </>

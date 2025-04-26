@@ -1,8 +1,6 @@
 import { IUser, UserData } from '@renderer/entities/User/interfaces'
 import { IVersions } from '@renderer/entities/Versions/interfaces'
 import { ControlsSwitcher } from '@renderer/features/LaucnherControls'
-import { OpenButton } from '@renderer/features/OpenFolder/ui'
-import { RemoveButton } from '@renderer/features/RemoveFolder/ui'
 import { useLoadableState } from '@renderer/shared/hooks/useLoadableState'
 import { useObservable } from '@renderer/shared/hooks/useObservable'
 import { useInjection } from 'inversify-react'
@@ -29,10 +27,6 @@ const PlayPage: FC = () => {
           alt={currentVersion?.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-0 right-0">
-          {currentVersion?.folder && <OpenButton path={currentVersion?.folder} />}
-          {currentVersion?.folder && <RemoveButton path={currentVersion?.folder} />}
-        </div>
       </div>
       <div className="flex justify-between items-center h-20 px-4 bg-common-base">
         <div className="flex items-center gap-4">

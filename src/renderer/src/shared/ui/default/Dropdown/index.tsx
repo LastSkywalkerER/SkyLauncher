@@ -3,7 +3,7 @@ import { FloatLabel } from 'primereact/floatlabel'
 import { FC, forwardRef, ForwardRefRenderFunction, PropsWithoutRef, ReactNode } from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
+import { capitalizeFirstLetter } from '../../../utils/capitalizeFirstLetter'
 
 export interface DropdownFieldProps extends PropsWithoutRef<DropdownProps> {
   label?: string

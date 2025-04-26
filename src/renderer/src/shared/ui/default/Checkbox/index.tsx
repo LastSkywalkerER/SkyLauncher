@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
+import { capitalizeFirstLetter } from '../../../utils/capitalizeFirstLetter'
 
 export interface CheckboxFieldProps
   extends PropsWithoutRef<

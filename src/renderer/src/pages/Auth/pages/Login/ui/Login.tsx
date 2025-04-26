@@ -5,9 +5,8 @@ import { AuthCard } from '@renderer/pages/Auth/ui/AuthCard'
 import { LoginData, LoginResponse } from '@renderer/shared/api/BackendApi/interfaces'
 import { useObservable } from '@renderer/shared/hooks/useObservable'
 import { useObservableRequest } from '@renderer/shared/hooks/useObservableRequest'
-import { InputFieldControlled } from '@renderer/shared/ui'
-import { BigButton } from '@renderer/shared/ui/BigButton'
-import { PasswordFieldControlled } from '@renderer/shared/ui/InputField/ui/password-field.ui'
+import { FCInputFieldControlled, FCPasswordFieldControlled } from '@renderer/shared/ui'
+import { BigButton } from '@renderer/shared/ui/default/BigButton'
 import { useInjection } from 'inversify-react'
 import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -52,7 +51,7 @@ const Login: FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className={'w-full h-full flex flex-col items-center justify-center gap-5'}
       >
-        <InputFieldControlled
+        <FCInputFieldControlled
           className={'w-full'}
           control={control}
           name={'email'}
@@ -60,7 +59,7 @@ const Login: FC = () => {
           error={errors['email'] ? t('errors.required') : undefined}
           rules={{ required: true }}
         />
-        <PasswordFieldControlled
+        <FCPasswordFieldControlled
           className={'w-full'}
           control={control}
           name={'password'}

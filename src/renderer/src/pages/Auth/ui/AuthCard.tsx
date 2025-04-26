@@ -1,4 +1,4 @@
-import { SimpleTitle } from '@renderer/shared/ui/Title'
+import { SimpleTitle } from '@renderer/shared/ui/default/Title'
 import cx from 'classnames'
 import { Card, CardProps } from 'primereact/card'
 import { FC } from 'react'

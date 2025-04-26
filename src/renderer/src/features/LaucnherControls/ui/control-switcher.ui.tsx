@@ -1,7 +1,7 @@
 import { IVersions } from '@renderer/entities/Versions/interfaces'
 import { PlayButton } from '@renderer/features/LaucnherControls/ui'
 import { useObservable } from '@renderer/shared/hooks/useObservable'
-import { BigButton } from '@renderer/shared/ui/BigButton'
+import { BigButton } from '@renderer/shared/ui/default/BigButton'
 import { useInjection } from 'inversify-react'
 import { ButtonProps } from 'primereact/button'
 import { FC } from 'react'

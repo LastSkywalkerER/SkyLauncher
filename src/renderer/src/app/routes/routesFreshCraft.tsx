@@ -15,10 +15,10 @@ import { RouteNames } from './routeNames'
 const Auth = lazy(() => import('../../pages/Auth/ui/AuthPage'))
 const Login = lazy(() => import('../../pages/Auth/pages/Login/ui/Login'))
 const HomePage = lazy(() => import('../../pages/Home/ui/HomePage'))
-const PlayPage = lazy(() => import('../../pages/Modpack/ui/play.page'))
-const ModpackSettingsPage = lazy(() => import('../../pages/Modpack/ui/settings.page'))
-const SkinsPage = lazy(() => import('../../pages/Modpack/ui/skins.page'))
-const ServersPage = lazy(() => import('../../pages/Modpack/ui/servers.page'))
+const PlayPage = lazy(() => import('../../pages/Modpack/pages/play.page'))
+const ModpackSettingsPage = lazy(() => import('../../pages/Modpack/pages/settings.page'))
+const SkinsPage = lazy(() => import('../../pages/Modpack/pages/skins.page'))
+const ServersPage = lazy(() => import('../../pages/Modpack/pages/servers.page'))
 const Settings = lazy(() => import('../../pages/Settings'))
 export const routesFreshCraft = createBrowserRouter([
   {

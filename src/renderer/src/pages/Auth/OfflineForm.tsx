@@ -7,8 +7,8 @@ import { RouteNames } from '../../app/routes/routeNames'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { InputFieldControlled } from '../../shared/ui/InputField'
-import { Loading } from '../../shared/ui/Loading'
+import { InputFieldControlled } from '../../shared/ui/default/InputField'
+import { Loading } from '../../shared/ui/default/Loading'
 
 const OfflineForm: FC = () => {
   const {

@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
-import { LoadingOverlay } from '../../shared/ui/Loading'
+import { LoadingOverlay } from '../../shared/ui'
 import { RouteNames } from '../routes/routeNames'
 
 export const AuthGuard: FC<{
