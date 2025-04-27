@@ -15,8 +15,8 @@ export const PageLoading: FC = () => {
 
 export const LoadingOverlay: FC = () => {
   return (
-    <div className="absolute z-100 top-0 left-0 right-0 bottom-0 w-full h-screen flex items-center justify-center bg-gray-800 bg-opacity-90">
-      <Loading />
+    <div className="absolute z-100 top-0 left-0 right-0 bottom-0 w-full h-full flex items-center justify-center bg-common-dark/50">
+      <Loading className="w-10 h-10" />
     </div>
   )
 }

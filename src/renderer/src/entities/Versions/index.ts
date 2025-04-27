@@ -40,7 +40,7 @@ export class Versions implements IVersions {
     this.setCurrentMCVersion = this.setCurrentMCVersion.bind(this)
     this.installGame = this.installGame.bind(this)
     this.updateGame = this.updateGame.bind(this)
-
+    this.getModpackVersions = this.getModpackVersions.bind(this)
     this.checkLocalMCVersions()
   }
 
@@ -138,12 +138,41 @@ export class Versions implements IVersions {
     )
   }
 
-  public getModpackVersions(modpackName: string): Observable<IMCGameVersion[]> {
-    return from(this._backendApi.getCustomMCModpacks()).pipe(
-      map((modpacks) => {
-        const modpack = modpacks.find((modpack) => modpack.name === modpackName)
+  public getModpackVersions(modpackName: string): Observable<IMCLocalGameVersion[]> {
+    return combineLatest([
+      from(this._backendApi.getCustomMCModpacks()).pipe(
+        map((modpacks) => {
+          const modpack = modpacks.find((modpack) => modpack.name === modpackName)
+          return modpack?.versions || []
+        })
+      ),
+      this._localMCVersions
+    ]).pipe(
+      map(([versions, installedVersions]) => {
+        const installedVersionsMap = installedVersions.reduce<Record<string, IMCGameVersion>>(
+          (acc, version) => {
+            acc[version.name] = version
+            return acc
+          },
+          {}
+        )
 
-        return modpack?.versions || []
+        return versions.map((version) => {
+          const installedVersion = installedVersionsMap[version.name]
+
+          return {
+            ...installedVersion,
+            ...(version && {
+              ...Object.keys(version).reduce((acc, key) => {
+                if (version[key]) {
+                  acc[key] = version[key]
+                }
+                return acc
+              }, {} as Partial<IMCGameVersion>)
+            }),
+            isInstalled: !!installedVersion
+          }
+        })
       })
     )
   }

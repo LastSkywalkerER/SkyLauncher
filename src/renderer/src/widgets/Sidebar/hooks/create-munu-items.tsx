@@ -1,7 +1,7 @@
 import { MenuItem } from 'primereact/menuitem'
 import { ReactElement } from 'react'
 
-import { MenuItemTemplate } from './ui/MenuItemTemplate'
+import { MenuItemTemplate } from '../ui/MenuItemTemplate'
 
 interface ModpackItem {
   id: string

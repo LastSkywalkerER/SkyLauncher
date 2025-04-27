@@ -9,8 +9,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { RouteNames } from '../../../app/routes/routeNames'
 import { IVersions } from '../../../entities/Versions/interfaces'
 import { useObservable } from '../../../shared/hooks/useObservable'
+import { Profile } from '../ui/Profile'
 import { createMenuItem } from './create-munu-items'
-import { Profile } from './ui/Profile'
 
 interface MenuItemsReturn {
   topMenuItems: MenuItem[]

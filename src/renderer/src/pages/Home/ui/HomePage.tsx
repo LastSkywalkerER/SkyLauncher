@@ -28,27 +28,26 @@ const HomePage: FC = () => {
     const webview = webRef.current
     if (!webview) return
 
-    // Обработчик события загрузки страницы
+    // Page load event handler
     webview.addEventListener('dom-ready', () => {
       const authData = getAuth()
       if (!authData) return
       const { token, type } = authData
 
-      // Выполняем скрипт в контексте страницы до загрузки основного JS
+      // Execute script in page context before loading main JS
       webview.executeJavaScript(`
         window.localStorage.setItem('access_token', '${token}')
         window.localStorage.setItem('access_token_type', '${type}')
       `)
 
-      // Открываем DevTools для отладки (опционально)
+      // Open DevTools for debugging (optional)
       environment.dev && webview.openDevTools()
 
       setIsDomReady(true)
       checkAndNavigate(webview)
     })
 
-    // Проверяем URL каждые 500мс после dom-ready
-    if (isDomReady && webview) {
+    if (isDomReady) {
       checkAndNavigate(webview)
     }
   }, [route, isDomReady])
