@@ -3,3 +3,9 @@ import { IMCGameVersion } from '../entities/mc-game-version/mc-game-version.inte
 export interface GameData {
   version: IMCGameVersion
 }
+
+export interface LauncherInfo {
+  version: string
+  platform: string
+  arch: string
+}

@@ -19,7 +19,10 @@ const PlayPage = lazy(() => import('../../pages/Modpack/pages/play.page'))
 const ModpackSettingsPage = lazy(() => import('../../pages/Modpack/pages/settings.page'))
 const SkinsPage = lazy(() => import('../../pages/Modpack/pages/skins.page'))
 const ServersPage = lazy(() => import('../../pages/Modpack/pages/servers.page'))
-const Settings = lazy(() => import('../../pages/Settings'))
+const LauncherSettingsPage = lazy(
+  () => import('../../pages/LauncherSettings/ui/launcher-settings.page')
+)
+
 export const routesFreshCraft = createBrowserRouter([
   {
     path: RouteNames.Home,
@@ -63,7 +66,7 @@ export const routesFreshCraft = createBrowserRouter([
       },
       {
         path: RouteNames.Settings,
-        element: <Settings />
+        element: <LauncherSettingsPage />
       }
     ]
   },

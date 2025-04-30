@@ -5,10 +5,11 @@ import { Controller, Inject } from '@nestjs/common'
 import { CommandBus } from '@nestjs/cqrs'
 import { Payload } from '@nestjs/microservices'
 
+import { version } from '../../../../package.json'
 import { IPCHandleNames } from '../../../shared/constants'
-import { type GameData } from '../../../shared/dtos/launcher.dto'
+import type { GameData, LauncherInfo } from '../../../shared/dtos/launcher.dto'
 import { MCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.entity'
-import { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
+import type { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { getInstallCommand } from '../installer/installer.commands'
 import { getUpdateCommand } from '../updater/updater.commands'
 import { LaunchModpackCommand } from './launch-modpack/launch-modpack.command'
@@ -16,6 +17,15 @@ import { LaunchModpackCommand } from './launch-modpack/launch-modpack.command'
 @Controller()
 export class LauncherController {
   constructor(@Inject(CommandBus) private readonly commandBus: CommandBus) {}
+
+  @IpcHandle(IPCHandleNames.GetLauncherInfo)
+  public getLauncherInfo(): LauncherInfo {
+    return {
+      version,
+      platform: process.platform,
+      arch: process.arch
+    }
+  }
 
   @IpcHandle(IPCHandleNames.InstallGame)
   public async handleInstallGame(

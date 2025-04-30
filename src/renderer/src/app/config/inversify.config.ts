@@ -8,6 +8,7 @@ import { Versions } from '../../entities/Versions'
 import { IVersions } from '../../entities/Versions/interfaces'
 import { ILauncherControlService, LauncherControlService } from '../../features/LaucnherControls'
 import { FeatureService, IFeatureService } from '../../features/service'
+import { LauncherSettingsModule } from '../../pages/LauncherSettings/services/launcher-settings.module'
 import { BackendApi } from '../../shared/api/BackendApi/index'
 import { IBackendApi } from '../../shared/api/BackendApi/interfaces'
 import { AxiosClient } from '../../shared/api/HttpClient/AxiosClient'
@@ -19,6 +20,8 @@ import { IProcessProgress } from '../../widgets/ProgressBar/service/interfaces'
 import { environment } from './environments'
 
 const inversifyContainer = new Container({ defaultScope: 'Singleton' })
+inversifyContainer.load(LauncherSettingsModule)
+
 inversifyContainer.bind<INodeApi>(INodeApi.$).to(NodeApi)
 inversifyContainer.bind<ISettings>(ISettings.$).to(Settings)
 inversifyContainer.bind<IVersions>(IVersions.$).to(Versions)
