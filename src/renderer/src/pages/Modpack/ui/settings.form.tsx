@@ -1,9 +1,10 @@
 import { OpenButton } from '@renderer/features'
 import { RemoveButton } from '@renderer/features/RemoveFolder/ui'
-import { CheckboxFieldControlled, FCSliderInputFieldControlled } from '@renderer/shared/ui'
+import { FCSliderInputFieldControlled } from '@renderer/shared/ui'
 import { FCInputFieldControlled } from '@renderer/shared/ui'
 import { FCMainButton, FCSecondaryButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
 import { FCFieldButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
+import { FCCheckboxFieldControlled } from '@renderer/shared/ui/freshcraft/Checkbox'
 import { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -82,7 +83,7 @@ export const SettingsForm: FC<SettingsFormProps> = ({ defaultValues, onCancel, o
             />
           </div>
         </div>
-        <CheckboxFieldControlled
+        <FCCheckboxFieldControlled
           key={'fullscreen'}
           name={'fullscreen'}
           control={control}
