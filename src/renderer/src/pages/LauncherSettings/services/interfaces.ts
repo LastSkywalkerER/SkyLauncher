@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs'
-
-import type { LauncherInfo } from '../../../../../../shared/dtos/launcher.dto'
+import { LauncherInfo } from 'src/shared/dtos/launcher.dto'
 
 export interface ILauncherSettingsService {
   $: symbol

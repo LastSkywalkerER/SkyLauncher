@@ -1,8 +1,8 @@
 import { INodeApi } from '@renderer/shared/api/NodeApi/interfaces'
 import { inject, injectable } from 'inversify'
 import { from, Observable } from 'rxjs'
+import { LauncherInfo } from 'src/shared/dtos/launcher.dto'
 
-import type { LauncherInfo } from '../../../../../../shared/dtos/launcher.dto'
 import { ILauncherSettingsService } from './interfaces'
 
 @injectable()
