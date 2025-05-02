@@ -1,3 +1,4 @@
+import { WidgetsModule } from '@renderer/widgets'
 import { Container } from 'inversify'
 
 import { Settings } from '../../entities/Settings/index'
@@ -15,12 +16,11 @@ import { AxiosClient } from '../../shared/api/HttpClient/AxiosClient'
 import { IHttpClient } from '../../shared/api/HttpClient/interfaces'
 import { NodeApi } from '../../shared/api/NodeApi/index'
 import { INodeApi } from '../../shared/api/NodeApi/interfaces'
-import { ProcessProgress } from '../../widgets/ProgressBar/service/index'
-import { IProcessProgress } from '../../widgets/ProgressBar/service/interfaces'
 import { environment } from './environments'
 
 const inversifyContainer = new Container({ defaultScope: 'Singleton' })
 inversifyContainer.load(LauncherSettingsModule)
+inversifyContainer.load(WidgetsModule)
 
 inversifyContainer.bind<INodeApi>(INodeApi.$).to(NodeApi)
 inversifyContainer.bind<ISettings>(ISettings.$).to(Settings)
@@ -31,7 +31,6 @@ inversifyContainer
   .bind<IHttpClient>(IHttpClient.$)
   .toDynamicValue(() => new AxiosClient({ baseURL: environment.baseURL }))
 
-inversifyContainer.bind<IProcessProgress>(IProcessProgress.$).to(ProcessProgress).inTransientScope()
 inversifyContainer
   .bind<ILauncherControlService>(ILauncherControlService.$)
   .to(LauncherControlService)

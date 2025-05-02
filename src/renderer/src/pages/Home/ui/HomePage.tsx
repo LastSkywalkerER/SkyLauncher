@@ -41,7 +41,7 @@ const HomePage: FC = () => {
       `)
 
       // Open DevTools for debugging (optional)
-      environment.dev && webview.openDevTools()
+      // environment.dev && webview.openDevTools()
 
       setIsDomReady(true)
       checkAndNavigate(webview)

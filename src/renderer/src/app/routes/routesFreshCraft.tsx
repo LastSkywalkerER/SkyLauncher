@@ -1,5 +1,5 @@
+import { HomeLayout } from '@renderer/app/Layout/HomeLayout'
 import { AuthLayout } from '@renderer/pages/Auth/Layout/ui/AuthLayout'
-import { HomeLayout } from '@renderer/pages/Home/Layout/HomeLayout'
 import { ModpackLayout } from '@renderer/pages/Modpack/layout/modpack.layout'
 import { ErrorWidget } from '@renderer/widgets/Error'
 import { MCSidebar } from '@renderer/widgets/Sidebar/ui/MCSidebar'

@@ -3,9 +3,7 @@ import { useInjection } from 'inversify-react'
 import { ButtonProps } from 'primereact/button'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
-import { RouteNames } from '../../../app/routes/routeNames'
 import { IUser, UserData } from '../../../entities/User/interfaces'
 import { IVersions } from '../../../entities/Versions/interfaces'
 import { useLoadableState } from '../../../shared/hooks/useLoadableState'
@@ -15,7 +13,7 @@ import { useTransientInjection } from '../../../shared/hooks/useTransientInjecti
 import { Loading } from '../../../shared/ui'
 import { ILauncherControlService } from '../service/index'
 
-export const PlayButton: FC<ButtonProps> = (props) => {
+export const PlayButton: FC<ButtonProps> = ({ onClick, ...props }) => {
   const { getCurrentMCVersion } = useInjection(IVersions.$)
   const currentVersion = useObservable(getCurrentMCVersion(), null)
   const { launchGame } = useTransientInjection(ILauncherControlService.$)
@@ -23,17 +21,13 @@ export const PlayButton: FC<ButtonProps> = (props) => {
   const { data } = useLoadableState<IUser, UserData>(IUser.$)
   const { t } = useTranslation()
 
-  const navigate = useNavigate()
-
-  const handlePlayButton = (): void => {
+  const handlePlayButton = (event: React.MouseEvent<HTMLButtonElement>): void => {
     if (!data?.userName) {
-      navigate(RouteNames.CheckMinecraftProfile)
-
       return
     }
 
     currentVersion && executeLaunchGame(currentVersion)
-    navigate(RouteNames.Logs)
+    onClick?.(event)
   }
 
   if (currentVersion?.folder) {

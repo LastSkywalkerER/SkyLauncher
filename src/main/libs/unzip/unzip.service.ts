@@ -22,7 +22,7 @@ export class UnzipService implements IUnzipService {
       currentValue: 0,
       maxValue: 1,
       minValue: 0,
-      unit: '%'
+      unit: 'files'
     })
 
     try {

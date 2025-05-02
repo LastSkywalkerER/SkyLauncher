@@ -1,4 +1,4 @@
-import { ProgressBar } from '@renderer/widgets/ProgressBar'
+import { NotificationCenter, SingleProgressBar } from '@renderer/widgets'
 import { FC } from 'react'
 import { Outlet } from 'react-router-dom'
 
@@ -9,11 +9,12 @@ export const HomeLayout: FC<{ Sidebar: FC }> = ({ Sidebar }) => {
         <Sidebar />
       </div>
 
-      <div className="flex-1 w-full h-full">
+      <div className="flex-1 flex flex-col w-full h-full">
         <Outlet />
-      </div>
 
-      <ProgressBar className={'absolute bottom-0 left-0 w-full h-10'} />
+        <NotificationCenter />
+        <SingleProgressBar className="bg-common-base" />
+      </div>
     </div>
   )
 }
