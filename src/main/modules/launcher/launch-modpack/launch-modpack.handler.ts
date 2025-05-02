@@ -25,6 +25,8 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
   public async execute({ target }: LaunchModpackCommand): Promise<ChildProcess> {
     const localTarget = target.update({})
 
+    this.logger.log(`Launching ${JSON.stringify(localTarget)}`)
+
     if (!localTarget.status?.native || !localTarget.status?.libs || !localTarget.folder) {
       throw Error(`Game ${localTarget.name} not ready`)
     }

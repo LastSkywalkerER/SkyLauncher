@@ -96,7 +96,11 @@ export class InstallModpackHandler extends InstallHandlerBase {
       localTarget.update(await this.installerService.install(localTarget))
       localTarget.update(await this.installerService.installModloader(localTarget))
 
+      this.logger.log(`Installed ${JSON.stringify(localTarget)}`)
+
       await this.metadataService.safe(localTarget)
+
+      this.logger.log(`Saved metadata for ${JSON.stringify(localTarget)}`)
 
       return localTarget
     } catch (error) {
