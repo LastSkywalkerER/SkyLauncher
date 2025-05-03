@@ -22,9 +22,8 @@ export class MetadataService {
   ) {}
 
   public async safe(version: MCGameVersion): Promise<void> {
-    console.log({ version })
     const newMetadata = version.getData()
-    console.log({ newMetadata })
+
     MCGameVersion.imageFields.forEach((field) => delete newMetadata[field])
     const fsMetadata = new MCGameVersion(newMetadata)
     // const ramMetadata = new MCGameVersion(newMetadata)
@@ -49,7 +48,7 @@ export class MetadataService {
     await this.update(fsMetadata.getData())
   }
 
-  public async update(newMetadata: IMCGameVersion): Promise<void> {
+  public async update(newMetadata: Partial<IMCGameVersion>): Promise<void> {
     if (!newMetadata.folder || !existsSync(newMetadata.folder)) {
       throw Error('Modpack not installed')
     }

@@ -35,15 +35,23 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
       await this.javaService.install(localTarget.java)
     }
 
-    const javaPath = this.hardwareService.getJavaExecutablePath(localTarget.java)
+    // User
     const userName = this.userConfigService.get('userName')
     const userId = this.userConfigService.get('userId')
     const accessToken = this.userConfigService.get('accessToken')
-    const minMemory = this.userConfigService.get('javaArgsMinMemory')
-    const maxMemory = this.userConfigService.get('javaArgsMaxMemory')
-    const width = this.userConfigService.get('resolutionWidth')
-    const height = this.userConfigService.get('resolutionHeight')
-    const fullscreen = this.userConfigService.get('resolutionFullscreen') as undefined | true
+
+    // Settings
+    const javaPath = this.hardwareService.getJavaExecutablePath(localTarget.java)
+    const javaArgs = localTarget.javaArgs?.split(' ')
+    const minMemory =
+      localTarget.javaArgsMinMemory || this.userConfigService.get('javaArgsMinMemory')
+    const maxMemory =
+      localTarget.javaArgsMaxMemory || this.userConfigService.get('javaArgsMaxMemory')
+    const width = localTarget.width || this.userConfigService.get('resolutionWidth')
+    const height = localTarget.height || this.userConfigService.get('resolutionHeight')
+    const fullscreen =
+      localTarget.fullscreen ||
+      (this.userConfigService.get('resolutionFullscreen') as undefined | true)
 
     const launchOptions: LaunchOption = {
       gamePath: localTarget.folder,
@@ -51,7 +59,7 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
       version: localTarget.fullVersion,
       gameProfile: { name: userName, id: userId },
       accessToken,
-      userType: 'legacy',
+      // userType: 'legacy',
       // resourcePath: root,
       minMemory,
       maxMemory,
@@ -67,7 +75,8 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
         height,
         fullscreen
       },
-      extraExecOption: { detached: true }
+      extraExecOption: { detached: true },
+      extraJVMArgs: javaArgs
     }
 
     this.logger.log(`Start ${localTarget.name} with args: `, launchOptions)

@@ -23,8 +23,6 @@ const VersionsListRenderer: ForwardRefRenderFunction<Menu, IVersionListProps> = 
     isLoaded
   } = useObservableState(getModpackVersions(modpackName), [], [modpackName])
 
-  console.log({ versions, modpackName })
-
   const items: MenuItem[] = versions.map((version: IMCLocalGameVersion) => ({
     template: (
       <div

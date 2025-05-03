@@ -23,6 +23,15 @@ export interface IMCGameVersion {
 
   modloader?: Modloader
   modloaderVersion?: string
+
+  // Settings fields
+  width?: number
+  height?: number
+  fullscreen?: boolean
+  // javaPath?: string
+  javaArgs?: string
+  javaArgsMinMemory?: number
+  javaArgsMaxMemory?: number
 }
 
 export interface GameInstallationStatus {

@@ -7,19 +7,28 @@ import { ButtonProps } from 'primereact/button'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ILauncherControlService } from '../service/interfaces'
+
 export const InstallButton: FC<ButtonProps> = (props) => {
   const { getCurrentMCVersion, installGame } = useInjection(IVersions.$)
   const { execute: executeInstallGame, isLoading: isLoadingInstall } =
     useObservableRequest(installGame)
   const currentVersion = useObservable(getCurrentMCVersion(), null)
   const { t } = useTranslation()
+  const { isProcessActive } = useInjection(ILauncherControlService.$)
+  const isProcessRunning = useObservable(isProcessActive(), false)
 
   const handleInstall = (): void => {
     currentVersion && executeInstallGame(currentVersion)
   }
 
   return (
-    <BigButton {...props} onClick={handleInstall} loading={isLoadingInstall}>
+    <BigButton
+      {...props}
+      onClick={handleInstall}
+      loading={isLoadingInstall || isProcessRunning}
+      disabled={isProcessRunning}
+    >
       {t('launcher.install')}
     </BigButton>
   )

@@ -1,6 +1,6 @@
 import { OpenButton } from '@renderer/features'
 import { RemoveButton } from '@renderer/features/RemoveFolder/ui'
-import { FCSliderInputFieldControlled } from '@renderer/shared/ui'
+import { FCDropdownFieldControlled, FCSliderInputFieldControlled } from '@renderer/shared/ui'
 import { FCInputFieldControlled } from '@renderer/shared/ui'
 import { FCMainButton, FCSecondaryButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
 import { FCFieldButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
@@ -9,24 +9,15 @@ import { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-interface ModpackSettings {
-  folder: string
-  width: number
-  height: number
-  fullscreen: boolean
-  javaPath: string
-  javaArgs: string
-  javaArgsMinMemory: number
-  javaArgsMaxMemory: number
-}
+import { javaVersionList } from '../../../../../shared/constants'
+import { ModpackSettings } from '../interface'
+import { SettingsFormProps } from '../interface'
 
-interface SettingsFormProps {
-  defaultValues: ModpackSettings
-  onSubmit: (data: ModpackSettings) => void
-  onCancel: () => void
-}
-
-export const SettingsForm: FC<SettingsFormProps> = ({ defaultValues, onCancel, onSubmit }) => {
+export const SettingsForm: FC<SettingsFormProps> = ({
+  defaultValues,
+  onCancel,
+  onSubmit: onSubmitProps
+}) => {
   const { t } = useTranslation()
   const {
     getValues,
@@ -35,7 +26,12 @@ export const SettingsForm: FC<SettingsFormProps> = ({ defaultValues, onCancel, o
     formState: { errors }
   } = useForm<ModpackSettings>({ defaultValues })
 
-  const { folder, javaPath } = getValues()
+  const { folder } = getValues()
+
+  const onSubmit = (data: ModpackSettings): void => {
+    // Folder is not in the form data couse of folder input is disabled, so we need to add it to the data
+    onSubmitProps({ ...data, folder })
+  }
 
   return (
     <form
@@ -90,7 +86,15 @@ export const SettingsForm: FC<SettingsFormProps> = ({ defaultValues, onCancel, o
           label={t('settings.fullscreen')}
           error={errors['fullscreen'] ? t('errors.required') : undefined}
         />
-        <FCInputFieldControlled
+        <FCDropdownFieldControlled
+          control={control}
+          key={'javaVersion'}
+          name={'javaVersion'}
+          options={javaVersionList.map((version) => String(version))}
+          label={t('settings.javaVersion')}
+          error={errors['javaVersion'] ? t('errors.required') : undefined}
+        />
+        {/* <FCInputFieldControlled
           placeholder="C:\\Program Files\\Java\\jdk-17"
           control={control}
           name={'javaPath'}
@@ -105,7 +109,7 @@ export const SettingsForm: FC<SettingsFormProps> = ({ defaultValues, onCancel, o
             />
           }
           className="w-full"
-        />
+        /> */}
         <FCInputFieldControlled
           placeholder="-Xmx12G -XX:+UnlockExperimentalVMOptions -XX:+UseCompressedOops"
           control={control}

@@ -50,6 +50,15 @@ export class MCGameVersion implements IMCGameVersion {
   modpackName?: string
   modpackVersion?: string
 
+  // Settings fields
+  width?: number
+  height?: number
+  fullscreen?: boolean
+  // javaPath?: string
+  javaArgs?: string
+  javaArgsMinMemory?: number
+  javaArgsMaxMemory?: number
+
   constructor(data: MakeOptional<IMCGameVersion, 'icon' | 'name' | 'fullVersion'>) {
     const { fullVersion, version, modloaderVersion, modloader } =
       MCGameVersion.getParsedNewVersion(data)
@@ -85,6 +94,15 @@ export class MCGameVersion implements IMCGameVersion {
     this.id = data.id
     this.modpackName = data.modpackName
     this.modpackVersion = data.modpackVersion
+
+    // Initialize settings fields
+    this.width = data.width
+    this.height = data.height
+    this.fullscreen = data.fullscreen
+    // this.javaPath = data.javaPath
+    this.javaArgs = data.javaArgs
+    this.javaArgsMinMemory = data.javaArgsMinMemory
+    this.javaArgsMaxMemory = data.javaArgsMaxMemory
   }
 
   public getData(): IMCGameVersion {
@@ -108,7 +126,15 @@ export class MCGameVersion implements IMCGameVersion {
       modloader: this.modloader,
       modpackVersion: this.modpackVersion,
       id: this.id,
-      modpackName: this.modpackName
+      modpackName: this.modpackName,
+      // Include settings fields in getData
+      width: this.width,
+      height: this.height,
+      fullscreen: this.fullscreen,
+      // javaPath: this.javaPath,
+      javaArgs: this.javaArgs,
+      javaArgsMinMemory: this.javaArgsMinMemory,
+      javaArgsMaxMemory: this.javaArgsMaxMemory
     }
   }
 

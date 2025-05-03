@@ -33,15 +33,6 @@ export class SingleProcessProgress
       const isProcessStarted = data.status === 'started'
       const isProcessInProgress = data.status === 'inProgress'
 
-      console.log({
-        data,
-        currentProcess,
-        isOldProcess,
-        isProcessFinished,
-        isProcessStarted,
-        isProcessInProgress
-      })
-
       if (isProcessStarted && !isOldProcess) {
         this._activeProcesses[data.id] = data
       }
@@ -64,8 +55,6 @@ export class SingleProcessProgress
         },
         { minValue: 0, maxValue: 0, currentValue: 0 }
       )
-
-      console.log({ accumulatedData })
 
       this.data$.next({
         id: currentProcess?.id || data.id,

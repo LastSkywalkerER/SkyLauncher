@@ -23,8 +23,6 @@ export const SingleProgressBar: FC<Omit<ProgressBarProps, 'value'>> = ({ classNa
     ISingleProcessProgress.$
   )
 
-  console.log({ progressData })
-
   if (!progressData) return null
 
   return (
