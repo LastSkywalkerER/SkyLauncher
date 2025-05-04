@@ -1,11 +1,10 @@
 import { Dirent, existsSync } from 'node:fs'
-import { readdir } from 'node:fs/promises'
-import * as path from 'node:path'
+import { readdir, rmdir, unlink } from 'node:fs/promises'
+import { basename, join } from 'node:path'
 
 import { Inject, Injectable, Logger } from '@nestjs/common'
-import * as fs from 'fs'
 
-// import { ProcessProgressService } from '../../libs/process-progress/process-progress.service'
+import { ProcessProgressService } from '../../libs/process-progress/process-progress.service'
 import { UserConfigService } from '../user-config/user-config.service'
 
 @Injectable()
@@ -13,10 +12,11 @@ export class FilesystemService {
   private readonly logger = new Logger(FilesystemService.name)
 
   constructor(
-    @Inject(UserConfigService) private readonly userConfigService: UserConfigService
-    // @Inject(ProcessProgressService)
-    // private readonly processProgressService: ProcessProgressService
+    @Inject(UserConfigService) private readonly userConfigService: UserConfigService,
+    @Inject(ProcessProgressService)
+    private readonly processProgressService: ProcessProgressService
   ) {}
+
   public async getModpacks(): Promise<Dirent[]> {
     const modpacksDir = this.userConfigService.get('modpacksPath')
 
@@ -34,25 +34,54 @@ export class FilesystemService {
   }
 
   public async removeFolder(folderPath: string): Promise<void> {
-    if (!fs.existsSync(folderPath)) {
+    const progress = this.processProgressService.getLogger()
+    const processName = `removeFolder:${basename(folderPath)}`
+
+    if (!existsSync(folderPath)) {
       this.logger.log(`Folder doesn't exists: ${folderPath}`)
+      progress.set({
+        processName,
+        status: 'failed'
+      })
       return
     }
 
-    const entries = fs.readdirSync(folderPath, { withFileTypes: true })
+    const entries = await readdir(folderPath, { withFileTypes: true })
+
+    progress.set({
+      processName,
+      status: 'started',
+      minValue: 0,
+      maxValue: entries.length,
+      currentValue: 0,
+      unit: 'files'
+    })
 
     for (const entry of entries) {
-      const fullPath = path.join(folderPath, entry.name)
+      const fullPath = join(folderPath, entry.name)
       if (entry.isDirectory()) {
         this.logger.log(`Removing folder: ${fullPath}`)
+
         await this.removeFolder(fullPath)
       } else {
         this.logger.log(`Removing file: ${fullPath}`)
-        fs.unlinkSync(fullPath)
+
+        await unlink(fullPath)
       }
+
+      progress.set(
+        {
+          status: 'inProgress'
+        },
+        { additionalValue: 1 }
+      )
     }
 
     this.logger.log(`Removing root folder: ${folderPath}`)
-    fs.rmdirSync(folderPath)
+    await rmdir(folderPath)
+
+    progress.set({
+      status: 'finished'
+    })
   }
 }

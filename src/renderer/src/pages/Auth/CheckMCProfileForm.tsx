@@ -7,7 +7,7 @@ import { RouteNames } from '../../app/routes/routeNames'
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { Loading } from '../../shared/ui/Loading'
+import { Loading } from '../../shared/ui/default/Loading'
 
 const CheckMCProfileForm: FC = () => {
   const {

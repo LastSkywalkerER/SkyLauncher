@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 
 import { IUser, UserData } from '../../entities/User/interfaces'
 import { useLoadableState } from '../../shared/hooks/useLoadableState'
-import { PageLoading } from '../../shared/ui/index'
+import { LoadingOverlay } from '../../shared/ui'
 import { RouteNames } from '../routes/routeNames'
 
 export const AuthGuard: FC<{
@@ -14,19 +14,19 @@ export const AuthGuard: FC<{
   const { data, isLoading, isLoaded } = useLoadableState<IUser, UserData>(IUser.$)
   const { t } = useTranslation()
 
-  if (isLoading) {
+  if (!isLoaded || isLoading) {
     return (
       <div className={'w-full h-full'}>
-        <PageLoading />
+        <LoadingOverlay />
       </div>
     )
   }
 
-  if (isLoaded && data) {
+  if (isLoaded && data?.role) {
     return children
   }
 
-  if (isLoaded && !data) {
+  if (isLoaded && !data?.role) {
     return <Navigate to={fallbackRoute} />
   }
 

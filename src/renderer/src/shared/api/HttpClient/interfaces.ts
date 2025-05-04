@@ -13,10 +13,16 @@ export interface ResponseData<T> {
   headers?: Record<string, string>
 }
 
+export interface AuthData {
+  token: string
+  type: string
+}
+
 export interface IHttpClient {
   request: <T>(data: RequestData) => Promise<ResponseData<T>>
-  setAuth(data: { token: string; type?: string }): void
+  setAuth(data: AuthData): void
   removeAuth(): void
+  getAuth(): AuthData | null
 }
 
 export namespace IHttpClient {

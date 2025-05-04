@@ -14,17 +14,31 @@
     "loading": "Загрузка...",
     "error": "Ошибка",
     "success": "Успешно",
-    "signIn": "Войти с FreshCraft",
+    "signIn": "Войти\u00A0с\u00A0FreshCraft",
     "signUp": "Регистрация",
-    "goBack": "Назад"
+    "goBack": "Назад",
+    "manageProfile": "Управление профилем"
+  },
+  "menu": {
+    "home": "Главная",
+    "premium": "Премиум",
+    "free": "Бесплатные"
   },
   "settings": {
-    "javaPath": "Путь к Java",
-    "javaVersion": "Версия Java",
+    "javaPath": "Путь\u00A0к\u00A0Java",
+    "javaVersion": "Версия\u00A0Java",
     "minMemory": "Минимальная память (ГБ)",
     "maxMemory": "Максимальная память (ГБ)",
-    "fullscreen": "Полный экран",
-    "modpacksPath": "Путь к модпакам"
+    "fullscreen": "Полный\u00A0экран",
+    "modpacksPath": "Путь\u00A0к\u00A0модпакам",
+    "gameDirectory": "Директория\u00A0игры",
+    "resolution": "Разрешение",
+    "width": "Ширина",
+    "height": "Высота",
+    "javaArguments": "Аргументы\u00A0Java",
+    "minJavaRAM": "Мин.\u00A0RAM\u00A0(МБ)",
+    "maxJavaRAM": "Макс.\u00A0RAM\u00A0(МБ)",
+    "reset": "Сбросить"
   },
   "launcher": {
     "play": "Играть",
@@ -32,6 +46,13 @@
     "update": "Обновить",
     "version": "Версия",
     "availableVersions": "Доступные версии",
-    "logs": "Логи"
+    "logs": "Логи",
+    "buy": "Купить"
+  },
+  "topbar": {
+    "play": "Играть",
+    "settings": "Настройки",
+    "skins": "Скины",
+    "servers": "Серверы"
   }
 } 

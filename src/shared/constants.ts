@@ -25,7 +25,9 @@ export enum IPCHandleNames {
   // GetCustomMCVersions = 'get-custom-mc-versions',
   SetConfig = 'set-config',
   GetConfig = 'get-config',
-  Request = 'request'
+  Request = 'request',
+  GetLauncherInfo = 'GetLauncherInfo',
+  UpdateLocalMCVersion = 'update-local-mc-version'
 }
 
 export enum IPCSendNames {

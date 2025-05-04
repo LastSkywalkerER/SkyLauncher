@@ -7,7 +7,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form'
 import { IMCLocalGameVersion, IVersions } from '../../entities/Versions/interfaces'
 import { useObservable } from '../../shared/hooks/useObservable'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { Loading } from '../../shared/ui/Loading'
+import { Loading } from '../../shared/ui/default/Loading'
 
 interface FormValue {
   value: IMCLocalGameVersion

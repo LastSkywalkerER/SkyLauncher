@@ -13,7 +13,13 @@
     "edit": "Edit",
     "loading": "Loading...",
     "success": "Success",
-    "goBack": "Back"
+    "goBack": "Back",
+    "manageProfile": "Manage Profile"
+  },
+  "menu": {
+    "home": "Home",
+    "premium": "Premium",
+    "free": "Free"
   },
   "errors": {
     "error": "Error",
@@ -25,7 +31,15 @@
     "minMemory": "Min Memory (GB)",
     "maxMemory": "Max Memory (GB)",
     "fullscreen": "Fullscreen",
-    "modpacksPath": "Modpacks Path"
+    "modpacksPath": "Modpacks Path",
+    "gameDirectory": "Game Directory",
+    "resolution": "Resolution",
+    "width": "Width",
+    "height": "Height",
+    "javaArguments": "Java Arguments",
+    "minJavaRAM": "Min Java RAM MB",
+    "maxJavaRAM": "Max Java RAM MB",
+    "reset": "Reset"
   },
   "launcher": {
     "play": "Play",
@@ -33,7 +47,8 @@
     "update": "Update",
     "version": "Version",
     "availableVersions": "Available Versions",
-    "logs": "Logs"
+    "logs": "Logs",
+    "buy": "Buy"
   },
   "auth": {
     "login": "Login",
@@ -45,5 +60,11 @@
     "noAccount": "Don't have an account?",
     "goOffline": "Go offline",
     "offlineLogin": "Offline Login"
+  },
+  "topbar": {
+    "play": "Play",
+    "settings": "Settings",
+    "skins": "Skins",
+    "servers": "Servers"
   }
 }

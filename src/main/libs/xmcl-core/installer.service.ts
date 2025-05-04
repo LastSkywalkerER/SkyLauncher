@@ -31,6 +31,8 @@ export class InstallerService {
   public async install(target: MCGameVersion): Promise<MCGameVersion> {
     const localTarget = target.update({})
 
+    this.logger.log(`Installing native version ${localTarget.name}`)
+
     if (!localTarget.jsonUrl) {
       const availableVersions = await getVersionList()
 
@@ -66,6 +68,10 @@ export class InstallerService {
       )
 
       localTarget.updateStatus({ native: true, assets: true, libs: true })
+
+      this.logger.log(
+        `Installed native version ${localTarget.name} assets: ${localTarget.status.assets} libs: ${localTarget.status.libs}`
+      )
     }
 
     return localTarget

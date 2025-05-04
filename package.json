@@ -1,11 +1,11 @@
 {
   "name": "skylauncher",
-  "version": "0.0.6-alpha",
+  "version": "0.0.7-alpha",
   "license": "MIT",
   "description": "Minecraft Launcher for sky purposes",
   "main": "./out/main/index.js",
   "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "homepage": "https://freshcraft.org",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",

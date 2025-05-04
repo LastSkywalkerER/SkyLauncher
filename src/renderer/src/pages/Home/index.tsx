@@ -3,8 +3,8 @@ import { FC } from 'react'
 
 import { IVersions } from '../../entities/Versions/interfaces'
 import { OpenButton, RemoveButton } from '../../features'
+import { PlayButton } from '../../features/LaucnherControls'
 import { useObservable } from '../../shared/hooks/useObservable'
-import { PlayButton } from '../../widgets/LaucnherControls/ui'
 
 const Home: FC = () => {
   const { getCurrentMCVersion } = useInjection(IVersions.$)

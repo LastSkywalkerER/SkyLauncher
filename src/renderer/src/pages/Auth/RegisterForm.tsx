@@ -10,9 +10,9 @@ import { RouteNames } from '../../app/routes/routeNames'
 import { IUser } from '../../entities/User/interfaces'
 import { LoginResponse, RegisterData } from '../../shared/api/BackendApi/interfaces'
 import { useObservableRequest } from '../../shared/hooks/useObservableRequest'
-import { InputFieldControlled } from '../../shared/ui/InputField'
-import { PasswordFieldControlled } from '../../shared/ui/InputField/Password'
-import { Loading } from '../../shared/ui/Loading'
+import { InputFieldControlled } from '../../shared/ui/default/InputField'
+import { PasswordFieldControlled } from '../../shared/ui/default/InputField/ui/password-field.ui'
+import { Loading } from '../../shared/ui/default/Loading'
 
 const RegisterForm: FC = () => {
   const { register } = useInjection(IUser.$)

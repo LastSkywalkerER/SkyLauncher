@@ -7,6 +7,7 @@ import { PrimeReactProvider } from 'primereact/api'
 import { FC } from 'react'
 import { RouterProvider } from 'react-router-dom'
 
+import { ModpackProvider } from '../../../shared/constants'
 import { environment } from './config/environments'
 import { inversifyContainer } from './config/inversify.config'
 import { routes } from './routes/routes'
@@ -16,7 +17,9 @@ export const App: FC = () => {
   return (
     <Provider container={inversifyContainer}>
       <PrimeReactProvider>
-        <RouterProvider router={environment.uiType === 'FreshCraft' ? routesFreshCraft : routes} />
+        <RouterProvider
+          router={environment.uiType === ModpackProvider.FreshCraft ? routesFreshCraft : routes}
+        />
         {/* <RouterProvider router={routesFreshCraft} /> */}
       </PrimeReactProvider>
     </Provider>

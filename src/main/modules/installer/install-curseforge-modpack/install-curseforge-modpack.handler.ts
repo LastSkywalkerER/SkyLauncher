@@ -1,7 +1,8 @@
 import { existsSync } from 'node:fs'
-import { readdir, readFile, rename, rmdir } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rename, rmdir } from 'node:fs/promises'
 
-import { Inject } from '@nestjs/common'
+import { prettyLogObject } from '@main/utils/pretty-log-object'
+import { Inject, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { CommandHandler } from '@nestjs/cqrs'
 import { CurseforgeV1Client } from '@xmcl/curseforge'
@@ -25,6 +26,8 @@ import { ManifestCurseForge } from './install-curseforge-modpack.interface'
 
 @CommandHandler(InstallCurseforgeModpackCommand)
 export class InstallCurseforgeModpackHandler extends InstallHandlerBase {
+  private readonly _logger = new Logger(InstallCurseforgeModpackHandler.name)
+
   private readonly _curseForgeApi: CurseforgeV1Client
 
   constructor(
@@ -49,6 +52,8 @@ export class InstallCurseforgeModpackHandler extends InstallHandlerBase {
       // 'FreshCraft'
       localTarget.name
     )
+
+    this._logger.log(`Installing: ${prettyLogObject(localTarget)} to ${installPath}`)
 
     // Recheck install folder
     // if (!localTarget.folder! && !existsSync(installPath)) {
@@ -90,22 +95,30 @@ export class InstallCurseforgeModpackHandler extends InstallHandlerBase {
 
     const fileContents = await readFile(manifestPath, 'utf-8')
     const jsonData = JSON.parse(fileContents) as ManifestCurseForge
+    this._logger.log(`Manifest: ${prettyLogObject(jsonData)}`)
     const overridesPath = join(localTarget.folder!, jsonData.overrides || 'overrides')
     const modsPath = join(localTarget.folder!, MCGameVersion.modsFolder)
 
     // Get modpack data from overrides folder
     if (existsSync(overridesPath)) {
       const itemsInSingleDirectory = await readdir(overridesPath)
+      this._logger.log(`Overrides: ${prettyLogObject(itemsInSingleDirectory)}`)
       for (const item of itemsInSingleDirectory) {
         const srcPath = join(overridesPath, item)
         const destPath = join(localTarget.folder!, item)
         await rename(srcPath, destPath)
       }
       await rmdir(overridesPath)
+      this._logger.log(`Overrides removed`)
     }
 
     // Download mods
-    if (existsSync(modsPath) && localTarget.modloader && !localTarget.status.mods) {
+    if (localTarget.modloader && !localTarget.status.mods) {
+      if (!existsSync(modsPath)) {
+        await mkdir(modsPath)
+      }
+
+      this._logger.log(`Downloading mods ${prettyLogObject(jsonData.files)}`)
       await Promise.all(
         jsonData.files.map(async ({ fileID, projectID }) => {
           const result = await this._curseForgeApi.getModFile(projectID, fileID)
@@ -120,6 +133,7 @@ export class InstallCurseforgeModpackHandler extends InstallHandlerBase {
       )
 
       localTarget.updateStatus({ mods: true })
+      this._logger.log(`Downloaded mods`)
     }
 
     localTarget.update(await this.installerService.install(localTarget))

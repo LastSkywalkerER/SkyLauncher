@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 
-import { ModpackProvider, supabaseFunctionsRoute } from '../../../../../shared/constants'
+import { Modloader, ModpackProvider, supabaseFunctionsRoute } from '../../../../../shared/constants'
 import { MCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { environment } from '../../../app/config/environments'
@@ -11,7 +11,9 @@ import {
   IBackendApi,
   LoginData,
   LoginResponse,
+  MCModpack,
   MinecraftProfileResponse,
+  Modpack,
   ProfileResponse,
   RegisterData
 } from './interfaces'
@@ -47,26 +49,41 @@ export class BackendApi implements IBackendApi {
   }
 
   public async getProfile(): Promise<ProfileResponse> {
-    const { body } = await this._httpClient.request<ProfileResponse>({
-      url: 'v1/profile'
-    })
+    try {
+      const { body } = await this._httpClient.request<ProfileResponse>({
+        url: 'v1/profile'
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message,
+        { cause: error }
+      )
+    }
   }
 
   public async login({ email, password }: LoginData): Promise<LoginResponse> {
-    const { body } = await this._httpClient.request<LoginResponse>({
-      url: 'v1/auth/login',
-      method: 'POST',
-      body: { email, password }
-    })
+    try {
+      const { body } = await this._httpClient.request<LoginResponse>({
+        url: 'v1/auth/login',
+        method: 'POST',
+        body: { email, password }
+      })
 
-    this._httpClient.setAuth({
-      token: body.access_token,
-      type: capitalizeFirstLetter(body.token_type)
-    })
+      this._httpClient.setAuth({
+        token: body.access_token,
+        type: capitalizeFirstLetter(body.token_type)
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async logout(): Promise<unknown> {
@@ -77,20 +94,30 @@ export class BackendApi implements IBackendApi {
       })
 
       return body
-    } catch (e) {
-      throw e
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
     } finally {
       this._httpClient.removeAuth()
     }
   }
 
   public async refresh(): Promise<unknown> {
-    const { body } = await this._httpClient.request<unknown>({
-      url: 'v1/auth/refresh',
-      method: 'POST'
-    })
+    try {
+      const { body } = await this._httpClient.request<unknown>({
+        url: 'v1/auth/refresh',
+        method: 'POST'
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async register({
@@ -99,18 +126,25 @@ export class BackendApi implements IBackendApi {
     confirmPassword,
     terms
   }: RegisterData): Promise<LoginResponse> {
-    const { body } = await this._httpClient.request<LoginResponse>({
-      url: 'v1/auth/register',
-      method: 'POST',
-      body: { email, password, confirmPassword, terms }
-    })
+    try {
+      const { body } = await this._httpClient.request<LoginResponse>({
+        url: 'v1/auth/register',
+        method: 'POST',
+        body: { email, password, confirmPassword, terms }
+      })
 
-    this._httpClient.setAuth({
-      token: body.access_token,
-      type: capitalizeFirstLetter(body.token_type)
-    })
+      this._httpClient.setAuth({
+        token: body.access_token,
+        type: capitalizeFirstLetter(body.token_type)
+      })
 
-    return body
+      return body
+    } catch (error) {
+      throw Error(
+        (error as ErrorResponse)?.response?.data?.error ||
+          (error as ErrorResponse)?.response?.data?.message
+      )
+    }
   }
 
   public async getCustomMCVersions(): Promise<IMCGameVersion[]> {
@@ -128,6 +162,56 @@ export class BackendApi implements IBackendApi {
 
         modpackProvider: ModpackProvider.FreshCraft
       }).getData()
+    })
+  }
+
+  public async getCustomMCModpacks(): Promise<MCModpack[]> {
+    const { body: modpacks } = await this._httpClient.request<Modpack[]>({
+      url: `${environment.supabaseBaseUrl}${supabaseFunctionsRoute}/get-modpacks`,
+      // method: 'POST',
+      headers: {
+        Authorization: `Bearer ${environment.supabaseAnonKey}`
+      }
+    })
+
+    return modpacks.map(({ id: modpackId, name: modpackName, versions }) => {
+      return {
+        id: String(modpackId),
+        name: modpackName,
+        versions: versions.map(
+          ({
+            cover_image,
+            description,
+            download_url,
+            icon,
+            id: versionId,
+            minecraft_version,
+            modloader,
+            modloader_version,
+            modpack_name,
+            modpack_version,
+            name,
+            title,
+            title_image
+          }) =>
+            new MCGameVersion({
+              id: String(versionId),
+              modpackName: modpack_name,
+              modpackProvider: ModpackProvider.FreshCraft,
+              version: minecraft_version,
+              coverImage: cover_image,
+              description,
+              downloadUrl: download_url,
+              icon,
+              modloader: modloader as Modloader,
+              modloaderVersion: modloader_version,
+              name,
+              title,
+              titleImage: title_image,
+              modpackVersion: modpack_version
+            })
+        )
+      }
     })
   }
 }

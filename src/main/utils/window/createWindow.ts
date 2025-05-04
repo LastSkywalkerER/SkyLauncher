@@ -8,8 +8,10 @@ import appIcon from '../../../../resources/SkyLauncher/icon.png?asset'
 export const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    minWidth: 720,
+    minHeight: 480,
+    width: 1280,
+    height: 720,
     show: false,
 
     autoHideMenuBar: true,
@@ -18,6 +20,7 @@ export const createWindow = (): BrowserWindow => {
     title: import.meta.env['VITE_UI_TYPE'] || 'SkyLauncher',
 
     webPreferences: {
+      webviewTag: true,
       preload: join(__dirname, '../preload/index.js'),
       // sandbox: false,
       nodeIntegration: true,
@@ -29,15 +32,26 @@ export const createWindow = (): BrowserWindow => {
     mainWindow.show()
   })
 
+  mainWindow.on('page-title-updated', (event) => {
+    event.preventDefault()
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
 
+  is.dev &&
+    mainWindow.webContents.openDevTools({
+      mode: 'detach',
+      activate: true,
+      title: 'DevTools'
+    })
+
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && import.meta.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(import.meta.env['ELECTRON_RENDERER_URL'])
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }

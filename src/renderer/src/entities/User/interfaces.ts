@@ -11,6 +11,7 @@ export interface UserData {
   email?: string
   icon?: string
   isOffline?: boolean
+  role?: string
   // accessToken: string
 }
 

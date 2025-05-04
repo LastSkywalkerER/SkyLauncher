@@ -5,6 +5,7 @@ import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-g
 
 export interface IMCLocalGameVersion extends IMCGameVersion {
   isInstalled: boolean
+  isUpdateAvailable: boolean
 }
 
 export interface IVersions {
@@ -13,9 +14,13 @@ export interface IVersions {
   getLocalMCVersions(): Observable<IMCGameVersion[]>
   getCurrentMCVersion(): Observable<IMCGameVersion | null>
   setCurrentMCVersion(version: IMCGameVersion): void
+  getCurseForgeModpacks(): Observable<IMCLocalGameVersion[]>
 
   installGame(version: IMCGameVersion): Observable<IMCGameVersion>
   updateGame(version: IMCGameVersion): Observable<IMCGameVersion>
+  updateLocalMCVersion(version: Partial<IMCGameVersion>): Observable<void>
+
+  getModpackVersions(modpackName: string): Observable<IMCLocalGameVersion[]>
 }
 
 export namespace IVersions {

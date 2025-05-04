@@ -35,7 +35,12 @@ interface UseObservableRequestResult<T, P extends unknown[]> {
  */
 export const useObservableRequest = <P extends unknown[], T>(
   createObservable: (...params: P) => Observable<T>,
-  commonParams?: P
+  commonParams?: P,
+  options?: {
+    onSuccess?: (data: T) => void
+    onError?: (error: Error) => void
+    onComplete?: () => void
+  }
 ): UseObservableRequestResult<T, P> => {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<Error | null>(null)
@@ -55,14 +60,17 @@ export const useObservableRequest = <P extends unknown[], T>(
           setData(result)
           setLoading(false)
           setLoaded(true)
+          options?.onSuccess?.(result)
         },
         error: (err) => {
           setError(err)
           setLoading(false)
           setLoaded(true)
+          options?.onError?.(err)
         },
         complete: () => {
           setLoading(false)
+          options?.onComplete?.()
         }
       })
 

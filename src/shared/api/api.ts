@@ -3,7 +3,7 @@ import { IpcRenderer, ipcRenderer } from 'electron'
 import { IPCHandleNames, IPCSendNames } from '../constants'
 import { type ConfigKeys, type UserConfigData } from '../dtos/config.dto'
 import { FolderPathDto } from '../dtos/filesystem.dto'
-import { type GameData } from '../dtos/launcher.dto'
+import { type GameData, type LauncherInfo, PartialGameData } from '../dtos/launcher.dto'
 import { type ProcessProgressData } from '../dtos/process-progress.dto'
 import { type RequestData, type ResponseData } from '../dtos/request.dto'
 import { type IMCGameVersion } from '../entities/mc-game-version/mc-game-version.interface'
@@ -17,6 +17,8 @@ export const rendererApi = {
     ipcRenderer.invoke(IPCHandleNames.InstallGame, data),
   updateGame: (data: GameData): Promise<IMCGameVersion> =>
     ipcRenderer.invoke(IPCHandleNames.UpdateGame, data),
+  updateLocalMCVersion: (data: PartialGameData): Promise<void> =>
+    ipcRenderer.invoke(IPCHandleNames.UpdateLocalMCVersion, data),
 
   setConfig: (data: UserConfigData): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.SetConfig, data),
@@ -36,5 +38,7 @@ export const rendererApi = {
   openFolder: (data: FolderPathDto): Promise<string> =>
     ipcRenderer.invoke(IPCHandleNames.OpenFolder, data),
   removeFolder: (data: FolderPathDto): Promise<void> =>
-    ipcRenderer.invoke(IPCHandleNames.RemoveFolder, data)
+    ipcRenderer.invoke(IPCHandleNames.RemoveFolder, data),
+
+  getLauncherInfo: (): Promise<LauncherInfo> => ipcRenderer.invoke(IPCHandleNames.GetLauncherInfo)
 }

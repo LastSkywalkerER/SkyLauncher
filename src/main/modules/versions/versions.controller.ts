@@ -1,5 +1,6 @@
 import { IpcHandle } from '@doubleshot/nest-electron'
 import { Controller, Inject } from '@nestjs/common'
+import { Payload } from '@nestjs/microservices'
 
 import { IPCHandleNames } from '../../../shared/constants'
 import { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
@@ -20,5 +21,12 @@ export class VersionsController {
     return (
       await Promise.all(modpacks.map(async (item) => await this.metadataService.parse(item.name)))
     ).filter((item) => !!item)
+  }
+
+  @IpcHandle(IPCHandleNames.UpdateLocalMCVersion)
+  public async handleUpdateMCVersion(
+    @Payload() { version }: { version: Partial<IMCGameVersion> }
+  ): Promise<void> {
+    await this.metadataService.update(version)
   }
 }

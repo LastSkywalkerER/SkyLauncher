@@ -15,7 +15,11 @@ import { Observable } from 'rxjs'
  * @example
  * const value = useObservable(someObservable$, 0);
  */
-export const useObservable = <T,>(observable: Observable<T>, initialValue: T): T => {
+export const useObservable = <T,>(
+  observable: Observable<T>,
+  initialValue: T,
+  deps: unknown[] = []
+): T => {
   // Создаем состояние с начальным значением
   const [value, setValue] = useState<T>(initialValue)
 
@@ -30,7 +34,7 @@ export const useObservable = <T,>(observable: Observable<T>, initialValue: T): T
     return (): void => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, deps)
 
   return value
 }
