@@ -41,7 +41,7 @@ export interface ProfileResponse {
 }
 
 export interface ModpackVersion {
-  id: string
+  id: number
   name: string
   title: string
   modpack_name: string
@@ -57,7 +57,7 @@ export interface ModpackVersion {
 }
 
 export interface Modpack {
-  id: string
+  id: number
   name: string
   versions: ModpackVersion[]
 }

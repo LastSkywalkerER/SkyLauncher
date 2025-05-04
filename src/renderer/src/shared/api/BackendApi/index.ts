@@ -174,17 +174,17 @@ export class BackendApi implements IBackendApi {
       }
     })
 
-    return modpacks.map(({ id, name, versions }) => {
+    return modpacks.map(({ id: modpackId, name: modpackName, versions }) => {
       return {
-        id,
-        name,
+        id: String(modpackId),
+        name: modpackName,
         versions: versions.map(
           ({
             cover_image,
             description,
             download_url,
             icon,
-            id,
+            id: versionId,
             minecraft_version,
             modloader,
             modloader_version,
@@ -195,7 +195,7 @@ export class BackendApi implements IBackendApi {
             title_image
           }) =>
             new MCGameVersion({
-              id,
+              id: String(versionId),
               modpackName: modpack_name,
               modpackProvider: ModpackProvider.FreshCraft,
               version: minecraft_version,
