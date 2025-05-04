@@ -5,6 +5,7 @@ import { IMCGameVersion } from '../../../../shared/entities/mc-game-version/mc-g
 
 export interface IMCLocalGameVersion extends IMCGameVersion {
   isInstalled: boolean
+  isUpdateAvailable: boolean
 }
 
 export interface IVersions {

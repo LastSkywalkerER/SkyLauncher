@@ -11,7 +11,7 @@ import {
 } from '../../../../../shared/constants'
 import { MCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.entity'
 import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/mc-game-version.interface'
-import { sortVersions } from '../../../../../shared/utils/versionSorter'
+import { compareFullVersions, sortVersions } from '../../../../../shared/utils/versionSorter'
 import { environment } from '../../../app/config/environments'
 import { IBackendApi } from '../../../shared/api/BackendApi/interfaces'
 import { NodeApi } from '../../../shared/api/NodeApi'
@@ -107,32 +107,51 @@ export class Versions implements IVersions {
         })
       ),
 
-      this._localMCVersions
+      from(this._nodeApi.getLocalMCVersions()).pipe(
+        // Group installed versions by modpack name
+        map((versions) => {
+          return versions.reduce<Record<string, IMCGameVersion[]>>((acc, version) => {
+            if (!version.modpackName) return acc
+
+            if (acc[version.modpackName]) {
+              acc[version.modpackName].push(version)
+            } else {
+              acc[version.modpackName] = [version]
+            }
+
+            return acc
+          }, {})
+        }),
+        // Leave only the latest version for each installed modpack
+        map((modpacks) => {
+          return Object.entries(modpacks).reduce(
+            (acc, [modpackName, versions]) => {
+              return {
+                ...acc,
+                [modpackName]: versions.sort(compareFullVersions)[0]
+              }
+            },
+            {} as Record<string, IMCGameVersion>
+          )
+        })
+      )
     ]).pipe(
       map(([versions, installedVersions]) => {
-        // Создаем объект с установленными версиями
-        const installedVersionsMap = installedVersions.reduce<Record<string, IMCGameVersion>>(
-          (acc, version) => {
-            acc[version.name] = version
-            return acc
-          },
-          {}
-        )
-
         return versions.map((version) => {
-          const installedVersion = installedVersionsMap[version.name]
+          if (!version.modpackName) throw new Error('Modpack name is required')
+
+          const installedVersion = installedVersions[version.modpackName]
+
+          if (installedVersion && installedVersion.id === version.id)
+            return { ...installedVersion, isInstalled: true, isUpdateAvailable: false }
+
+          if (installedVersion && installedVersion.id !== version.id)
+            return { ...installedVersion, isInstalled: true, isUpdateAvailable: true }
 
           return {
-            ...installedVersion,
-            ...(version && {
-              ...Object.keys(version).reduce((acc, key) => {
-                if (version[key]) {
-                  acc[key] = version[key]
-                }
-                return acc
-              }, {} as Partial<IMCGameVersion>)
-            }),
-            isInstalled: !!installedVersion
+            ...version,
+            isInstalled: false,
+            isUpdateAvailable: false
           }
         })
       })
@@ -147,7 +166,7 @@ export class Versions implements IVersions {
           return modpack?.versions || []
         })
       ),
-      this._localMCVersions
+      from(this._nodeApi.getLocalMCVersions())
     ]).pipe(
       map(([versions, installedVersions]) => {
         const installedVersionsMap = installedVersions.reduce<Record<string, IMCGameVersion>>(

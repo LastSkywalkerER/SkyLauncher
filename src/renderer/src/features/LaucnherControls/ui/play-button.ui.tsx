@@ -17,7 +17,7 @@ export const PlayButton: FC<ButtonProps> = ({ onClick, ...props }) => {
   const { getCurrentMCVersion } = useInjection(IVersions.$)
   const currentVersion = useObservable(getCurrentMCVersion(), null)
   const { launchGame } = useTransientInjection(ILauncherControlService.$)
-  const { execute: executeLaunchGame } = useObservableRequest(launchGame)
+  const { execute: executeLaunchGame, isLoading } = useObservableRequest(launchGame)
   const { data } = useLoadableState<IUser, UserData>(IUser.$)
   const { t } = useTranslation()
 
@@ -32,7 +32,7 @@ export const PlayButton: FC<ButtonProps> = ({ onClick, ...props }) => {
 
   if (currentVersion?.folder) {
     return (
-      <BigButton {...props} onClick={handlePlayButton}>
+      <BigButton {...props} onClick={handlePlayButton} loading={isLoading}>
         {t('launcher.play')}
       </BigButton>
     )

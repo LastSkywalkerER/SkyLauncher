@@ -22,6 +22,7 @@ export class LauncherController {
   constructor(
     @Inject(CommandBus) private readonly commandBus: CommandBus,
     @Inject(UserConfigService) private readonly userConfigService: UserConfigService
+    // @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService
   ) {}
 
   @IpcHandle(IPCHandleNames.GetLauncherInfo)
@@ -72,7 +73,8 @@ export class LauncherController {
     const fullVersion = new MCGameVersion(version)
 
     const command = new LaunchModpackCommand(fullVersion)
+    const result = await this.commandBus.execute<LaunchModpackCommand, ChildProcess>(command)
 
-    return await this.commandBus.execute<LaunchModpackCommand, ChildProcess>(command)
+    return result
   }
 }

@@ -17,7 +17,7 @@ export interface IMCGameVersion {
   description?: string
   modpackProvider: ModpackProvider
 
-  id?: string
+  id?: number
   modpackName?: string
   modpackVersion?: string
 
