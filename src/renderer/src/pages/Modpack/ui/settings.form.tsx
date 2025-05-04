@@ -5,7 +5,7 @@ import { FCInputFieldControlled } from '@renderer/shared/ui'
 import { FCMainButton, FCSecondaryButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
 import { FCFieldButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
 import { FCCheckboxFieldControlled } from '@renderer/shared/ui/freshcraft/Checkbox'
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -21,12 +21,17 @@ export const SettingsForm: FC<SettingsFormProps> = ({
   const { t } = useTranslation()
   const {
     getValues,
+    setValue,
     control,
     handleSubmit,
     formState: { errors }
   } = useForm<ModpackSettings>({ defaultValues })
 
   const { folder } = getValues()
+
+  const resetJavaArgs = useCallback(() => {
+    setValue('javaArgs', '')
+  }, [setValue])
 
   const onSubmit = (data: ModpackSettings): void => {
     // Folder is not in the form data couse of folder input is disabled, so we need to add it to the data
@@ -123,6 +128,8 @@ export const SettingsForm: FC<SettingsFormProps> = ({
               className="h-full m-0 py-1 px-5 flex items-center justify-center text-main bg-common-darker rounded-l-none rounded-r-md hover:bg-common-base w-auto"
               text
               label={t('settings.reset')}
+              onClick={resetJavaArgs}
+              type="reset"
             />
           }
         />
