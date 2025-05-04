@@ -91,12 +91,12 @@ export const useMenuItems = (): MenuItemsReturn => {
     .map((version, index) => ({
       type: version.modpackName!,
       icon: <Avatar image={version.icon} shape="square" size="normal" />,
-      title: version.title || version.modpackProvider,
+      title: version.modpackProvider,
       id: `${version.modpackProvider}-${index}`
     }))
 
   const freeModpacks = curseForgeModpacks.map((version, index) => ({
-    type: version.title,
+    type: version.modpackName!,
     icon: <Avatar image={version.icon} shape="square" size="normal" />,
     title: version.modpackProvider,
     id: `${version.modpackProvider}-${index}`
@@ -121,8 +121,8 @@ export const useMenuItems = (): MenuItemsReturn => {
   const scrollableMenuItems: MenuItem[] = modpackCategories.map((category) => ({
     label: category.label,
     className: category.className,
-    items: category.modpacks.map((modpack) =>
-      createMenuItem(
+    items: category.modpacks.map((modpack) => {
+      return createMenuItem(
         {
           id: modpack.id!,
           icon: modpack.icon,
@@ -132,7 +132,7 @@ export const useMenuItems = (): MenuItemsReturn => {
         activeItemId,
         handleItemClick
       )
-    )
+    })
   }))
 
   // Bottom fixed items

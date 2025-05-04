@@ -1,9 +1,9 @@
 import { ChildProcess } from 'node:child_process'
 
+import { prettyLogObject } from '@main/utils/pretty-log-object'
 import { Inject, Logger } from '@nestjs/common'
 import { CommandHandler } from '@nestjs/cqrs'
 import { launch, LaunchOption } from '@xmcl/core'
-import * as util from 'util'
 
 import { HardwareService } from '../../../libs/hardware/hardware.service'
 import { JavaService } from '../../../libs/java/java.service'
@@ -27,9 +27,7 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
   public async execute({ target }: LaunchModpackCommand): Promise<ChildProcess> {
     const localTarget = target.update({})
 
-    this.logger.log(
-      `Launching ${util.inspect(localTarget, { showHidden: false, depth: null, colors: true })}`
-    )
+    this.logger.log(`Launching ${prettyLogObject(localTarget)}`)
 
     try {
       if (!localTarget.status?.native || !localTarget.status?.libs || !localTarget.folder) {

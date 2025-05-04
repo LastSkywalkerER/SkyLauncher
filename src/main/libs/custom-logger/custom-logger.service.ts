@@ -22,6 +22,12 @@ export class CustomLoggerService implements LoggerService {
             appName: true
           })
         )
+      }),
+      new winston.transports.File({
+        maxsize: 1024 * 1024,
+        maxFiles: 1,
+        filename: 'logs/complete.log',
+        format: winston.format.combine(winston.format.ms(), winston.format.simple())
       })
     ]
   })

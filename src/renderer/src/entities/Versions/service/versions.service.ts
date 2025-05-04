@@ -42,6 +42,7 @@ export class Versions implements IVersions {
     this.updateGame = this.updateGame.bind(this)
     this.getModpackVersions = this.getModpackVersions.bind(this)
     this.updateLocalMCVersion = this.updateLocalMCVersion.bind(this)
+    this.getCurseForgeModpacks = this.getCurseForgeModpacks.bind(this)
     this.checkLocalMCVersions()
   }
 
@@ -52,62 +53,53 @@ export class Versions implements IVersions {
       pageSize: 3,
       sortField: 5
     }
-  ): Observable<IMCGameVersion[]> {
+  ): Observable<IMCLocalGameVersion[]> {
     const api = new CurseforgeV1Client(environment.curseForgeApiKey)
 
-    return from(api.searchMods(searchOptions)).pipe(
-      map((result) => {
-        return result.data.map((data) => {
-          const mainFile = data.latestFiles.find((file) => file.id === data.mainFileId)
-          const mainVersion = mainFile?.gameVersions.find(
-            (string) => string.split('.').length === 3
-          )
-          const mainModloader = mainFile?.gameVersions
-            .find((string) => modloaderList.includes(string.toLowerCase() as Modloader))
-            ?.toLowerCase() as Modloader
-
-          return new MCGameVersion({
-            id: String(data.id),
-            name: mainFile?.fileName.replace('.zip', ''),
-            icon: data.logo.url,
-            coverImage: data.screenshots[0]?.url,
-            downloadUrl:
-              mainFile?.downloadUrl || (mainFile?.fileName && mainFile?.id)
-                ? getCurseForgeLinks({ fileID: mainFile.id!, fileName: mainFile.fileName! })[0]
-                : '',
-            version: mainVersion!,
-            modloader: mainModloader,
-            description: data.summary,
-            title: data.name,
-            modpackProvider: ModpackProvider.CurseFroge,
-            modpackVersion: mainFile?.fileName
-              ? mainFile.fileName.match(/\d+\.\d+\.\d+/)?.[0]
-              : undefined
-          }).getData()
-        })
-      })
-    )
-  }
-
-  public getCustomMCVersions(): Observable<IMCLocalGameVersion[]> {
     return combineLatest([
-      from(this._backendApi.getCustomMCModpacks()).pipe(
-        map((modpacks) => {
-          return modpacks.map((modpack) => {
-            const latestModpackVersion = sortVersions(
-              modpack.versions
-                .filter((version) => version.modpackVersion)
-                .map((version) => version.modpackVersion!)
-            )[0]
+      // Get modpacks from CurseForge
+      from(api.searchMods(searchOptions)).pipe(
+        map((result) => {
+          return result.data.map((data) => {
+            const mainFile = data.latestFiles.find((file) => file.id === data.mainFileId)
+            const mainVersion = mainFile?.gameVersions.find(
+              (string) => string.split('.').length === 3
+            )
+            const mainModloader = mainFile?.gameVersions
+              .find((string) => modloaderList.includes(string.toLowerCase() as Modloader))
+              ?.toLowerCase() as Modloader
 
-            return modpack.versions.find(
-              (version) => version.modpackVersion === latestModpackVersion
-            )!
+            return new MCGameVersion({
+              id: String(data.id),
+              name: mainFile?.fileName.replace('.zip', ''),
+              icon: data.logo.url,
+              coverImage: data.screenshots[0]?.url,
+              downloadUrl:
+                mainFile?.downloadUrl || (mainFile?.fileName && mainFile?.id)
+                  ? getCurseForgeLinks({ fileID: mainFile.id!, fileName: mainFile.fileName! })[0]
+                  : '',
+              version: mainVersion!,
+              modloader: mainModloader,
+              description: data.summary,
+              title: data.name,
+              modpackProvider: ModpackProvider.CurseFroge,
+              modpackVersion: mainFile?.fileName
+                ? mainFile.fileName.match(/\d+\.\d+\.\d+/)?.[0]
+                : undefined,
+              modpackName: mainFile?.fileName.split('-')[0]
+            }).getData()
           })
         })
       ),
 
-      from(this._nodeApi.getLocalMCVersions()).pipe(
+      // Get installed versions
+      this._localMCVersions.pipe(
+        // Filter installed versions by modpack provider
+        map((versions) => {
+          return versions.filter(
+            (version) => version.modpackProvider === ModpackProvider.CurseFroge
+          )
+        }),
         // Group installed versions by modpack name
         map((versions) => {
           return versions.reduce<Record<string, IMCGameVersion[]>>((acc, version) => {
@@ -128,7 +120,10 @@ export class Versions implements IVersions {
             (acc, [modpackName, versions]) => {
               return {
                 ...acc,
-                [modpackName]: versions.sort(compareFullVersions)[0]
+                [modpackName]: versions.sort(
+                  ({ modpackVersion: modpackVersionA }, { modpackVersion: modpackVersionB }) =>
+                    compareFullVersions(modpackVersionA, modpackVersionB)
+                )[0]
               }
             },
             {} as Record<string, IMCGameVersion>
@@ -137,6 +132,90 @@ export class Versions implements IVersions {
       )
     ]).pipe(
       map(([versions, installedVersions]) => {
+        // console.log('get curse forge modpacks', { versions, installedVersions })
+
+        return versions.map((version) => {
+          if (!version.modpackName) throw new Error('Modpack name is required')
+
+          const installedVersion = installedVersions[version.modpackName]
+
+          if (installedVersion && installedVersion.id === version.id)
+            return { ...installedVersion, isInstalled: true, isUpdateAvailable: false }
+
+          if (installedVersion && installedVersion.id !== version.id)
+            return { ...installedVersion, isInstalled: true, isUpdateAvailable: true }
+
+          return {
+            ...version,
+            isInstalled: false,
+            isUpdateAvailable: false
+          }
+        })
+      })
+    )
+  }
+
+  public getCustomMCVersions(): Observable<IMCLocalGameVersion[]> {
+    return combineLatest([
+      // Get modpacks from api
+      from(this._backendApi.getCustomMCModpacks()).pipe(
+        map((modpacks) => {
+          return modpacks.map((modpack) => {
+            const latestModpackVersion = sortVersions(
+              modpack.versions
+                .filter((version) => version.modpackVersion)
+                .map((version) => version.modpackVersion!)
+            )[0]
+
+            return modpack.versions.find(
+              (version) => version.modpackVersion === latestModpackVersion
+            )!
+          })
+        })
+      ),
+
+      // Get installed versions
+      this._localMCVersions.pipe(
+        // Filter installed versions by modpack provider
+        map((versions) => {
+          return versions.filter(
+            (version) => version.modpackProvider === ModpackProvider.FreshCraft
+          )
+        }),
+        // Group installed versions by modpack name
+        map((versions) => {
+          return versions.reduce<Record<string, IMCGameVersion[]>>((acc, version) => {
+            if (!version.modpackName) return acc
+
+            if (acc[version.modpackName]) {
+              acc[version.modpackName].push(version)
+            } else {
+              acc[version.modpackName] = [version]
+            }
+
+            return acc
+          }, {})
+        }),
+        // Leave only the latest version for each installed modpack
+        map((modpacks) => {
+          return Object.entries(modpacks).reduce(
+            (acc, [modpackName, versions]) => {
+              return {
+                ...acc,
+                [modpackName]: versions.sort(
+                  ({ modpackVersion: modpackVersionA }, { modpackVersion: modpackVersionB }) =>
+                    compareFullVersions(modpackVersionA, modpackVersionB)
+                )[0]
+              }
+            },
+            {} as Record<string, IMCGameVersion>
+          )
+        })
+      )
+    ]).pipe(
+      map(([versions, installedVersions]) => {
+        // console.log('get custom modpacks', { versions, installedVersions })
+
         return versions.map((version) => {
           if (!version.modpackName) throw new Error('Modpack name is required')
 
@@ -163,34 +242,61 @@ export class Versions implements IVersions {
       from(this._backendApi.getCustomMCModpacks()).pipe(
         map((modpacks) => {
           const modpack = modpacks.find((modpack) => modpack.name === modpackName)
-          return modpack?.versions || []
+          return (
+            modpack?.versions.sort(
+              ({ modpackVersion: modpackVersionA }, { modpackVersion: modpackVersionB }) =>
+                compareFullVersions(modpackVersionA, modpackVersionB)
+            ) || []
+          )
         })
       ),
-      from(this._nodeApi.getLocalMCVersions())
+      this._localMCVersions.pipe(
+        // Filter installed versions by modpack name
+        map((versions) => {
+          return versions.filter((version) => version.modpackName === modpackName)
+        }),
+        // Sort versions by modpack version
+        map((versions) => {
+          return versions.sort(
+            ({ modpackVersion: modpackVersionA }, { modpackVersion: modpackVersionB }) =>
+              compareFullVersions(modpackVersionA, modpackVersionB)
+          )
+        }),
+        // Group versions by modpack version
+        map((versions) => {
+          return versions.reduce<Record<string, IMCGameVersion>>((acc, version) => {
+            if (!version.modpackVersion) return acc
+
+            acc[version.modpackVersion] = version
+            return acc
+          }, {})
+        })
+      )
     ]).pipe(
       map(([versions, installedVersions]) => {
-        const installedVersionsMap = installedVersions.reduce<Record<string, IMCGameVersion>>(
-          (acc, version) => {
-            acc[version.name] = version
-            return acc
-          },
-          {}
-        )
+        // console.log('get modpack versions', { versions, installedVersions })
 
         return versions.map((version) => {
-          const installedVersion = installedVersionsMap[version.name]
+          if (!version.modpackVersion) throw new Error('Modpack version is required')
+
+          const installedVersion = installedVersions[version.modpackVersion]
+
+          if (
+            installedVersion &&
+            compareFullVersions(installedVersion.modpackVersion, version.modpackVersion) <= 0
+          )
+            return { ...installedVersion, isInstalled: true, isUpdateAvailable: false }
+
+          if (
+            installedVersion &&
+            compareFullVersions(installedVersion.modpackVersion, version.modpackVersion) > 0
+          )
+            return { ...installedVersion, isInstalled: true, isUpdateAvailable: true }
 
           return {
-            ...installedVersion,
-            ...(version && {
-              ...Object.keys(version).reduce((acc, key) => {
-                if (version[key]) {
-                  acc[key] = version[key]
-                }
-                return acc
-              }, {} as Partial<IMCGameVersion>)
-            }),
-            isInstalled: !!installedVersion
+            ...version,
+            isInstalled: false,
+            isUpdateAvailable: false
           }
         })
       })

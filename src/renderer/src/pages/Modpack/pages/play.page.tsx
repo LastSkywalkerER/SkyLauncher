@@ -48,16 +48,18 @@ const PlayPage: FC = () => {
       </div>
       <div className="flex justify-between items-center h-20 px-4 bg-common-base">
         <div
-          className="flex items-center gap-4 relative group cursor-pointer rounded-md overflow-hidden p-2 hover:bg-common-light transition-colors duration-200"
+          className="w-[200px] flex items-center gap-4 relative group cursor-pointer rounded-md overflow-hidden p-2 hover:bg-common-light transition-colors duration-200 justify-between"
           onClick={handleClick}
         >
           {currentVersion.modpackName && (
             <VersionsList ref={menu} modpackName={currentVersion.modpackName} />
           )}
-          <Avatar image={currentVersion.icon} shape="square" size="normal" />
-          <div className="flex flex-col text-sm">
-            <span>{currentVersion.modpackVersion}</span>
-            <span className="text-xs text-muted">{currentVersion.fullVersion}</span>
+          <div className="flex items-center gap-4">
+            <Avatar image={currentVersion.icon} shape="square" size="normal" />
+            <div className="flex flex-col text-sm">
+              <span>{currentVersion.modpackVersion}</span>
+              <span className="text-xs text-muted">{currentVersion.fullVersion}</span>
+            </div>
           </div>
           {currentVersion.modpackName && (
             <i

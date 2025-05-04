@@ -1,6 +1,7 @@
 import { ChildProcess } from 'node:child_process'
 
 import { IpcHandle } from '@doubleshot/nest-electron'
+import { prettyLogObject } from '@main/utils/pretty-log-object'
 import { Controller, Inject, Logger } from '@nestjs/common'
 import { CommandBus } from '@nestjs/cqrs'
 import { Payload } from '@nestjs/microservices'
@@ -48,7 +49,7 @@ export class LauncherController {
       java: String(this.userConfigService.get('javaArgsVersion'))
     })
 
-    this.logger.log(`Installing game ${JSON.stringify(fullVersion, null, 2)}`)
+    this.logger.log(`Installing game ${prettyLogObject(fullVersion)}`)
 
     const Command = getInstallCommand(version.modpackProvider)
     const command = new Command(fullVersion)

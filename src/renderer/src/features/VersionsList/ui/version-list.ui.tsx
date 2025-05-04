@@ -26,14 +26,14 @@ const VersionsListRenderer: ForwardRefRenderFunction<Menu, IVersionListProps> = 
   const items: MenuItem[] = versions.map((version: IMCLocalGameVersion) => ({
     template: (
       <div
-        className="flex items-center gap-4 justify-between p-2 hover:bg-common-light cursor-pointer rounded"
+        className="w-[200px] flex items-center gap-4 justify-between p-2 hover:bg-common-light cursor-pointer rounded"
         onClick={() => setCurrentMCVersion(version)}
       >
         <div className="flex items-center gap-3">
           <Avatar image={version.icon} size="normal" shape="circle" />
           <div className="flex flex-col text-sm">
             <span className="font-semibold">{version.modpackVersion}</span>
-            <span className="text-muted">{version.fullVersion}</span>
+            <span className="text-muted text-xs">{version.fullVersion}</span>
           </div>
         </div>
         <i className={`pi ${version.isInstalled ? 'pi-check' : 'pi-download'} text-sm`} />

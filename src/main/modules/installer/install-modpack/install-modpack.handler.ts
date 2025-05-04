@@ -84,7 +84,7 @@ export class InstallModpackHandler extends InstallHandlerBase {
 
         this.logger.log({ folderWithoutNest })
 
-        localTarget.update({ folder: folderWithoutNest })
+        localTarget.update({ folder: folderWithoutNest, status: { mods: true } })
       } else {
         localTarget.update({ folder: installPath })
       }
