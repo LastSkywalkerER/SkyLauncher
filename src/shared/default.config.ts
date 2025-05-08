@@ -18,7 +18,7 @@ export const defaults: UserConfigData = {
   javaArgsMaxMemory: 8126,
   javaArgsVersion: 17,
 
-  resolutionWidth: 900,
-  resolutionHeight: 670,
+  resolutionWidth: 1280,
+  resolutionHeight: 720,
   resolutionFullscreen: false
 }
