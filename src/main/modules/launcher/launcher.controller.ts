@@ -8,7 +8,7 @@ import { Payload } from '@nestjs/microservices'
 
 import { version } from '../../../../package.json'
 import { IPCHandleNames } from '../../../shared/constants'
-import type { GameData, LauncherInfo } from '../../../shared/dtos/launcher.dto'
+import type { GameData, GameDataWithUser, LauncherInfo } from '../../../shared/dtos/launcher.dto'
 import { MCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.entity'
 import type { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
 import { getInstallCommand } from '../installer/installer.commands'
@@ -70,10 +70,12 @@ export class LauncherController {
   }
 
   @IpcHandle(IPCHandleNames.LaunchGame)
-  public async handleLaunchGame(@Payload() { version }: GameData): Promise<ChildProcess> {
+  public async handleLaunchGame(
+    @Payload() { version, user }: GameDataWithUser
+  ): Promise<ChildProcess> {
     const fullVersion = new MCGameVersion(version)
 
-    const command = new LaunchModpackCommand(fullVersion)
+    const command = new LaunchModpackCommand(fullVersion, user)
     const result = await this.commandBus.execute<LaunchModpackCommand, ChildProcess>(command)
 
     return result

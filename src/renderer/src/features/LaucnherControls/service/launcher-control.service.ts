@@ -1,3 +1,4 @@
+import { IUser } from '@renderer/entities/User'
 import { inject, injectable } from 'inversify'
 import { from, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -16,7 +17,8 @@ export class LauncherControlService implements ILauncherControlService {
   constructor(
     @inject(INodeApi.$) nodeApi: NodeApi,
     @inject(ISingleProcessProgress.$)
-    private readonly _singleProcessProgress: ISingleProcessProgress
+    private readonly _singleProcessProgress: ISingleProcessProgress,
+    @inject(IUser.$) private readonly _user: IUser
   ) {
     this._nodeApi = nodeApi.getMainProcessApi()
 
@@ -25,11 +27,20 @@ export class LauncherControlService implements ILauncherControlService {
   }
 
   public launchGame(version: IMCGameVersion): Observable<void> {
-    // TODO: Check User Name
+    const user = this._user.getUser()
+
+    if (!user.userName) {
+      throw new Error('Microsoft Account is required')
+    }
 
     return from(
       this._nodeApi.launchGame({
-        version
+        version,
+        user: {
+          userName: user.userName,
+          userId: user.userId,
+          accessToken: user.accessToken
+        }
       })
     )
   }

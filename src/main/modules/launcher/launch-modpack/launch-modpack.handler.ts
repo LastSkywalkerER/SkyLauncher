@@ -24,7 +24,7 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
     super()
   }
 
-  public async execute({ target }: LaunchModpackCommand): Promise<ChildProcess> {
+  public async execute({ target, user }: LaunchModpackCommand): Promise<ChildProcess> {
     const localTarget = target.update({})
 
     this.logger.log(`Launching ${prettyLogObject(localTarget)}`)
@@ -39,9 +39,9 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
       }
 
       // User
-      const userName = this.userConfigService.get('userName')
-      const userId = this.userConfigService.get('userId')
-      const accessToken = this.userConfigService.get('accessToken')
+      const userName = user.userName
+      const userId = user.userId ?? ''
+      const accessToken = user.accessToken ?? ''
 
       // Settings
       const javaPath = this.hardwareService.getJavaExecutablePath(localTarget.java)
@@ -82,7 +82,7 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
         extraJVMArgs: javaArgs
       }
 
-      this.logger.log(`Start ${localTarget.name} with args: `, launchOptions)
+      this.logger.log(`Start ${localTarget.name} with args: ${prettyLogObject(launchOptions)}`)
 
       const process = await launch(launchOptions)
 
