@@ -1,18 +1,21 @@
+import { MCUser } from '@shared/dtos/launcher.dto'
 import { interfaces } from 'inversify'
 import { Observable } from 'rxjs'
 
-import { UserConfigData } from '../../../../shared/dtos/config.dto'
 import { LoginData, LoginResponse, RegisterData } from '../../shared/api/BackendApi/interfaces'
 import { ILoadableState } from '../LoadableState/interfaces'
 
 export interface UserData {
-  // userId: UserConfigData['userId']
-  userName?: UserConfigData['userName']
+  // MCUser
+  userName?: MCUser['userName']
+  userId?: MCUser['userId']
+  accessToken?: MCUser['accessToken']
+
+  // Api User
   email?: string
   icon?: string
   isOffline?: boolean
   role?: string
-  // accessToken: string
 }
 
 export interface IUser extends ILoadableState<UserData> {

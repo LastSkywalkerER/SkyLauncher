@@ -3,7 +3,12 @@ import { IpcRenderer, ipcRenderer } from 'electron'
 import { IPCHandleNames, IPCSendNames } from '../constants'
 import { type ConfigKeys, type UserConfigData } from '../dtos/config.dto'
 import { FolderPathDto } from '../dtos/filesystem.dto'
-import { type GameData, type LauncherInfo, PartialGameData } from '../dtos/launcher.dto'
+import {
+  type GameData,
+  type GameDataWithUser,
+  type LauncherInfo,
+  type PartialGameData
+} from '../dtos/launcher.dto'
 import { type ProcessProgressData } from '../dtos/process-progress.dto'
 import { type RequestData, type ResponseData } from '../dtos/request.dto'
 import { type IMCGameVersion } from '../entities/mc-game-version/mc-game-version.interface'
@@ -11,7 +16,7 @@ import { type IMCGameVersion } from '../entities/mc-game-version/mc-game-version
 export const rendererApi = {
   getLocalMCVersions: (): Promise<IMCGameVersion[]> =>
     ipcRenderer.invoke(IPCHandleNames.GetLocalMCVersions),
-  launchGame: (data: GameData): Promise<void> =>
+  launchGame: (data: GameDataWithUser): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.LaunchGame, data),
   installGame: (data: GameData): Promise<IMCGameVersion> =>
     ipcRenderer.invoke(IPCHandleNames.InstallGame, data),

@@ -4,6 +4,7 @@ import { join } from 'path'
 import { BucketNames, launcherName } from './constants'
 import { UserConfigData } from './dtos/config.dto'
 
+// TODO: remove non launcher configs and prepare diffrenet configs for user data
 export const defaults: UserConfigData = {
   userName: '',
   userId: '',
@@ -17,7 +18,7 @@ export const defaults: UserConfigData = {
   javaArgsMaxMemory: 8126,
   javaArgsVersion: 17,
 
-  resolutionWidth: 900,
-  resolutionHeight: 670,
+  resolutionWidth: 1280,
+  resolutionHeight: 720,
   resolutionFullscreen: false
 }
