@@ -55,7 +55,7 @@ export const FCInputFieldControlled = <
   name,
   control,
   defaultValue,
-  disabled,
+  // disabled,
   rules,
   shouldUnregister,
   ...props
@@ -65,7 +65,7 @@ export const FCInputFieldControlled = <
       name={name}
       control={control}
       defaultValue={defaultValue}
-      disabled={disabled}
+      // disabled={disabled}
       rules={rules}
       shouldUnregister={shouldUnregister}
       render={({ field }) => (
