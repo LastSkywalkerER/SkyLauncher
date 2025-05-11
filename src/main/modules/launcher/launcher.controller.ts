@@ -7,7 +7,7 @@ import { CommandBus } from '@nestjs/cqrs'
 import { Payload } from '@nestjs/microservices'
 
 import { version } from '../../../../package.json'
-import { IPCHandleNames } from '../../../shared/constants'
+import { defaultJavaArgs, IPCHandleNames } from '../../../shared/constants'
 import type { GameData, GameDataWithUser, LauncherInfo } from '../../../shared/dtos/launcher.dto'
 import { MCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.entity'
 import type { IMCGameVersion } from '../../../shared/entities/mc-game-version/mc-game-version.interface'
@@ -46,7 +46,8 @@ export class LauncherController {
       fullscreen: this.userConfigService.get('resolutionFullscreen'),
       javaArgsMinMemory: this.userConfigService.get('javaArgsMinMemory'),
       javaArgsMaxMemory: this.userConfigService.get('javaArgsMaxMemory'),
-      java: String(this.userConfigService.get('javaArgsVersion'))
+      java: String(this.userConfigService.get('javaArgsVersion')),
+      javaArgs: defaultJavaArgs
     })
 
     this.logger.log(`Installing game ${prettyLogObject(fullVersion)}`)

@@ -110,8 +110,6 @@ export class User extends LoadableState<UserData> implements IUser {
         )
       ),
       tap(([newValue, prevValue, profile, minecraftProfile]) => {
-        console.log('profile', { newValue, prevValue, profile, minecraftProfile })
-
         if (profile?.email && profile.email.value) {
           const data: UserData = {
             email: profile.email.value,
@@ -177,7 +175,6 @@ export class User extends LoadableState<UserData> implements IUser {
             if (profile?.minecraftProfile?.username) {
               return from(this._backendApi.getMinecraftProfile()).pipe(
                 tap((minecraftProfile) => {
-                  console.log('minecraftProfile', minecraftProfile)
                   if (minecraftProfile?.username) {
                     this.data$.next({
                       ...this.data$.getValue(),

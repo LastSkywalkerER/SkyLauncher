@@ -5,11 +5,11 @@ import { FCInputFieldControlled } from '@renderer/shared/ui'
 import { FCMainButton, FCSecondaryButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
 import { FCFieldButton } from '@renderer/shared/ui/freshcraft/Button/ui/button.ui'
 import { FCCheckboxFieldControlled } from '@renderer/shared/ui/freshcraft/Checkbox'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { javaVersionList } from '../../../../../shared/constants'
+import { defaultJavaArgs, defaultMaxMemory, javaVersionList } from '../../../../../shared/constants'
 import { ModpackSettings } from '../interface'
 import { SettingsFormProps } from '../interface'
 
@@ -20,22 +20,41 @@ export const SettingsForm: FC<SettingsFormProps> = ({
 }) => {
   const { t } = useTranslation()
   const {
-    getValues,
     setValue,
     control,
     handleSubmit,
+    watch,
+    getValues,
     formState: { errors }
   } = useForm<ModpackSettings>({ defaultValues })
 
-  const { folder } = getValues()
+  const folder = watch('folder')
+  const javaArgsMaxMemory = watch('javaArgsMaxMemory')
 
   const resetJavaArgs = useCallback(() => {
-    setValue('javaArgs', '')
+    setValue('javaArgs', defaultJavaArgs)
+    setValue('javaArgsMaxMemory', defaultMaxMemory)
   }, [setValue])
 
+  useEffect(() => {
+    const currentJavaArgs = getValues('javaArgs')
+    const newXmxValue = `-Xmx${Math.round(javaArgsMaxMemory / 1024)}G`
+
+    if (currentJavaArgs.includes('-Xmx')) {
+      // Replace existing -Xmx value
+      const updatedArgs = currentJavaArgs.replace(/-Xmx\d+(\.\d+)?G/, newXmxValue)
+      setValue('javaArgs', updatedArgs)
+    } else if (currentJavaArgs) {
+      // Add -Xmx at the beginning if it doesn't exist
+      setValue('javaArgs', `${newXmxValue} ${currentJavaArgs}`)
+    } else {
+      // Set only -Xmx if javaArgs is empty
+      setValue('javaArgs', newXmxValue)
+    }
+  }, [javaArgsMaxMemory, getValues, setValue])
+
   const onSubmit = (data: ModpackSettings): void => {
-    // Folder is not in the form data couse of folder input is disabled, so we need to add it to the data
-    onSubmitProps({ ...data, folder })
+    onSubmitProps(data)
   }
 
   return (
@@ -116,7 +135,7 @@ export const SettingsForm: FC<SettingsFormProps> = ({
           className="w-full"
         /> */}
         <FCInputFieldControlled
-          placeholder="-Xmx12G -XX:+UnlockExperimentalVMOptions -XX:+UseCompressedOops"
+          placeholder="Example: -Xmx12G"
           control={control}
           name={'javaArgs'}
           label={t('settings.javaArguments')}
@@ -134,7 +153,7 @@ export const SettingsForm: FC<SettingsFormProps> = ({
           }
         />
         <div className="flex gap-4">
-          <FCSliderInputFieldControlled
+          {/* <FCSliderInputFieldControlled
             name={'javaArgsMinMemory'}
             control={control}
             label={t('settings.minJavaRAM')}
@@ -142,7 +161,7 @@ export const SettingsForm: FC<SettingsFormProps> = ({
             max={65536}
             step={512}
             error={errors['javaArgsMinMemory'] ? t('errors.required') : undefined}
-          />
+          /> */}
           <FCSliderInputFieldControlled
             name={'javaArgsMaxMemory'}
             control={control}
