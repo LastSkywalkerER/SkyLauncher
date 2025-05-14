@@ -64,5 +64,5 @@ export const getCurseForgeLinks = ({
 export const javaVersionList = [8, 11, 17, 21]
 
 export const defaultJavaArgs =
-  '-Xmx5G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M'
-export const defaultMaxMemory = 5120
+  '-Xmx6G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M'
+export const defaultMaxMemory = 6144
