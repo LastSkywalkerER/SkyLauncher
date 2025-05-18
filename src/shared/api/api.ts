@@ -1,3 +1,5 @@
+import { MsalAuthResponse } from '@shared/dtos/msal.dto'
+import { MicrosoftMinecraftProfile } from '@xmcl/user'
 import { IpcRenderer, ipcRenderer } from 'electron'
 
 import { IPCHandleNames, IPCSendNames } from '../constants'
@@ -45,5 +47,11 @@ export const rendererApi = {
   removeFolder: (data: FolderPathDto): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.RemoveFolder, data),
 
-  getLauncherInfo: (): Promise<LauncherInfo> => ipcRenderer.invoke(IPCHandleNames.GetLauncherInfo)
+  getLauncherInfo: (): Promise<LauncherInfo> => ipcRenderer.invoke(IPCHandleNames.GetLauncherInfo),
+
+  loginWithMicrosoft: (): Promise<MsalAuthResponse> =>
+    ipcRenderer.invoke(IPCHandleNames.LoginWithMicrosoft),
+  logoutMicrosoft: (): Promise<void> => ipcRenderer.invoke(IPCHandleNames.LogoutMicrosoft),
+  getMojangProfile: (accessToken: string): Promise<MicrosoftMinecraftProfile> =>
+    ipcRenderer.invoke(IPCHandleNames.GetMojangProfile, accessToken)
 }

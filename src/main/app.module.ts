@@ -6,6 +6,7 @@ import { AppConfigModule } from './libs/config/config.module'
 import { CustomLoggerModule } from './libs/custom-logger/custom-logger.module'
 import { HardwareModule } from './libs/hardware/hardware.module'
 import { JavaModule } from './libs/java/java.module'
+import { MsalAuthModule } from './libs/msal-auth/msal-auth.module'
 import { ProcessProgressModule } from './libs/process-progress/process-progress.module'
 import { UnzipModule } from './libs/unzip/unzip.module'
 import { XmclCoreModule } from './libs/xmcl-core/xmcl-core.module'
@@ -68,7 +69,8 @@ import { createWindow } from './utils/window/createWindow'
     FilesystemModule,
     UpdaterModule,
     CustomLoggerModule,
-    XmclCoreModule
+    XmclCoreModule,
+    MsalAuthModule
   ]
 })
 export class AppModule {}

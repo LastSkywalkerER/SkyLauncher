@@ -27,7 +27,10 @@ export enum IPCHandleNames {
   GetConfig = 'get-config',
   Request = 'request',
   GetLauncherInfo = 'GetLauncherInfo',
-  UpdateLocalMCVersion = 'update-local-mc-version'
+  UpdateLocalMCVersion = 'update-local-mc-version',
+  LoginWithMicrosoft = 'login-with-microsoft',
+  LogoutMicrosoft = 'logout-microsoft',
+  GetMojangProfile = 'get-mojang-profile'
 }
 
 export enum IPCSendNames {
@@ -66,3 +69,8 @@ export const javaVersionList = [8, 11, 17, 21]
 export const defaultJavaArgs =
   '-Xmx6G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M'
 export const defaultMaxMemory = 6144
+
+export const authConfig = {
+  authority: 'https://login.microsoftonline.com/consumers',
+  redirectUri: 'http://localhost'
+}

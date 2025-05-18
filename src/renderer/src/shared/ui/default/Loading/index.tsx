@@ -5,10 +5,10 @@ export const Loading: FC<ProgressSpinnerProps> = (props) => {
   return <ProgressSpinner strokeWidth="7" animationDuration="2s" className="w-20 h-20" {...props} />
 }
 
-export const PageLoading: FC = () => {
+export const PageLoading: FC<ProgressSpinnerProps> = (props) => {
   return (
-    <div className={'w-full h-агдд flex items-center justify-center'}>
-      <Loading />
+    <div className={'w-full h-full flex items-center justify-center'}>
+      <Loading {...props} />
     </div>
   )
 }
