@@ -24,7 +24,8 @@ export const createWindow = (): BrowserWindow => {
       preload: join(__dirname, '../preload/index.js'),
       // sandbox: false,
       nodeIntegration: true,
-      contextIsolation: true
+      contextIsolation: true,
+      webSecurity: !is.dev // Отключаем webSecurity только в dev режиме для CORS
     }
   })
 
@@ -55,21 +56,20 @@ export const createWindow = (): BrowserWindow => {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-  //
-  // mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-  //   const { requestHeaders } = details
-  //   UpsertKeyValue(requestHeaders, 'Access-Control-Allow-Origin', ['*'])
-  //   callback({ requestHeaders })
-  // })
-  //
-  // mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-  //   const { responseHeaders } = details
-  //   UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Origin', ['*'])
-  //   UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Headers', ['*'])
-  //   callback({
-  //     responseHeaders
-  //   })
-  // })
+  // Только в dev режиме добавляем CORS заголовки для внешних API
+  if (is.dev) {
+    mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+      const { responseHeaders } = details
+      if (details.url.includes('api.minecraftservices.com') && responseHeaders) {
+        responseHeaders['Access-Control-Allow-Origin'] = ['*']
+        responseHeaders['Access-Control-Allow-Headers'] = ['*']
+        responseHeaders['Access-Control-Allow-Methods'] = ['*']
+      }
+      callback({
+        responseHeaders
+      })
+    })
+  }
 
   return mainWindow
 }

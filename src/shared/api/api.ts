@@ -1,8 +1,10 @@
+import { MsalAuthResponse } from '@shared/dtos/msal.dto'
+import { MicrosoftMinecraftProfile } from '@xmcl/user'
 import { IpcRenderer, ipcRenderer } from 'electron'
 
 import { IPCHandleNames, IPCSendNames } from '../constants'
 import { type ConfigKeys, type UserConfigData } from '../dtos/config.dto'
-import { FolderPathDto } from '../dtos/filesystem.dto'
+import { FilePickerOptions, FilePickerResult, FolderPathDto } from '../dtos/filesystem.dto'
 import {
   type GameData,
   type GameDataWithUser,
@@ -44,6 +46,17 @@ export const rendererApi = {
     ipcRenderer.invoke(IPCHandleNames.OpenFolder, data),
   removeFolder: (data: FolderPathDto): Promise<void> =>
     ipcRenderer.invoke(IPCHandleNames.RemoveFolder, data),
+  showFilePickerDialog: (options: FilePickerOptions): Promise<FilePickerResult> =>
+    ipcRenderer.invoke(IPCHandleNames.ShowFilePickerDialog, options),
 
-  getLauncherInfo: (): Promise<LauncherInfo> => ipcRenderer.invoke(IPCHandleNames.GetLauncherInfo)
+  getLauncherInfo: (): Promise<LauncherInfo> => ipcRenderer.invoke(IPCHandleNames.GetLauncherInfo),
+
+  loginWithMicrosoft: (): Promise<MsalAuthResponse> =>
+    ipcRenderer.invoke(IPCHandleNames.LoginWithMicrosoft),
+  logoutMicrosoft: (): Promise<void> => ipcRenderer.invoke(IPCHandleNames.LogoutMicrosoft),
+  getMojangProfile: (accessToken: string): Promise<MicrosoftMinecraftProfile> =>
+    ipcRenderer.invoke(IPCHandleNames.GetMojangProfile, accessToken),
+
+  readFile: (filePath: string): Promise<{ data: string; fileName: string }> =>
+    ipcRenderer.invoke(IPCHandleNames.ReadFile, filePath)
 }

@@ -7,6 +7,7 @@ export default defineConfig({
   main: {
     resolve: {
       alias: {
+        '@shared': resolve('src/shared'),
         '@main': resolve('src/main')
       }
     },
@@ -18,7 +19,8 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        '@shared': resolve('src/shared')
       }
     },
     plugins: [react(), nodePolyfills()]

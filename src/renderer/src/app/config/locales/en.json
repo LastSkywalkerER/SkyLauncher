@@ -14,7 +14,8 @@
     "loading": "Loading...",
     "success": "Success",
     "goBack": "Back",
-    "manageProfile": "Manage Profile"
+    "manageProfile": "Manage Profile",
+    "noData": "No data"
   },
   "menu": {
     "home": "Home",
@@ -66,5 +67,30 @@
     "settings": "Settings",
     "skins": "Skins",
     "servers": "Servers"
+  },
+  "skins": {
+    "uploadNewSkin": "Upload New Skin",
+    "skinType": "Skin Type",
+    "selectSkinType": "Select skin type",
+    "classic": "Classic (Steve)",
+    "slim": "Slim (Alex)",
+    "classicDescription": "Classic - normal arms (like Steve), Slim - thin arms (like Alex)",
+    "uploadFromFile": "Upload from File",
+    "selectPngFile": "Select PNG skin file",
+    "fileNotSelected": "File not selected...",
+    "fileDescription": "Supported PNG images 64x64 or 64x32 pixels (max 100KB)",
+    "or": "or",
+    "uploadFromUrl": "Upload from URL",
+    "urlPlaceholder": "https://example.com/skin.png",
+    "urlDescription": "Enter direct link to PNG skin image (size 64x64 or 64x32)",
+    "uploadSkin": "Upload Skin",
+    "yourSkins": "Your Skins",
+    "noSkinsYet": "You don't have any uploaded skins yet",
+    "validation": {
+      "invalidUrl": "Invalid URL",
+      "httpRequired": "URL must use HTTP or HTTPS protocol",
+      "pngRequired": "URL must point to a PNG image",
+      "fileOrUrlRequired": "Select a file or enter URL"
+    }
   }
 }

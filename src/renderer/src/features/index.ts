@@ -1,4 +1,5 @@
-export { OpenButton } from './OpenFolder'
-export { RemoveButton } from './RemoveFolder'
-export { FeatureService, IFeatureService } from './service'
+export * from './FSPicker'
+export * from './OpenFolder'
+export * from './RemoveFolder'
+export * from './service'
 export * from './VersionsList'
