@@ -7,8 +7,8 @@ import { Avatar } from 'primereact/avatar'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { ModpackSettings } from '../interface'
-import { SettingsForm } from '../ui/settings.form'
+import { SettingsForm } from './settings.form'
+import { ModpackSettings } from './settings.types'
 
 const SettingsPage: FC = () => {
   const { getCurrentMCVersion, updateLocalMCVersion } = useInjection(IVersions.$)

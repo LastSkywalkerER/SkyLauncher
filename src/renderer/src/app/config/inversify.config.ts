@@ -11,11 +11,13 @@ import { IVersions } from '../../entities/Versions/interfaces'
 import { ILauncherControlService, LauncherControlService } from '../../features/LaucnherControls'
 import { FeatureService, IFeatureService } from '../../features/service'
 import { LauncherSettingsModule } from '../../pages/LauncherSettings/services/launcher-settings.module'
+import { ModpackModule } from '../../pages/Modpack/modpack.module'
 
 const inversifyContainer = new Container({ defaultScope: 'Singleton' })
 inversifyContainer.load(LauncherSettingsModule)
 inversifyContainer.load(WidgetsModule)
 inversifyContainer.load(ApiModule)
+inversifyContainer.load(ModpackModule)
 
 inversifyContainer.bind<ISettings>(ISettings.$).to(Settings)
 inversifyContainer.bind<IVersions>(IVersions.$).to(Versions)

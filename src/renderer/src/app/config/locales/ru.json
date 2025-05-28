@@ -17,7 +17,8 @@
     "signIn": "Войти\u00A0с\u00A0FreshCraft",
     "signUp": "Регистрация",
     "goBack": "Назад",
-    "manageProfile": "Управление профилем"
+    "manageProfile": "Управление профилем",
+    "noData": "Нет данных"
   },
   "menu": {
     "home": "Главная",
@@ -54,5 +55,30 @@
     "settings": "Настройки",
     "skins": "Скины",
     "servers": "Серверы"
+  },
+  "skins": {
+    "uploadNewSkin": "Загрузить новый скин",
+    "skinType": "Тип скина",
+    "selectSkinType": "Выберите тип скина",
+    "classic": "Classic (Steve)",
+    "slim": "Slim (Alex)",
+    "classicDescription": "Classic - обычные руки (как у Steve), Slim - тонкие руки (как у Alex)",
+    "uploadFromFile": "Загрузить из файла",
+    "selectPngFile": "Выберите PNG файл скина",
+    "fileNotSelected": "Файл не выбран...",
+    "fileDescription": "Поддерживаются PNG изображения размером 64x64 или 64x32 пикселей (не более 100KB)",
+    "or": "или",
+    "uploadFromUrl": "Загрузить по URL",
+    "urlPlaceholder": "https://example.com/skin.png",
+    "urlDescription": "Введите прямую ссылку на PNG изображение скина (размер 64x64 или 64x32)",
+    "uploadSkin": "Загрузить скин",
+    "yourSkins": "Ваши скины",
+    "noSkinsYet": "У вас пока нет загруженных скинов",
+    "validation": {
+      "invalidUrl": "Некорректный URL",
+      "httpRequired": "URL должен использовать протокол HTTP или HTTPS",
+      "pngRequired": "URL должен указывать на PNG изображение",
+      "fileOrUrlRequired": "Выберите файл или введите URL"
+    }
   }
 } 

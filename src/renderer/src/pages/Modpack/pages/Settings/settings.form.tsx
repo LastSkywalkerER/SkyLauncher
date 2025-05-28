@@ -9,9 +9,12 @@ import { FC, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { defaultJavaArgs, defaultMaxMemory, javaVersionList } from '../../../../../shared/constants'
-import { ModpackSettings } from '../interface'
-import { SettingsFormProps } from '../interface'
+import {
+  defaultJavaArgs,
+  defaultMaxMemory,
+  javaVersionList
+} from '../../../../../../shared/constants'
+import { ModpackSettings, SettingsFormProps } from './settings.types'
 
 export const SettingsForm: FC<SettingsFormProps> = ({
   defaultValues,

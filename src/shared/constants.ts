@@ -20,6 +20,7 @@ export enum IPCHandleNames {
   UpdateGame = 'update-game',
   RemoveFolder = 'remove-folder',
   OpenFolder = 'open-folder',
+  ShowFilePickerDialog = 'show-file-picker-dialog',
   // CheckGame = 'check-game',
   GetLocalMCVersions = 'get-local-mc-versions',
   // GetCustomMCVersions = 'get-custom-mc-versions',
@@ -30,7 +31,8 @@ export enum IPCHandleNames {
   UpdateLocalMCVersion = 'update-local-mc-version',
   LoginWithMicrosoft = 'login-with-microsoft',
   LogoutMicrosoft = 'logout-microsoft',
-  GetMojangProfile = 'get-mojang-profile'
+  GetMojangProfile = 'get-mojang-profile',
+  ReadFile = 'read-file'
 }
 
 export enum IPCSendNames {
