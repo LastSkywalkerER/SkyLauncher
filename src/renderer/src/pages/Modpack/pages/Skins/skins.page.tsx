@@ -43,32 +43,33 @@ const SkinsPage: FC = () => {
     return <div>{t('common.noData')}</div>
   }
 
+  const activeSkin = data.skins.find((skin) => skin.state === 'ACTIVE')!
+  const activeCape = data.capes.find((cape) => cape.state === 'ACTIVE')
+
   return (
     <div className="w-full h-full flex flex-row gap-4 p-4">
       {/* Current skins - left side */}
       <div className="w-full h-full overflow-y-auto">
         <h2 className="text-lg font-bold mb-4 text-main uppercase">{t('skins.yourSkins')}</h2>
         <div className="flex flex-wrap gap-4 justify-center">
-          {data.skins.map((skin, index) => (
-            <div key={skin.id} className="flex flex-col items-center gap-2">
-              <ReactSkinview3d
-                skinUrl={skin.url}
-                capeUrl={data.capes[index]?.url}
-                height="300"
-                width="300"
-                options={{
-                  animation: new WalkingAnimation()
-                  // enableControls: false,
-                }}
-              />
-              <div className="text-center text-sm">
-                <div className="font-medium text-main">
-                  {skin.variant === 'CLASSIC' ? 'Classic' : 'Slim'}
-                </div>
-                <div className="text-contrast-base">{skin.state}</div>
+          <div className="flex flex-col items-center gap-2">
+            <ReactSkinview3d
+              skinUrl={activeSkin.url}
+              capeUrl={activeCape?.url}
+              height="300"
+              width="300"
+              options={{
+                animation: new WalkingAnimation()
+                // enableControls: false,
+              }}
+            />
+            <div className="text-center text-sm">
+              <div className="font-medium text-main">
+                {activeSkin.variant === 'CLASSIC' ? 'Classic' : 'Slim'}
               </div>
+              <div className="text-contrast-base">{activeSkin.state}</div>
             </div>
-          ))}
+          </div>
 
           {data.skins.length === 0 && (
             <div className="w-full text-center text-contrast-base py-8">
