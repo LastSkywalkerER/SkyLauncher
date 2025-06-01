@@ -1,3 +1,5 @@
+import { FolderIcon } from '@renderer/shared/ui/default/FolderIcon'
+import cx from 'classnames'
 import { Button } from 'primereact/button'
 import { FC, MouseEventHandler } from 'react'
 
@@ -6,7 +8,12 @@ import { useTransientInjection } from '../../../shared/hooks/useTransientInjecti
 import { IFeatureService } from '../../service/index'
 import { OpenFolderProps } from './interface'
 
-export const OpenButton: FC<OpenFolderProps> = ({ path, CutomButton = Button, ...props }) => {
+export const OpenButton: FC<OpenFolderProps> = ({
+  path,
+  CutomButton = Button,
+  className,
+  ...props
+}) => {
   const { openFolder } = useTransientInjection(IFeatureService.$)
   const { execute: executeOpenFolder } = useObservableRequest(openFolder)
   const handleOpenFolder: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -18,11 +25,13 @@ export const OpenButton: FC<OpenFolderProps> = ({ path, CutomButton = Button, ..
 
   return (
     <CutomButton
-      icon="pi pi-folder-open"
       rounded
       aria-label="Filter"
       onClick={handleOpenFolder}
+      className={cx('p-0', className)}
       {...props}
-    />
+    >
+      <FolderIcon />
+    </CutomButton>
   )
 }

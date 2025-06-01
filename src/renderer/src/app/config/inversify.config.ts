@@ -1,13 +1,8 @@
+import { EntitiesModule } from '@renderer/entities/entities.module'
 import { ApiModule } from '@renderer/shared/api'
 import { WidgetsModule } from '@renderer/widgets'
 import { Container } from 'inversify'
 
-import { Settings } from '../../entities/Settings/index'
-import { ISettings } from '../../entities/Settings/interfaces'
-import { User } from '../../entities/User/index'
-import { IUser } from '../../entities/User/interfaces'
-import { Versions } from '../../entities/Versions'
-import { IVersions } from '../../entities/Versions/interfaces'
 import { ILauncherControlService, LauncherControlService } from '../../features/LaucnherControls'
 import { FeatureService, IFeatureService } from '../../features/service'
 import { LauncherSettingsModule } from '../../pages/LauncherSettings/services/launcher-settings.module'
@@ -18,10 +13,7 @@ inversifyContainer.load(LauncherSettingsModule)
 inversifyContainer.load(WidgetsModule)
 inversifyContainer.load(ApiModule)
 inversifyContainer.load(ModpackModule)
-
-inversifyContainer.bind<ISettings>(ISettings.$).to(Settings)
-inversifyContainer.bind<IVersions>(IVersions.$).to(Versions)
-inversifyContainer.bind<IUser>(IUser.$).to(User)
+inversifyContainer.load(EntitiesModule)
 
 inversifyContainer
   .bind<ILauncherControlService>(ILauncherControlService.$)

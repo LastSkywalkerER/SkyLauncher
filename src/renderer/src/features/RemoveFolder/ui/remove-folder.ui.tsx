@@ -1,3 +1,5 @@
+import { TrashIcon } from '@renderer/shared/ui/default/TrashIcon'
+import cx from 'classnames'
 import { Button } from 'primereact/button'
 import { FC, MouseEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -7,7 +9,12 @@ import { useTransientInjection } from '../../../shared/hooks/useTransientInjecti
 import { IFeatureService } from '../../service/index'
 import { RemoveFolderProps } from './interface'
 
-export const RemoveButton: FC<RemoveFolderProps> = ({ path, CutomButton = Button, ...props }) => {
+export const RemoveButton: FC<RemoveFolderProps> = ({
+  path,
+  CutomButton = Button,
+  className,
+  ...props
+}) => {
   const navigate = useNavigate()
 
   const { removeFolder } = useTransientInjection(IFeatureService.$)
@@ -25,13 +32,15 @@ export const RemoveButton: FC<RemoveFolderProps> = ({ path, CutomButton = Button
 
   return (
     <CutomButton
-      icon="pi pi-trash"
       rounded
       severity="danger"
       aria-label="remove-folder"
       onClick={handleRemoveFolder}
       loading={isLoading}
+      className={cx('p-0', className)}
       {...props}
-    />
+    >
+      <TrashIcon />
+    </CutomButton>
   )
 }
