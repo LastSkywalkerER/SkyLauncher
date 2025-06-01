@@ -6,6 +6,7 @@ import { IMCGameVersion } from '../../../../../shared/entities/mc-game-version/m
 export interface ILauncherControlService {
   launchGame(version: IMCGameVersion): Observable<void>
   isProcessActive(): Observable<boolean>
+  installGame(version: IMCGameVersion): Observable<void>
 }
 
 export namespace ILauncherControlService {

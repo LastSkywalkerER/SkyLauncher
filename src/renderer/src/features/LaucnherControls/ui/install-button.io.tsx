@@ -10,13 +10,17 @@ import { useTranslation } from 'react-i18next'
 import { ILauncherControlService } from '../service/interfaces'
 
 export const InstallButton: FC<ButtonProps> = (props) => {
-  const { getCurrentMCVersion, installGame } = useInjection(IVersions.$)
+  const { getCurrentMCVersion } = useInjection(IVersions.$)
+  const currentVersion = useObservable(getCurrentMCVersion(), null)
+
+  const { installGame } = useInjection(ILauncherControlService.$)
   const { execute: executeInstallGame, isLoading: isLoadingInstall } =
     useObservableRequest(installGame)
-  const currentVersion = useObservable(getCurrentMCVersion(), null)
-  const { t } = useTranslation()
+
   const { isProcessActive } = useInjection(ILauncherControlService.$)
   const isProcessRunning = useObservable(isProcessActive(), false)
+
+  const { t } = useTranslation()
 
   const handleInstall = (): void => {
     currentVersion && executeInstallGame(currentVersion)
