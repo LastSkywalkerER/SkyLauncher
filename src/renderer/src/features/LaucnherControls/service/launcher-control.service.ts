@@ -1,7 +1,8 @@
+import { ISettings } from '@renderer/entities/Settings/interfaces'
 import { IUser } from '@renderer/entities/User'
 import { IVersions } from '@renderer/entities/Versions/interfaces'
 import { inject, injectable } from 'inversify'
-import { from, Observable } from 'rxjs'
+import { combineLatest, from, Observable, of } from 'rxjs'
 import { map, switchMap, tap } from 'rxjs/operators'
 
 import { RendererApi } from '../../../../../shared/api/types'
@@ -20,7 +21,8 @@ export class LauncherControlService implements ILauncherControlService {
     @inject(ISingleProcessProgress.$)
     private readonly _singleProcessProgress: ISingleProcessProgress,
     @inject(IUser.$) private readonly _user: IUser,
-    @inject(IVersions.$) private readonly _versions: IVersions
+    @inject(IVersions.$) private readonly _versions: IVersions,
+    @inject(ISettings.$) private readonly _settings: ISettings
   ) {
     this._nodeApi = nodeApi.getMainProcessApi()
 
@@ -58,7 +60,18 @@ export class LauncherControlService implements ILauncherControlService {
         this._versions.setCurrentMCVersion(data)
         this._versions.checkLocalMCVersions()
       }),
-      switchMap((data) => this.launchGame(data))
+
+      switchMap((data) => {
+        return combineLatest([of(data), from(this._settings.getSettings())])
+      }),
+
+      switchMap(([data, settings]) => {
+        if (settings?.isLaunchAfterInstall) {
+          return this.launchGame(data)
+        }
+
+        return of()
+      })
     )
   }
 

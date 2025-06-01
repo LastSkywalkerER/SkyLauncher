@@ -68,5 +68,16 @@ export const settingsList: SettingField[] = [
     fieldName: 'javaArgsMaxMemory',
     type: 'slider',
     label: 'Max Java RAM GB'
+  },
+
+  {
+    fieldName: 'isLaunchAfterInstall',
+    type: 'checkbox',
+    label: 'Launch game after installation'
+  },
+  {
+    fieldName: 'isHideAfterLaunch',
+    type: 'checkbox',
+    label: 'Hide launcher after game launch'
   }
 ]

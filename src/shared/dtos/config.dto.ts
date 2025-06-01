@@ -13,10 +13,8 @@ export type UserConfigData = {
   resolutionHeight?: number
   resolutionFullscreen?: boolean
 
-  flags?: {
-    isLaunchAfterInstall: boolean
-    isHideAfterLaunch: boolean
-  }
+  isLaunchAfterInstall?: boolean
+  isHideAfterLaunch?: boolean
 }
 
 // Получаем все ключи объекта defaults

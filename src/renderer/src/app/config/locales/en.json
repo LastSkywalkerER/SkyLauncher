@@ -49,7 +49,15 @@
     "version": "Version",
     "availableVersions": "Available Versions",
     "logs": "Logs",
-    "buy": "Buy"
+    "buy": "Buy",
+    "settings": "Launcher Settings",
+    "launcherInfo": "Launcher",
+    "gameSettings": "Game Settings",
+    "launchAfterInstall": "Launch game after installation",
+    "hideAfterLaunch": "Hide launcher after game launch",
+    "saveSettings": "Save Settings",
+    "platform": "Platform",
+    "architecture": "Architecture"
   },
   "auth": {
     "login": "Login",

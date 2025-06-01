@@ -19,8 +19,6 @@ export const defaults: UserConfigData = {
   resolutionHeight: 720,
   resolutionFullscreen: false,
 
-  flags: {
-    isLaunchAfterInstall: true,
-    isHideAfterLaunch: true
-  }
+  isLaunchAfterInstall: true,
+  isHideAfterLaunch: true
 }

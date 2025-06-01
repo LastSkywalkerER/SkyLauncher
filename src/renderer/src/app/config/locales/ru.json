@@ -48,7 +48,15 @@
     "version": "Версия",
     "availableVersions": "Доступные версии",
     "logs": "Логи",
-    "buy": "Купить"
+    "buy": "Купить",
+    "settings": "Настройки лаунчера",
+    "launcherInfo": "Лаунчер",
+    "gameSettings": "Настройки игры",
+    "launchAfterInstall": "Запускать игру после установки",
+    "hideAfterLaunch": "Скрывать лаунчер после запуска игры",
+    "saveSettings": "Сохранить настройки",
+    "platform": "Платформа",
+    "architecture": "Архитектура"
   },
   "topbar": {
     "play": "Играть",
