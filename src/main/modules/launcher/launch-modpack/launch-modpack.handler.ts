@@ -3,6 +3,7 @@ import { ChildProcess } from 'node:child_process'
 import { prettyLogObject } from '@main/utils/pretty-log-object'
 import { Inject, Logger } from '@nestjs/common'
 import { CommandHandler } from '@nestjs/cqrs'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { launch, LaunchOption } from '@xmcl/core'
 
 import { HardwareService } from '../../../libs/hardware/hardware.service'
@@ -16,12 +17,13 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
   private readonly logger = new Logger(LaunchModpackHandler.name)
 
   constructor(
+    @Inject(EventEmitter2) eventEmitter: EventEmitter2,
     @Inject(UserConfigService) private readonly userConfigService: UserConfigService,
     @Inject(HardwareService) private readonly hardwareService: HardwareService,
     @Inject(JavaService) private readonly javaService: JavaService
     // @Inject(ProcessProgressService) private readonly processProgressService: ProcessProgressService
   ) {
-    super()
+    super(eventEmitter)
   }
 
   public async execute({ target, user }: LaunchModpackCommand): Promise<ChildProcess> {
@@ -98,7 +100,11 @@ export class LaunchModpackHandler extends LaunchHandlerBase {
         } else {
           this.logger.error(`${localTarget.name} closed with code ${code}`)
         }
+
+        this.emitModpackClosed(localTarget.getData())
       })
+
+      this.emitModpackLaunched(localTarget.getData())
 
       return process
     } catch (error) {

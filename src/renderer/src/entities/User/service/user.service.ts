@@ -134,7 +134,7 @@ export class User extends LoadableState<UserData> implements IUser {
           this.data$.next({ ...prevValue, email: newValue.email })
         }
 
-        if (newValue?.userName && !newValue?.accessToken) {
+        if (newValue?.userName) {
           this.offlineLogin({ userName: newValue.userName }).subscribe()
         }
       }),
@@ -283,10 +283,7 @@ export class User extends LoadableState<UserData> implements IUser {
       }
 
       this._settings.setSettings({
-        userName: response.username,
-        userId: response.uuid,
-        accessToken: response.minecraft_access_token,
-        minecraftAccessExpiration: response.minecraft_access_expires_in
+        userName: response.username
       })
 
       this.data$.next({ ...oldData, userName: response.username })

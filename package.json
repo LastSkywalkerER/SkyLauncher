@@ -1,6 +1,6 @@
 {
   "name": "skylauncher",
-  "version": "0.0.10-alpha",
+  "version": "0.0.11-alpha",
   "license": "MIT",
   "description": "Minecraft Launcher for sky purposes",
   "main": "./out/main/index.js",
@@ -34,6 +34,7 @@
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.3.8",
     "@nestjs/cqrs": "^11.0.0",
+    "@nestjs/event-emitter": "^3.0.1",
     "@nestjs/microservices": "^10.3.8",
     "@xmcl/core": "^2.14.0",
     "@xmcl/curseforge": "^2.2.0",

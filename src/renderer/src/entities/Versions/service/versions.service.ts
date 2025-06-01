@@ -38,7 +38,6 @@ export class Versions implements IVersions {
     this.getLocalMCVersions = this.getLocalMCVersions.bind(this)
     this.getCurrentMCVersion = this.getCurrentMCVersion.bind(this)
     this.setCurrentMCVersion = this.setCurrentMCVersion.bind(this)
-    this.installGame = this.installGame.bind(this)
     this.updateGame = this.updateGame.bind(this)
     this.getModpackVersions = this.getModpackVersions.bind(this)
     this.updateLocalMCVersion = this.updateLocalMCVersion.bind(this)
@@ -323,19 +322,6 @@ export class Versions implements IVersions {
 
   public setCurrentMCVersion(version: IMCGameVersion): void {
     this._version.next(version)
-  }
-
-  public installGame(version: IMCGameVersion): Observable<IMCGameVersion> {
-    return from(
-      this._nodeApi.installGame({
-        version
-      })
-    ).pipe(
-      tap((data) => {
-        this._version.next(data)
-        this.checkLocalMCVersions()
-      })
-    )
   }
 
   public updateGame(version: IMCGameVersion): Observable<IMCGameVersion> {

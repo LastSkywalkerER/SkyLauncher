@@ -1,10 +1,6 @@
 export type UserConfigData = {
-  email?: string
-
   userName?: string
-  userId?: string
-  accessToken?: string
-  minecraftAccessExpiration?: string
+  email?: string
 
   javaPath?: string
   modpacksPath?: string
@@ -16,6 +12,9 @@ export type UserConfigData = {
   resolutionWidth?: number
   resolutionHeight?: number
   resolutionFullscreen?: boolean
+
+  isLaunchAfterInstall?: boolean
+  isHideAfterLaunch?: boolean
 }
 
 // Получаем все ключи объекта defaults

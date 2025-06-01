@@ -1,4 +1,4 @@
-import { InputField } from '@renderer/shared/ui'
+import { FolderIcon, InputField } from '@renderer/shared/ui'
 import { Button } from 'primereact/button'
 import { MouseEventHandler, ReactElement } from 'react'
 import { Controller, FieldPath, FieldValues } from 'react-hook-form'
@@ -68,14 +68,15 @@ export const FSInputPicker = <
                 className="!rounded-r-none w-full"
                 afterInputComponent={
                   <CustomButton
-                    icon="pi pi-folder-open"
                     rounded
                     aria-label="select-file"
                     onClick={handleSelectFile}
                     loading={isFilePickerLoading}
                     disabled={disabled || isFilePickerLoading}
-                    className="rounded-l-none rounded-r-md"
-                  />
+                    className="rounded-l-none rounded-r-md p-1"
+                  >
+                    <FolderIcon />
+                  </CustomButton>
                 }
               />
             </div>

@@ -1,11 +1,7 @@
 import { javaVersionList } from '../../../../shared/constants'
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
-import { environment } from './environments'
 
 export const defaults: UserConfigData = {
-  accessToken: '',
-  userId: '',
-  minecraftAccessExpiration: '',
   userName: ''
 }
 
@@ -29,21 +25,6 @@ export const settingsList: SettingField[] = [
     fieldName: 'userName',
     type: 'string',
     label: 'User Name'
-  },
-
-  {
-    fieldName: 'userId',
-    type: 'string',
-    label: 'Iser ID',
-
-    isNotShow: environment.prod
-  },
-  {
-    fieldName: 'accessToken',
-    type: 'string',
-    label: 'Minecraft Access Token',
-
-    isNotShow: environment.prod
   },
 
   {
@@ -87,5 +68,16 @@ export const settingsList: SettingField[] = [
     fieldName: 'javaArgsMaxMemory',
     type: 'slider',
     label: 'Max Java RAM GB'
+  },
+
+  {
+    fieldName: 'isLaunchAfterInstall',
+    type: 'checkbox',
+    label: 'Launch game after installation'
+  },
+  {
+    fieldName: 'isHideAfterLaunch',
+    type: 'checkbox',
+    label: 'Hide launcher after game launch'
   }
 ]

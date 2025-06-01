@@ -55,7 +55,9 @@ export class LauncherController {
     const Command = getInstallCommand(version.modpackProvider)
     const command = new Command(fullVersion)
 
-    return (await this.commandBus.execute(command)).getData()
+    const result = await this.commandBus.execute(command)
+
+    return result.getData()
   }
 
   @IpcHandle(IPCHandleNames.UpdateGame)
