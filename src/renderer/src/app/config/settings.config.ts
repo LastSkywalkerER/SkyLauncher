@@ -1,11 +1,7 @@
 import { javaVersionList } from '../../../../shared/constants'
 import { UserConfigData } from '../../../../shared/dtos/config.dto'
-import { environment } from './environments'
 
 export const defaults: UserConfigData = {
-  accessToken: '',
-  userId: '',
-  minecraftAccessExpiration: '',
   userName: ''
 }
 
@@ -29,21 +25,6 @@ export const settingsList: SettingField[] = [
     fieldName: 'userName',
     type: 'string',
     label: 'User Name'
-  },
-
-  {
-    fieldName: 'userId',
-    type: 'string',
-    label: 'Iser ID',
-
-    isNotShow: environment.prod
-  },
-  {
-    fieldName: 'accessToken',
-    type: 'string',
-    label: 'Minecraft Access Token',
-
-    isNotShow: environment.prod
   },
 
   {

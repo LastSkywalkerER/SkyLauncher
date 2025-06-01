@@ -1,3 +1,4 @@
+import { ILauncherControlService } from '@renderer/features/LaucnherControls'
 import { useInjection } from 'inversify-react'
 import { Button } from 'primereact/button'
 import { ListBox } from 'primereact/listbox'
@@ -16,8 +17,9 @@ interface FormValue {
 const AvailableVersions: FC = () => {
   const { handleSubmit, control } = useForm<FormValue>()
   const { value } = useWatch({ control })
-  const { getCustomMCVersions, installGame, updateGame } = useInjection(IVersions.$)
+  const { getCustomMCVersions, updateGame } = useInjection(IVersions.$)
   const versions = useObservable(getCustomMCVersions(), [])
+  const { installGame } = useInjection(ILauncherControlService.$)
   const { execute: executeInstallGame, isLoading: isLoadingInstall } =
     useObservableRequest(installGame)
   const { execute: executeUpdateGame, isLoading: isLoadingUpdate } =
