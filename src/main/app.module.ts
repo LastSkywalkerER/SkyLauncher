@@ -18,6 +18,7 @@ import { RequestsModule } from './modules/requests/requests.module'
 import { UpdaterModule } from './modules/updater/updater.module'
 import { UserConfigModule } from './modules/user-config/user-config.module'
 import { VersionsModule } from './modules/versions/versions.module'
+import { WindowModule } from './modules/window/window.module'
 import { createWindow } from './utils/window/createWindow'
 
 @Module({
@@ -70,7 +71,8 @@ import { createWindow } from './utils/window/createWindow'
     UpdaterModule,
     CustomLoggerModule,
     XmclCoreModule,
-    MsalAuthModule
+    MsalAuthModule,
+    WindowModule
   ]
 })
 export class AppModule {}
